@@ -1,0 +1,86 @@
+serverservice:
+  image:
+    repository: "localhost:5000/serverservice"
+    tag: latest
+    pullPolicy: Always
+  nats:
+    publishStreamPrefix: com.hollow.sh.serverservice.events
+
+conditionorc:
+  image:
+    repository: "localhost:5000/conditionorc"
+    tag: latest
+    pullPolicy: Always
+
+alloy:
+  image:
+    repository: "localhost:5000/alloy"
+    tag: latest
+    pullPolicy: Always
+  env:
+    SERVERSERVICE_ENDPOINT: http://serverservice:8000
+    SERVERSERVICE_SKIP_OAUTH: true
+    SERVERSERVICE_FACILITY_CODE: dc13
+    ALLOY_NATS_URL: "nats://nats:4222"
+    ALLOY_NATS_STREAM_USER: alloy
+    ALLOY_NATS_STREAM_PASS: password
+
+crdb:
+  image: cockroachdb/cockroach:latest-v21.1
+#
+# https://github.com/nats-io/k8s/tree/main/helm/charts/nats#using-nats-chart-as-a-dependency
+nats:
+  fullnameOverride: nats
+  auth:
+    enabled: true
+    systemAccount: SYS
+    basic:
+      accounts:
+        SYS:
+          users:
+            - user: sys
+              pass: sys
+        js:
+          jetstream: true
+          users:
+            - user: serverservice
+              pass: password
+            - user: alloy
+              pass: password
+            - user: conditionorc
+              pass: password
+    #operatorjwt:
+    #  name: operator-jwt
+    #  key: serverservice.jwt
+    ## systemAccount parameter should be the public key of the system account -
+    ## the one listed in resolver.conf
+    #systemAccount: ABYA4ITM6PS5GWFBNH55UIIZEXNLJ5GIN2GLH52ASFPRWIGGB7MIJZGP
+    #resolver:
+    #  type: memory
+    #  configMap:
+    #    name: nats-accounts
+    #    key: resolver.conf
+  nats:
+    logging:
+      debug: true
+      logtime: true
+    jetstream:
+      enabled: true
+      fileStorage:
+        size: 1Gi
+    cluster:
+      enabled: true
+      noAdvertise: true
+  natsbox:
+    enabled: true
+    image: natsio/nats-box:0.13.4
+
+#https://github.com/chaos-mesh/chaos-mesh/tree/master/helm/chaos-mesh
+controllerManager:
+  leaderElection:
+    enabled: false
+dashboard:
+  securityMode: false
+chaosDaemon:
+  runtime: containerd
+  socketPath: /run/containerd/containerd.sock

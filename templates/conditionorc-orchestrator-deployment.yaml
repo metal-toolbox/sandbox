@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    k8s-service: conditionorc
+  name: conditionorc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-service: conditionorc
+  template:
+    metadata:
+      labels:
+        k8s-service: conditionorc
+    spec:
+      containers:
+        - image: "{{ .Values.conditionorc.image.repository }}:{{ .Values.conditionorc.image.tag }}"
+          name: conditionorc
+          args:
+            - orchestrator
+            - "--config"
+            - "/etc/conditionorc/config.yaml"
+          ports:
+            - containerPort: 9002
+          volumeMounts:
+            - name: config-volume
+              mountPath: /etc/conditionorc
+          resources:
+            limits:
+              cpu: 200m
+              memory: 200M
+            requests:
+              cpu: 200m
+              memory: 200M
+      volumes:
+        - name: config-volume
+          configMap:
+            name: conditionorc-config
+      restartPolicy: Always

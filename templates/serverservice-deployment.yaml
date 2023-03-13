@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    k8s-service: serverservice
+  name: serverservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-service: serverservice
+  template:
+    metadata:
+      labels:
+        k8s-service: serverservice
+    spec:
+      initContainers:
+        - args:
+            - migrate
+            - up
+          env:
+            - name: SERVERSERVICE_CRDB_URI
+              value: postgresql://root@crdb:26257/defaultdb?sslmode=disable
+          image: "{{ .Values.serverservice.image.repository }}:{{ .Values.serverservice.image.tag }}"
+          name: serverservice-migrate
+          resources:
+            limits:
+              cpu: 200m
+              memory: 200M
+            requests:
+              cpu: 200m
+              memory: 200M
+      containers:
+        - env:
+            - name: SERVERSERVICE_CRDB_URI
+              value: postgresql://root@crdb:26257/defaultdb?sslmode=disable
+            - name: SERVERSERVICE_OIDC_ENABLED
+              value: "false"
+            - name: SERVERSERVICE_NATS_URL
+              value: "nats://nats:4222"
+            - name: SERVERSERVICE_NATS_STREAM_USER
+              value: serverservice
+            - name: SERVERSERVICE_NATS_STREAM_PASS
+              value: password
+            - name: SERVERSERVICE_NATS_STREAM_PREFIX
+              value: {{ .Values.serverservice.nats.publishStreamPrefix }}
+          image: "{{ .Values.serverservice.image.repository }}:{{ .Values.serverservice.image.tag }}"
+          name: serverservice
+          args:
+            - serve
+            # base64 key generated with,
+            # $ echo "foobar1234567890abcdefghijklmno" | base64
+            - --db-encryption-driver=base64key://Zm9vYmFyMTIzNDU2Nzg5MGFiY2RlZmdoaWprbG1ubwo=
+          ports:
+            - containerPort: 8000
+          resources:
+            limits:
+              cpu: 200m
+              memory: 200M
+            requests:
+              cpu: 200m
+              memory: 200M
+      restartPolicy: Always

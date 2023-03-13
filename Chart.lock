@@ -1,0 +1,9 @@
+dependencies:
+- name: nats
+  repository: https://nats-io.github.io/k8s/helm/charts/
+  version: 0.18.0
+- name: chaos-mesh
+  repository: https://charts.chaos-mesh.org
+  version: 2.5.1
+digest: sha256:54b3cc6aaffe52b85610c8ad852f1d777c3423dfb77b300ef20da49c5453d45a
+generated: "2023-02-14T17:26:36.339096+01:00"

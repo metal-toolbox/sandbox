@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    k8s-service: alloy
+  name: alloy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-service: alloy
+  template:
+    metadata:
+      labels:
+        k8s-service: alloy
+    spec:
+      containers:
+        - name: alloy
+          image: "{{ .Values.alloy.image.repository }}:{{ .Values.alloy.image.tag }}"
+          command: [
+           "alloy",
+           "outofband",
+           "-asset-source",
+           "serverService",
+           "-publish-target",
+           "serverService",
+           "-controller-mode",
+           "-config-file",
+           "/etc/alloy/config.yaml",
+          ]
+          volumeMounts:
+            - name: config-volume
+              mountPath: /etc/alloy
+          resources:
+            limits:
+              cpu: 200m
+              memory: 200M
+            requests:
+              cpu: 200m
+              memory: 200M
+      volumes:
+        - name: config-volume
+          configMap:
+            name: alloy-config
+      restartPolicy: Always

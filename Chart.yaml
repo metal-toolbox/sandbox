@@ -1,0 +1,13 @@
+apiVersion: v2
+name: hollow-sandbox
+description: A helm chart for developing hollow services.
+type: application
+version: 0.0.1
+appVersion: "0.0.1"
+dependencies:
+- name: nats
+  version: 0.18.0
+  repository: https://nats-io.github.io/k8s/helm/charts/
+- name: chaos-mesh
+  repository: https://charts.chaos-mesh.org
+  version: 2.5.1

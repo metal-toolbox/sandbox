@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    k8s-service: crdb
+  name: crdb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-service: crdb
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        k8s-service: crdb
+    spec:
+      containers:
+        - name: crdb
+          env:
+            # https://github.com/cockroachdb/cockroach/issues/81209
+            - name: COCKROACH_RAFT_CLOSEDTS_ASSERTIONS_ENABLED
+              value: "false"
+          image: cockroachdb/cockroach:latest-v21.1
+          args:
+            - start-single-node
+            - --insecure
+          ports:
+            - containerPort: 8080
+            - containerPort: 26257
+          resources:
+            limits:
+              cpu: 500m
+              memory: 1G
+            requests:
+              cpu: 500m
+              memory: 1G
+          volumeMounts:
+            - mountPath: /cockroach/cockroach-data
+              name: db
+      restartPolicy: Always
+      volumes:
+        - name: db
+          persistentVolumeClaim:
+            claimName: db
