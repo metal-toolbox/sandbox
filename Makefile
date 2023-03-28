@@ -8,6 +8,11 @@ local-devel: kubectl-ctx-kind
 local-devel-upgrade: kubectl-ctx-kind
 	helm upgrade hollow-sandbox . -f values.yaml
 
+## port forward condition orchestrator API  (runs in foreground)
+port-forward-conditionorc-api: kubectl-ctx-kind
+	kubectl port-forward deployment/conditionorc-api 9001:9001
+
+
 ## port forward hollow server service port (runs in foreground)
 port-forward-hss: kubectl-ctx-kind
 	kubectl port-forward deployment/serverservice 8000:8000
