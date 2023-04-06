@@ -13,6 +13,10 @@ port-forward-conditionorc-api: kubectl-ctx-kind
 	kubectl port-forward deployment/conditionorc-api 9001:9001
 
 
+## port forward condition Alloy pprof endpoint  (runs in foreground)
+port-forward-alloy-pprof: kubectl-ctx-kind
+	kubectl port-forward deployment/alloy 9091:9091
+
 ## port forward hollow server service port (runs in foreground)
 port-forward-hss: kubectl-ctx-kind
 	kubectl port-forward deployment/serverservice 8000:8000
@@ -30,6 +34,9 @@ port-forward-chaos-dash: kubectl-ctx-kind
 psql-crdb: kubectl-ctx-kind
 	psql -d "postgresql://root@localhost:26257/defaultdb?sslmode=disable"
 
+## purge nats app and storage pvcs
+clean-nats:
+	kubectl delete statefulsets.apps nats && kubectl delete pvc nats-js-pvc-nats-0 nats-jwt-pvc-nats-0
 
 #
 ## set kube ctx to kind cluster

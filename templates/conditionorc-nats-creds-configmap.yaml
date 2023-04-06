@@ -1,0 +1,26 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: conditionorc-nats-creds
+  namespace: default
+data:
+  # NOTE: This is method of providing the secret is bad
+  # practice and is meant for this sandbox env only,
+  # in order to simplify the setup and debugging process.
+  #
+  # To update the credentials below see nats-bootstrap/README.md
+  nats.creds: |
+    -----BEGIN NATS USER JWT-----
+    eyJ0eXAiOiJKV1QiLCJhbGciOiJlZDI1NTE5LW5rZXkifQ.eyJqdGkiOiJCTDdWVFROVVZMTlJQRFdVMlI0NkNJVlJOTFVSNVFYSjRLV0ZKQ0gzTjM2WUlHQlJXRFpBIiwiaWF0IjoxNjgwNzA1NzExLCJpc3MiOiJBQ0lDNEtLNVVZT1hNV1UySTNWS05QTE40MkVORTJKVkJNR1lXWUJNSEZaVEtFUURaNDNNU0FaNiIsIm5hbWUiOiJjb25kaXRpb25vcmMiLCJzdWIiOiJVRERPNjZKTFNXUkFPQlc2NkFQVDRWR1ZOVzZHRk9CS0U1N0RBN09UU09ZUEVINUVER0FYNFAyRSIsIm5hdHMiOnsicHViIjp7fSwic3ViIjp7fSwiaXNzdWVyX2FjY291bnQiOiJBQUs0SU5HN0YzNUpVUDdFUU5RNjVMTko2U1g1VzVSVlc0U0paS0xNR1pEUFpFN1ZPNUNXNEtCSSIsInR5cGUiOiJ1c2VyIiwidmVyc2lvbiI6Mn19.kYaCIOy9A0EZI-lI377Y4YUxNizeiMb6OFMAq4bnoEJ64TYDJwiMUIoPVy_x-ZY42ENJn9z85zRgs-oMpbOhBg
+    ------END NATS USER JWT------
+
+    ************************* IMPORTANT *************************
+    NKEY Seed printed below can be used to sign and prove identity.
+    NKEYs are sensitive and should be treated as secrets.
+
+    -----BEGIN USER NKEY SEED-----
+    SUAAKGIBSNJ46JMOFJ4AG2SXBZOSISVJIPNX67FTKTMR4BHRCFEAUJBXYQ
+    ------END USER NKEY SEED------
+
+    *************************************************************

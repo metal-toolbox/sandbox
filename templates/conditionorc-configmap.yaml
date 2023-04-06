@@ -38,9 +38,7 @@ data:
       stream_urn_ns: hollow-controllers
       subscribe_subjects:
         - com.hollow.sh.serverservice.events.>
-      connect_timeout: 500ms
-      stream_user: conditionorc
-      stream_pass: password
+      connect_timeout: 30s
       #creds_file:
       stream:
         name: controllers

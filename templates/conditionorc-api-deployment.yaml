@@ -26,6 +26,11 @@ spec:
           volumeMounts:
             - name: config-volume
               mountPath: /etc/conditionorc/
+            - name: nats-creds-volume
+              mountPath: /etc/nats
+          env:
+            - name: CONDITIONORC_NATS_CREDS_FILE
+              value: /etc/nats/nats.creds
           resources:
             limits:
               cpu: 100m
@@ -37,4 +42,7 @@ spec:
         - name: config-volume
           configMap:
             name: conditionorc-config
+        - name: nats-creds-volume
+          configMap:
+            name: conditionorc-nats-creds
       restartPolicy: Always

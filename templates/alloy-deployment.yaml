@@ -30,6 +30,11 @@ spec:
           volumeMounts:
             - name: config-volume
               mountPath: /etc/alloy
+            - name: nats-creds-volume
+              mountPath: /etc/nats
+          env:
+            - name: ALLOY_NATS_CREDS_FILE
+              value: /etc/nats/nats.creds
           resources:
             limits:
               cpu: 200m
@@ -41,4 +46,7 @@ spec:
         - name: config-volume
           configMap:
             name: alloy-config
+        - name: nats-creds-volume
+          configMap:
+            name: alloy-nats-creds
       restartPolicy: Always

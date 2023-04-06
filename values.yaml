@@ -31,50 +31,35 @@ crdb:
 # https://github.com/nats-io/k8s/tree/main/helm/charts/nats#using-nats-chart-as-a-dependency
 nats:
   fullnameOverride: nats
-  auth:
-    enabled: true
-    systemAccount: SYS
-    basic:
-      accounts:
-        SYS:
-          users:
-            - user: sys
-              pass: sys
-        js:
-          jetstream: true
-          users:
-            - user: serverservice
-              pass: password
-            - user: alloy
-              pass: password
-            - user: conditionorc
-              pass: password
-    #operatorjwt:
-    #  name: operator-jwt
-    #  key: serverservice.jwt
-    ## systemAccount parameter should be the public key of the system account -
-    ## the one listed in resolver.conf
-    #systemAccount: ABYA4ITM6PS5GWFBNH55UIIZEXNLJ5GIN2GLH52ASFPRWIGGB7MIJZGP
-    #resolver:
-    #  type: memory
-    #  configMap:
-    #    name: nats-accounts
-    #    key: resolver.conf
   nats:
     logging:
       debug: true
+      trace: true
       logtime: true
     jetstream:
       enabled: true
       fileStorage:
         size: 1Gi
-    cluster:
-      enabled: true
-      noAdvertise: true
+  auth:
+    enabled: true
+    timeout: "5s"
+    resolver:
+      type: full
+      # operator name KO
+      operator: eyJ0eXAiOiJKV1QiLCJhbGciOiJlZDI1NTE5LW5rZXkifQ.eyJqdGkiOiIzU0hJVlRTRENIMkxJNFFWWVlENlVDM0VJNUM3SDdMVzRXWE5IM1cyVjVMRVJPQ0EzSU5BIiwiaWF0IjoxNjgwNzA1NzEwLCJpc3MiOiJPQk41SVhYUU9FV0lKTUJSSEtWNlhTMlpSVVJZUlE0VkNNRUlKQVNCM0ZZNVJWVVNTR0kzTElOQSIsIm5hbWUiOiJLTyIsInN1YiI6Ik9CTjVJWFhRT0VXSUpNQlJIS1Y2WFMyWlJVUllSUTRWQ01FSUpBU0IzRlk1UlZVU1NHSTNMSU5BIiwibmF0cyI6eyJhY2NvdW50X3NlcnZlcl91cmwiOiJuYXRzOi8vbmF0czo0MjIyIiwib3BlcmF0b3Jfc2VydmljZV91cmxzIjpbIm5hdHM6Ly9uYXRzOjQyMjIiXSwidHlwZSI6Im9wZXJhdG9yIiwidmVyc2lvbiI6Mn19.jifVbTTRZGcjK5-Ho90-_2y7bggPqyAankcXp2kUKJ5Ykj-r6wTvZfQqJFlScJqrOJnqNqkOc2ZMFBuAqIIkAQ
+      # system account SYS
+      systemAccount: AADVGURLGX4OADMVSSZ2GQZN25X6BCRLRFE43MOCZ6F4RB4BQMFAI4Y3
+      store:
+        dir: "/accounts/jwt"
+        size: "50Mi"
+      resolverPreload:
+        AADVGURLGX4OADMVSSZ2GQZN25X6BCRLRFE43MOCZ6F4RB4BQMFAI4Y3: eyJ0eXAiOiJKV1QiLCJhbGciOiJlZDI1NTE5LW5rZXkifQ.eyJqdGkiOiJaSEcyMlVHQ0hSNkZMVjVKU05BRUVMNlNMWUNMVUxEWjMyWEg2TlJTVU9PVERQVzMyV1ZBIiwiaWF0IjoxNjgwNzA1NzEwLCJpc3MiOiJPQk41SVhYUU9FV0lKTUJSSEtWNlhTMlpSVVJZUlE0VkNNRUlKQVNCM0ZZNVJWVVNTR0kzTElOQSIsIm5hbWUiOiJTWVMiLCJzdWIiOiJBQURWR1VSTEdYNE9BRE1WU1NaMkdRWk4yNVg2QkNSTFJGRTQzTU9DWjZGNFJCNEJRTUZBSTRZMyIsIm5hdHMiOnsibGltaXRzIjp7InN1YnMiOi0xLCJkYXRhIjotMSwicGF5bG9hZCI6LTEsImltcG9ydHMiOi0xLCJleHBvcnRzIjotMSwid2lsZGNhcmRzIjp0cnVlLCJjb25uIjotMSwibGVhZiI6LTF9LCJkZWZhdWx0X3Blcm1pc3Npb25zIjp7InB1YiI6e30sInN1YiI6e319LCJhdXRob3JpemF0aW9uIjp7ImF1dGhfdXNlcnMiOm51bGx9LCJ0eXBlIjoiYWNjb3VudCIsInZlcnNpb24iOjJ9fQ.spPqCxgrwZr5-udMt2srU9F2oPNDdVChNyLiPpObrf8zAVNsmpBjtDmMVtg2m4M78pmS3-5rwsWUavztP4vACg
+  cluster:
+    enabled: false
+    noAdvertise: true
   natsbox:
     enabled: true
     image: natsio/nats-box:0.13.4
-
 #https://github.com/chaos-mesh/chaos-mesh/tree/master/helm/chaos-mesh
 controllerManager:
   leaderElection:
