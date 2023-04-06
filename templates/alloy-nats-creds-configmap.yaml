@@ -1,0 +1,26 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: alloy-nats-creds
+  namespace: default
+data:
+  # NOTE: This is method of providing the secret is a
+  # practice and is meant for this sandbox env only,
+  # in order to simplify the setup and debugging process.
+  #
+  # To update the credentials below see scripts/nats-bootstrap/README.md
+  nats.creds: |
+    -----BEGIN NATS USER JWT-----
+    eyJ0eXAiOiJKV1QiLCJhbGciOiJlZDI1NTE5LW5rZXkifQ.eyJqdGkiOiJUSDdPT1VVR1lYNEY3TzJaUlRWQU5VMjVFWU8zQlRBRlhTSTNJMzJaM0dWQ1hRR1o3SlVRIiwiaWF0IjoxNjgwNzA1NzExLCJpc3MiOiJBQ0lDNEtLNVVZT1hNV1UySTNWS05QTE40MkVORTJKVkJNR1lXWUJNSEZaVEtFUURaNDNNU0FaNiIsIm5hbWUiOiJhbGxveSIsInN1YiI6IlVCUFlRNUxINkxaM1lQTURRRFFOWVdSU0ZHRUI2WlVFWk1MWklENURTWkE2Q0tMUlFaTllCQUI2IiwibmF0cyI6eyJwdWIiOnt9LCJzdWIiOnt9LCJpc3N1ZXJfYWNjb3VudCI6IkFBSzRJTkc3RjM1SlVQN0VRTlE2NUxOSjZTWDVXNVJWVzRTSlpLTE1HWkRQWkU3Vk81Q1c0S0JJIiwidHlwZSI6InVzZXIiLCJ2ZXJzaW9uIjoyfX0.HnEZ4jV7LZZAS8N5AcOCdE-4dDY-09bEtmMrBOemfN8iIlodqWopjLrA4rnwg5ODGmGo8pNbpvIXQSRwSMquDg
+    ------END NATS USER JWT------
+
+    ************************* IMPORTANT *************************
+    NKEY Seed printed below can be used to sign and prove identity.
+    NKEYs are sensitive and should be treated as secrets.
+
+    -----BEGIN USER NKEY SEED-----
+    SUAI4HFBFRCSG52DFHJIN4FTL53SZ7VQM4UATWPDLZCUU7BXDN2NQGF52Q
+    ------END USER NKEY SEED------
+
+    *************************************************************

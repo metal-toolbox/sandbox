@@ -30,6 +30,10 @@ spec:
             requests:
               cpu: 200m
               memory: 200M
+      volumes:
+        - name: nats-creds-volume
+          configMap:
+            name: serverservice-nats-creds
       containers:
         - env:
             - name: SERVERSERVICE_CRDB_URI
@@ -44,6 +48,8 @@ spec:
               value: password
             - name: SERVERSERVICE_NATS_STREAM_PREFIX
               value: {{ .Values.serverservice.nats.publishStreamPrefix }}
+            - name: SERVERSERVICE_NATS_CREDS_FILE
+              value: /etc/nats/nats.creds
           image: "{{ .Values.serverservice.image.repository }}:{{ .Values.serverservice.image.tag }}"
           name: serverservice
           args:

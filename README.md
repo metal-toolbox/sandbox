@@ -1,10 +1,11 @@
 ## k8s helm charts for the hollow sandbox.
 
-This deploys multiple applications in KIND for
+This chart deploys multiple metal-toolbox/hollow services in docker KIND for +development and testing.
 
  - Serverservice and crDB
  - Conditionorc
  - Alloy
+ - NATS Jetstream
  - Chaos mesh
 
 ### Prerequisites
@@ -50,14 +51,15 @@ make local-devel
 make local-devel-upgrade
 ```
 
-## NATs setup
+## NATs Jetstream setup
 
-The chart configures a NATS Jetstream that serverservice sends messages on,
-for the list of accounts configured check out [values.yaml](values.yaml).
+The chart configures a NATS Jetstream that Serverservice, Orchestrator and the
+controllers sends messages on, the NATS Jetstream configuration is specified in [values.yaml](values.yaml).
 
-Messages sent from Serverservice are recieved by `conditionorc` which then forwards them to `alloy` to execute.
+The services auth in the NATS Jetstream using JWT, to have this properly setup
+on a new sandbox install or update, follow the steps in [nats-bootstrap](./scripts/nats-bootstrap/README.md).
 
-Also check out the [cheatsheet](cheatsheet.md) to validate the Jetstream setup.
+Check out the [cheatsheet](cheatsheet.md) to validate the Jetstream setup.
 
 ## Chaos mesh
 
@@ -92,10 +94,13 @@ Usage:
 Targets:
   local-devel          install helm chart for the sandbox env
   local-devel-upgrade  upgrade helm chart for the sandbox environment
+  port-forward-conditionorc-api port forward condition orchestrator API  (runs in foreground)
+  port-forward-alloy-pprof port forward condition Alloy pprof endpoint  (runs in foreground)
   port-forward-hss     port forward hollow server service port (runs in foreground)
   port-forward-crdb    port forward crdb service port (runs in foreground)
   port-forward-chaos-dash port forward chaos-mesh dashboard (runs in foreground)
   psql-crdb            connect to crdb with psql (requires port-forward-crdb)
+  clean-nats           purge nats app and storage pvcs
   kubectl-ctx-kind     set kube ctx to kind cluster
   help                 Show help
 ```

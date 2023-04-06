@@ -1,0 +1,26 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: serverservice-nats-creds
+  namespace: default
+data:
+  # NOTE: This is method of providing the secret is bad
+  # practice and is meant for this sandbox env only,
+  # this is done to simplify the setup and debugging process.
+  #
+  # To update the credentials below see nats-bootstrap/README.md
+  nats.creds: |
+    -----BEGIN NATS USER JWT-----
+    eyJ0eXAiOiJKV1QiLCJhbGciOiJlZDI1NTE5LW5rZXkifQ.eyJqdGkiOiJFRVNCNEw0RkROUEwzUVhVRlFJTEJDWkc1RUVIRzJGNDZIQlA0WldCV0VYUEY1N0NDVzRBIiwiaWF0IjoxNjgwNzA1NzExLCJpc3MiOiJBQUtCRkJEWUhCRjZLM0pYNFBOV1RUNktGMkw2M1lUUTRYWVQzNk5PV1VPQ09JVURGN1FPTjU3MiIsIm5hbWUiOiJzZXJ2ZXJzZXJ2aWNlIiwic3ViIjoiVUIyUVVTQ01ZUTNMTkRaN0pQSlo1UlRES1Q1V0FZTUQ2NUlFRjJHWkxGRUZHRkxFVUlLRUY1MlkiLCJuYXRzIjp7InB1YiI6e30sInN1YiI6e30sImlzc3Vlcl9hY2NvdW50IjoiQUEyTVFPUUhVSUxSRFBLSkNLQVY3Rk41R1ZCMzVVTko2T1c1UUhOSzRBSEY0Qk9RMlNKUFhEQ0MiLCJ0eXBlIjoidXNlciIsInZlcnNpb24iOjJ9fQ.pS_U2_bREoYlOgZ00itkMF2pytcFgfD6kqfhMSiP4F5Rd-LiV7x89PWhtS10I0UhgXLqhFDlcX6bg_kiFQC3CQ
+    ------END NATS USER JWT------
+
+    ************************* IMPORTANT *************************
+    NKEY Seed printed below can be used to sign and prove identity.
+    NKEYs are sensitive and should be treated as secrets.
+
+    -----BEGIN USER NKEY SEED-----
+    SUADLIEHNRFTCBJWGER7NJK6OLBLTHD4S4THZI7GCRLXUHZSK4ZP6PVEEM
+    ------END USER NKEY SEED------
+
+    *************************************************************
