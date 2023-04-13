@@ -27,18 +27,24 @@ nsc add user --name sys
 
 # create servserservice Jetstream account - with permissions to list, create JS streams
 nsc add account --name serverservice
-nsc edit account --name serverservice --js-mem-storage -1 --js-consumer -1 --js-streams -1
+nsc edit account --name serverservice --js-disk-storage 256M --js-mem-storage -1 --js-consumer -1 --js-streams -1
 
 # generate a signing key to create a serverservice role
 # so we can attach various pubsub permissions to the role
 nsc edit account --sk generate --name serverservice
 SK_S=$(nsc describe account serverservice -J | jq .nats.signing_keys[0] -r)
 nsc edit signing-key -a serverservice --sk ${SK_S} --role serverservice
+
+# https://docs.nats.io/reference/reference-protocols/nats_api_reference
 nsc edit signing-key -a serverservice --sk ${SK_S} \
 	--allow-pubsub '$JS.API.INFO' \
 	--allow-pubsub '$JS.API.STREAM.NAMES' \
 	--allow-pubsub '$JS.API.STREAM.LIST' \
 	--allow-pubsub '$JS.API.STREAM.CREATE.serverservice' \
+	--allow-pubsub '$JS.API.CONSUMER.NAMES.serverservice' \
+	--allow-pubsub '$JS.API.CONSUMER.INFO.serverservice.>' \
+	--allow-pubsub '$JS.API.CONSUMER.CREATE.serverservice.>' \
+	--allow-pubsub '$JS.API.STREAM.DELETE.serverservice' \
 	--allow-sub '_INBOX.>' \
 	--allow-pubsub 'com.hollow.sh.serverservice.events.>'
 
@@ -47,18 +53,25 @@ nsc add user -a serverservice --name serverservice -K serverservice
 
 # create controllers Jetstream account - with permissions to list, create JS streams
 nsc add account --name controllers
-nsc edit account --name controllers --js-mem-storage -1 --js-consumer -1 --js-streams -1
+nsc edit account --name controllers --js-disk-storage 256M --js-mem-storage -1 --js-consumer -1 --js-streams -1
 
 # generate a signing key to create a controllers role
 # so we can attach various pubsub permissions to the role
 nsc edit account --sk generate --name controllers
 SK_A=$(nsc describe account controllers -J | jq .nats.signing_keys[0] -r)
 nsc edit signing-key -a controllers --sk ${SK_A} --role controllers
+
+# https://docs.nats.io/reference/reference-protocols/nats_api_reference
 nsc edit signing-key -a controllers --sk ${SK_A} \
 	--allow-pubsub '$JS.API.INFO' \
 	--allow-pubsub '$JS.API.STREAM.NAMES' \
 	--allow-pubsub '$JS.API.STREAM.LIST' \
 	--allow-pubsub '$JS.API.STREAM.CREATE.controllers' \
+	--allow-pubsub '$JS.API.CONSUMER.NAMES.controllers' \
+	--allow-pubsub '$JS.API.CONSUMER.INFO.controllers.>' \
+	--allow-pubsub '$JS.API.CONSUMER.CREATE.controllers.>' \
+	--allow-pubsub '$JS.API.CONSUMER.MSG.NEXT.controllers.>' \
+	--allow-pubsub '$JS.ACK.controllers.>' \
 	--allow-sub 'com.hollow.sh.serverservice.events.>' \
 	--allow-pubsub 'com.hollow.sh.controllers.>' \
 	--allow-sub 'com.hollow.sh.controllers.commands.>' \
@@ -74,8 +87,8 @@ nsc add user -a controllers --name alloy -K controllers
 nsc generate config --sys-account SYS --nats-resolver
 echo ">>> accounts generated, now follow steps below.."
 echo "1. update values.yaml with Operator, SYS, Resolver Preload values from the above output."
-echo "2. update the nats-server helm install - make local-devel-upgrade."
-echo "3. make sure the nats-server pod is restarted - and indicates its running."
+echo "2. update the nats-server helm install - make clean-nats && make local-devel-upgrade."
+echo "3. make sure the nats-server pod is restarted - and indicates its running, give it about 15-20s or so after its started"
 echo "4. hit enter when ready - this will push the accounts to the nats server."
 read
 
