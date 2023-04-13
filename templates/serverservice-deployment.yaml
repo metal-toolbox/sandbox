@@ -42,14 +42,13 @@ spec:
               value: "false"
             - name: SERVERSERVICE_NATS_URL
               value: "nats://nats:4222"
-            - name: SERVERSERVICE_NATS_STREAM_USER
-              value: serverservice
-            - name: SERVERSERVICE_NATS_STREAM_PASS
-              value: password
             - name: SERVERSERVICE_NATS_STREAM_PREFIX
               value: {{ .Values.serverservice.nats.publishStreamPrefix }}
             - name: SERVERSERVICE_NATS_CREDS_FILE
               value: /etc/nats/nats.creds
+          volumeMounts:
+            - name: nats-creds-volume
+              mountPath: /etc/nats
           image: "{{ .Values.serverservice.image.repository }}:{{ .Values.serverservice.image.tag }}"
           name: serverservice
           args:
