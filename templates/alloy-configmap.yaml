@@ -30,11 +30,11 @@ data:
         name: alloy
         ack_wait: 5m
         max_ack_pending: 10
-        queue_group: controllers
+        queue_group: alloy
         subscribe_subjects:
-          - com.hollow.sh.controllers.commands.>
-        # filter_subject required for a workqueue stream
-        filter_subject: com.hollow.sh.controllers.commands.>
+          - com.hollow.sh.controllers.commands.servers.inventory.>
+        # filter_subject required to create consumer, must be unique on stream.
+        filter_subject: com.hollow.sh.controllers.commands.servers.inventory.>
       stream:
         name: controllers
         subjects:
