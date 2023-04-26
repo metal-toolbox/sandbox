@@ -11,3 +11,5 @@ dependencies:
 - name: chaos-mesh
   repository: https://charts.chaos-mesh.org
   version: 2.5.1
+  condition:
+    chaos-mesh.enabled

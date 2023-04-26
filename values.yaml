@@ -66,6 +66,10 @@ nats:
   natsbox:
     enabled: true
     image: natsio/nats-box:0.13.4
+
+chaos-mesh:
+  enabled: false
+
 #https://github.com/chaos-mesh/chaos-mesh/tree/master/helm/chaos-mesh
 controllerManager:
   leaderElection:
