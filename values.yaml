@@ -12,6 +12,12 @@ conditionorc:
     tag: latest
     pullPolicy: Always
 
+flasher:
+  image:
+    repository: "localhost:5000/flasher"
+    tag: latest
+    pullPolicy: Always
+
 alloy:
   image:
     repository: "localhost:5000/alloy"
