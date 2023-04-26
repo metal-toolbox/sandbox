@@ -38,6 +38,7 @@ nsc edit signing-key -a serverservice --sk ${SK_S} --role serverservice
 # https://docs.nats.io/reference/reference-protocols/nats_api_reference
 nsc edit signing-key -a serverservice --sk ${SK_S} \
 	--allow-pubsub '$JS.API.INFO' \
+	--allow-pubsub '$JS.API.STREAM.INFO.serverservice' \
 	--allow-pubsub '$JS.API.STREAM.NAMES' \
 	--allow-pubsub '$JS.API.STREAM.LIST' \
 	--allow-pubsub '$JS.API.STREAM.CREATE.serverservice' \
@@ -45,6 +46,7 @@ nsc edit signing-key -a serverservice --sk ${SK_S} \
 	--allow-pubsub '$JS.API.CONSUMER.INFO.serverservice.>' \
 	--allow-pubsub '$JS.API.CONSUMER.CREATE.serverservice.>' \
 	--allow-pubsub '$JS.API.STREAM.DELETE.serverservice' \
+	--allow-pubsub '$JS.API.CONSUMER.DELETE.serverservice.serverservice' \
 	--allow-sub '_INBOX.>' \
 	--allow-pubsub 'com.hollow.sh.serverservice.events.>'
 
@@ -64,6 +66,7 @@ nsc edit signing-key -a controllers --sk ${SK_A} --role controllers
 # https://docs.nats.io/reference/reference-protocols/nats_api_reference
 nsc edit signing-key -a controllers --sk ${SK_A} \
 	--allow-pubsub '$JS.API.INFO' \
+	--allow-pubsub '$JS.API.STREAM.INFO.controllers' \
 	--allow-pubsub '$JS.API.STREAM.NAMES' \
 	--allow-pubsub '$JS.API.STREAM.LIST' \
 	--allow-pubsub '$JS.API.STREAM.CREATE.controllers' \
@@ -71,6 +74,7 @@ nsc edit signing-key -a controllers --sk ${SK_A} \
 	--allow-pubsub '$JS.API.CONSUMER.INFO.controllers.>' \
 	--allow-pubsub '$JS.API.CONSUMER.CREATE.controllers.>' \
 	--allow-pubsub '$JS.API.CONSUMER.MSG.NEXT.controllers.>' \
+	--allow-pubsub '$JS.API.CONSUMER.DELETE.controllers.>' \
 	--allow-pubsub '$JS.ACK.controllers.>' \
 	--allow-sub 'com.hollow.sh.serverservice.events.>' \
 	--allow-pubsub 'com.hollow.sh.controllers.>' \
@@ -83,6 +87,9 @@ nsc add user -a controllers --name conditionorc -K controllers
 
 # create alloy user, with the controllers role
 nsc add user -a controllers --name alloy -K controllers
+
+# create flasher user, with the controllers role
+nsc add user -a controllers --name flasher -K controllers
 
 nsc generate config --sys-account SYS --nats-resolver
 echo ">>> accounts generated, now follow steps below.."
@@ -107,6 +114,10 @@ read
 
 cat /root/nsc/nkeys/creds/KO/controllers/conditionorc.creds
 echo ">>> add the above creds into templates/conditionorc-nats-creds-configmap.yaml, press enter when done..."
+read
+
+cat /root/nsc/nkeys/creds/KO/controllers/flasher.creds
+echo ">>> add the above creds into templates/flasher-nats-creds-configmap.yaml, press enter when done..."
 read
 
 echo ">>> creating tarball with nsc accounts to restore these accounts"
