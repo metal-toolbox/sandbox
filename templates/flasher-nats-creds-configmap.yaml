@@ -1,0 +1,26 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: flasher-nats-creds
+  namespace: default
+data:
+  # NOTE: This is method of providing the secret is bad
+  # practice and is meant for this sandbox env only,
+  # in order to simplify the setup and debugging process.
+  #
+  # To update the credentials below see nats-bootstrap/README.md
+  nats.creds: |
+    -----BEGIN NATS USER JWT-----
+    eyJ0eXAiOiJKV1QiLCJhbGciOiJlZDI1NTE5LW5rZXkifQ.eyJqdGkiOiIyUlhDTjRGSVRDRkxQMlhOTktTRkxETUVFMlNPTE9BSkIzVFpUQ0pVU1VJVVRUNEFVV1lRIiwiaWF0IjoxNjgyNTAzMjcyLCJpc3MiOiJBQzZEV0RDSk5NSUdVRUJCVTJWWEdBTzI3V1ZaU05ZM1RKNldaMlNFVVVWTzQzWks3U0pPTFQ1RCIsIm5hbWUiOiJmbGFzaGVyIiwic3ViIjoiVUNCTllYVVRaM0pJS0oySTRLRTZRRDNDNEFUU0lLNk1BQ0dIUURINjJJWk5LTUhDRldHRkdRNFAiLCJuYXRzIjp7InB1YiI6e30sInN1YiI6e30sImlzc3Vlcl9hY2NvdW50IjoiQUJTUFlSTUpNRkxQWDVQNDdWWE9JSlpDWEo2U01PM1BQVFY1WFZOTFNFNlZRV1VHVTdPNjZaT0MiLCJ0eXBlIjoidXNlciIsInZlcnNpb24iOjJ9fQ.T3p_OK5NBiRe6qoSd21PBxQ0mZcKLv8goFitS3zJn7WGBWsGAQyMWCY7h-_RoCX0AkAYrP_5I7Df_OG4v5lYAQ
+    ------END NATS USER JWT------
+
+    ************************* IMPORTANT *************************
+    NKEY Seed printed below can be used to sign and prove identity.
+    NKEYs are sensitive and should be treated as secrets.
+
+    -----BEGIN USER NKEY SEED-----
+    SUAD3WRRPNXCA43V2YKK2CT2R5JBLEVSCXW6ABTMSLCURGPYNQQ2IIQKZA
+    ------END USER NKEY SEED------
+
+    *************************************************************
