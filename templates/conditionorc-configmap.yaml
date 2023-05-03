@@ -36,8 +36,11 @@ data:
       app_name: conditionorc
       publisher_subject_prefix: com.hollow.sh.controllers.commands
       stream_urn_ns: hollow-controllers
-      subscribe_subjects:
-        - com.hollow.sh.serverservice.events.>
+      # TODO: pending fix
+      # add an orchestrator role which will have permissions on the
+      # serverservice stream
+      #subscribe_subjects:
+      #  - com.hollow.sh.serverservice.events.>
       connect_timeout: 30s
       #creds_file:
       stream:
