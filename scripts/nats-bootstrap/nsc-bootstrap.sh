@@ -70,6 +70,8 @@ nsc edit signing-key -a controllers --sk ${SK_A} \
 	--allow-pubsub '$JS.API.STREAM.NAMES' \
 	--allow-pubsub '$JS.API.STREAM.LIST' \
 	--allow-pubsub '$JS.API.STREAM.CREATE.controllers' \
+	--allow-pubsub '$JS.API.STREAM.MSG.DELETE.controllers' \
+	--allow-pubsub '$JS.API.STREAM.MSG.GET.controllers' \
 	--allow-pubsub '$JS.API.CONSUMER.NAMES.controllers' \
 	--allow-pubsub '$JS.API.CONSUMER.INFO.controllers.>' \
 	--allow-pubsub '$JS.API.CONSUMER.CREATE.controllers.>' \
