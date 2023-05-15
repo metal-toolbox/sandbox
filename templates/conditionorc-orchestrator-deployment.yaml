@@ -21,6 +21,8 @@ spec:
             - orchestrator
             - "--config"
             - "/etc/conditionorc/config.yaml"
+            - "--log-level"
+            - "debug"
           ports:
             - containerPort: 9002
           volumeMounts:
