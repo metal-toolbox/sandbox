@@ -93,9 +93,10 @@ nsc edit signing-key -a controllers --sk ${SK_A} \
 	--allow-pubsub '$JS.API.CONSUMER.CREATE.controllers.>' \
 	--allow-pubsub '$JS.API.CONSUMER.MSG.NEXT.controllers.>' \
 	--allow-pubsub '$JS.API.CONSUMER.DELETE.controllers.>' \
-	--allow-pubsub '$JS.API.STREAM.INFO.KV_active-controllers' \
+    --allow-pubsub '$JS.API.STREAM.INFO.KV_active-controllers' \
     --allow-pubsub '$JS.API.STREAM.CREATE.KV_active-controllers' \
-	--allow-pubsub '$JS.ACK.controllers.>' \
+    --allow-pubsub '$JS.API.STREAM.{INFO|CREATE}.KV_firmwareInstall' \
+    --allow-pubsub '$JS.ACK.controllers.>' \
 	--allow-sub 'com.hollow.sh.serverservice.events.>' \
 	--allow-pubsub 'com.hollow.sh.controllers.>' \
 	--allow-sub 'com.hollow.sh.controllers.commands.>' \
