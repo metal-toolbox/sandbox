@@ -9,6 +9,20 @@ serverservice:
     publishStreamPrefix: com.hollow.sh.serverservice.events
 
 conditionorc:
+  env:
+    NATS_URL: "nats://nats:4222"
+    NATS_CONNECT_TIMEOUT: 60s
+    SERVERSERVICE_ENDPOINT: http://serverservice:8000
+    SERVERSERVICE_DISABLE_OAUTH: true
+    # uncomment once oauth service is available in sandbox
+    #SERVERSERVICE_OIDC_AUDIENCE_ENDPOINT:
+    ## trailing forward slash is required.
+    #SERVERSERVICE_OIDC_ISSUER_ENDPOINT:
+    #SERVERSERVICE_OIDC_CLIENT_ID: conditionorc-api
+    #SERVERSERVICE_OIDC_CLIENT_SCOPES: "read:server create:server:attributes update:server:attributes delete:server:attributes"
+    ## telemetry configuration
+    #OTEL_EXPORTER_OTLP_ENDPOINT:
+    #OTEL_EXPORTER_OTLP_INSECURE:
   image:
     repository: "localhost:5000/conditionorc"
     tag: latest
