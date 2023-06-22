@@ -2,7 +2,7 @@ location: sandbox
 
 serverservice:
   image:
-    repository: "localhost:5000/serverservice"
+    repository: "localhost:5001/serverservice"
     tag: latest
     pullPolicy: Always
   nats:
@@ -24,7 +24,7 @@ conditionorc:
     #OTEL_EXPORTER_OTLP_ENDPOINT:
     #OTEL_EXPORTER_OTLP_INSECURE:
   image:
-    repository: "localhost:5000/conditionorc"
+    repository: "localhost:5001/conditionorc"
     tag: latest
     pullPolicy: Always
 
@@ -43,13 +43,13 @@ flasher:
     # OTEL_EXPORTER_OTLP_ENDPOINT:
     # OTEL_EXPORTER_OTLP_INSECURE:
   image:
-    repository: "localhost:5000/flasher"
+    repository: "localhost:5001/flasher"
     tag: latest
     pullPolicy: Always
 
 alloy:
   image:
-    repository: "localhost:5000/alloy"
+    repository: "localhost:5001/alloy"
     tag: latest
     pullPolicy: Always
   env:

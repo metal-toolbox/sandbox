@@ -20,21 +20,17 @@ This chart deploys multiple metal-toolbox/hollow services in docker KIND for +de
 1. In the serverservice repository, build the docker image,
 
 ```
-export GIT_TAG="localhost:5000/serverservice:latest" && \
+export GIT_TAG="localhost:5001/serverservice:latest" && \
     GOOS=linux GOARCH=amd64 go build -o serverservice && \
     docker build -t "${GIT_TAG}" -f Dockerfile . && \
-    docker push localhost:5000/serverservice:latest && kind load docker-image "${GIT_TAG}"
+    docker push localhost:5001/serverservice:latest && kind load docker-image "${GIT_TAG}"
 ```
 
-2. In the Alloy git repository run,
+2. In the Alloy, Conditionorc, Flasher git repositories run,
 ```
 make build-image-devel
 ```
 
-3. In the Conditionorc git repository run,
-```
-make build-image-devel
-```
 ### Deploy helm chart.
 
 - Run `make local-devel`
