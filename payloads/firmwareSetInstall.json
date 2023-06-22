@@ -1,5 +1,7 @@
 {
-    "assetID": "your-uuid-here",
-    "resetBMCBeforeInstall": true,
-    "firmwareSetID": "another-uuid-here"
+    "parameters" : {
+        "assetID": "your-uuid-here",
+        "resetBMCBeforeInstall": true,
+        "firmwareSetID": "another-uuid-here"
+    }
 }
