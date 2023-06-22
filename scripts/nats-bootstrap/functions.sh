@@ -81,11 +81,14 @@ nsc edit signing-key -a controllers --sk ${SK_A} --role controllers
 
 # https://docs.nats.io/reference/reference-protocols/nats_api_reference
 nsc edit signing-key -a controllers --sk ${SK_A} \
+    --allow-pubsub '$KV.>' \
+	--allow-pubsub '$JS.API.DIRECT.GET.>' \
 	--allow-pubsub '$JS.API.INFO' \
 	--allow-pubsub '$JS.API.STREAM.INFO.controllers' \
 	--allow-pubsub '$JS.API.STREAM.NAMES' \
 	--allow-pubsub '$JS.API.STREAM.LIST' \
 	--allow-pubsub '$JS.API.STREAM.CREATE.controllers' \
+	--allow-pubsub '$JS.API.STREAM.PURGE.controllers' \
 	--allow-pubsub '$JS.API.STREAM.MSG.DELETE.controllers' \
 	--allow-pubsub '$JS.API.STREAM.MSG.GET.controllers' \
 	--allow-pubsub '$JS.API.CONSUMER.NAMES.controllers' \
@@ -93,9 +96,20 @@ nsc edit signing-key -a controllers --sk ${SK_A} \
 	--allow-pubsub '$JS.API.CONSUMER.CREATE.controllers.>' \
 	--allow-pubsub '$JS.API.CONSUMER.MSG.NEXT.controllers.>' \
 	--allow-pubsub '$JS.API.CONSUMER.DELETE.controllers.>' \
+	--allow-pubsub '$JS.API.CONSUMER.CREATE.KV_active-controllers' \
+	--allow-pubsub '$JS.API.CONSUMER.CREATE.KV_firmwareInstall' \
+	--allow-pubsub '$JS.API.CONSUMER.CREATE.KV_active-controllers.>' \
+	--allow-pubsub '$JS.API.CONSUMER.CREATE.KV_firmwareInstall.>' \
+	--allow-pubsub '$JS.API.CONSUMER.DELETE.KV_active-controllers.>' \
+	--allow-pubsub '$JS.API.CONSUMER.DELETE.KV_firmwareInstall.>' \
     --allow-pubsub '$JS.API.STREAM.INFO.KV_active-controllers' \
+    --allow-pubsub '$JS.API.STREAM.INFO.KV_active-controllers.>' \
     --allow-pubsub '$JS.API.STREAM.CREATE.KV_active-controllers' \
-    --allow-pubsub '$JS.API.STREAM.{INFO|CREATE}.KV_firmwareInstall' \
+    --allow-pubsub '$JS.API.STREAM.CREATE.KV_active-controllers.>' \
+    --allow-pubsub '$JS.API.STREAM.INFO.KV_firmwareInstall' \
+    --allow-pubsub '$JS.API.STREAM.INFO.KV_firmwareInstall.>' \
+    --allow-pubsub '$JS.API.STREAM.CREATE.KV_firmwareInstall' \
+    --allow-pubsub '$JS.API.STREAM.CREATE.KV_firmwareInstall.>' \
     --allow-pubsub '$JS.ACK.controllers.>' \
 	--allow-sub 'com.hollow.sh.serverservice.events.>' \
 	--allow-pubsub 'com.hollow.sh.controllers.>' \

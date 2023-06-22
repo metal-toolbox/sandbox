@@ -3,7 +3,7 @@
 set -e
 
 CPWD=$(PWD)
-[[ "$(basename $CPWD)" != "sandbox" ]] && echo "This script should be executed from the repo top level directory" && return 1
+[[ "$(basename $CPWD)" != "sandbox" ]] && echo "This script should be executed from the repo top level directory" && exit 1
 
 echo "Note: this will purge all current NATS related k8s objects and services"
 echo "before proceeding make sure any changes to values.yaml has been commited or backed up..."
