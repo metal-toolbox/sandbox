@@ -191,3 +191,9 @@ function backup_accounts() {
 	kuexec "tar -czf nats-accounts.tar.gz /root/nsc /nsc"
 	kubectl cp $(kubectl get pods | awk '/nats-box/{print $1}'):/nats-accounts.tar.gz ./scripts/nats-bootstrap/nats-accounts.tar.gz
 }
+
+function restore_accounts() {
+	set -x
+	kubectl cp ./scripts/nats-bootstrap/nats-accounts.tar.gz $(kubectl get pods | awk '/nats-box/{print $1}'):/nats-accounts.tar.gz
+	kuexec "cd / && tar -xvzf nats-accounts.tar.gz && nsc push --system-account SYS -u nats://nats:4222 -A"
+}
