@@ -23,6 +23,8 @@ spec:
             - "/etc/conditionorc/config.yaml"
             - "--log-level"
             - "debug"
+            - "--use-kv"
+            - "--replica-count=1"
           ports:
             - containerPort: 9002
           volumeMounts:
