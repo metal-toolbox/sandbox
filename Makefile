@@ -30,6 +30,10 @@ port-forward-chaos-dash: kubectl-ctx-kind
 	kubectl port-forward  service/chaos-dashboard 2333:2333
 
 
+## port forward dex IDP
+port-forward-dex: kubectl-ctx-kind
+	kubectl port-forward deployments/dex 5556:5556
+
 ## connect to crdb with psql (requires port-forward-crdb)
 psql-crdb: kubectl-ctx-kind
 	psql -d "postgresql://root@localhost:26257/defaultdb?sslmode=disable"

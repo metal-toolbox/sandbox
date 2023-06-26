@@ -39,6 +39,16 @@ spec:
                 path: nats.creds
       containers:
         - env:
+            - name: SERVERSERVICE_OIDC_AUDIENCE
+              value: "{{ .Values.serverservice.oidc.audience }}"
+            - name: SERVERSERVICE_OIDC_ISSUER
+              value: "http://dex:5556/dex"
+            - name: SERVERSERVICE_OIDC_JWKSURI
+              value: "http://dex:5556/dex/keys"
+            - name: SERVERSERVICE_OIDC_CLAIMS_ROLES
+              value: "scp"
+            - name: SERVERSERVICE_OIDC_CLAIMS_USERNAME
+              value: "sub"
             - name: SERVERSERVICE_CRDB_URI
               value: postgresql://root@crdb:26257/defaultdb?sslmode=disable
             - name: SERVERSERVICE_OIDC_ENABLED

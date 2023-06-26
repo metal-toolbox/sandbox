@@ -5,6 +5,11 @@ serverservice:
     repository: "localhost:5001/serverservice"
     tag: latest
     pullPolicy: Always
+  oidc:
+    audience: "http://serverservice"
+    issuer: "http://dex:5556/dex"
+    jwksuri: "http://dex:5556/dex/keys"
+    rolesClaim: "scp"
   nats:
     publishStreamPrefix: com.hollow.sh.serverservice.events
 
@@ -116,3 +121,14 @@ dashboard:
 chaosDaemon:
   runtime: containerd
   socketPath: /run/containerd/containerd.sock
+
+## Dex idp configuration
+#https://github.com/dexidp/dex/blob/master/examples/config-dev.yaml
+dex:
+  ingress:
+    enabled: true
+    hosts:
+      - host: dex.local
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
