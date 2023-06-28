@@ -31,7 +31,9 @@ spec:
            "trace",
            "--fault-injection",
            "--use-kv",
-           "--replica-count=1"
+           "--replica-count=1",
+           "--facility-code",
+           "{{ .Values.location }}"
           ]
           volumeMounts:
             - name: config-volume
