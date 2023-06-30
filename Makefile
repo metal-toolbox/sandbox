@@ -29,6 +29,10 @@ port-forward-crdb: kubectl-ctx-kind
 port-forward-chaos-dash: kubectl-ctx-kind
 	kubectl port-forward  service/chaos-dashboard 2333:2333
 
+## port forward jaeger frontend
+port-forward-jaeger-dash:
+	kubectl port-forward  service/jaeger 16686:16686
+
 
 ## connect to crdb with psql (requires port-forward-crdb)
 psql-crdb: kubectl-ctx-kind

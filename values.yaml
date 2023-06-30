@@ -21,8 +21,8 @@ conditionorc:
     #SERVERSERVICE_OIDC_CLIENT_ID: conditionorc-api
     #SERVERSERVICE_OIDC_CLIENT_SCOPES: "read:server create:server:attributes update:server:attributes delete:server:attributes"
     ## telemetry configuration
-    #OTEL_EXPORTER_OTLP_ENDPOINT:
-    #OTEL_EXPORTER_OTLP_INSECURE:
+    OTEL_EXPORTER_OTLP_ENDPOINT: jaeger:4317
+    OTEL_EXPORTER_OTLP_INSECURE: true
   image:
     repository: "localhost:5001/conditionorc"
     tag: latest
@@ -40,8 +40,8 @@ flasher:
     # SERVERSERVICE_OIDC_CLIENT_ID: flasher
     # SERVERSERVICE_OIDC_CLIENT_SCOPES: "read:server read:server:credentials read:server:component read:server:versioned-attributes read:server-component-firmwares read:server-component-firmware-sets"
     # # telemetry configuration
-    # OTEL_EXPORTER_OTLP_ENDPOINT:
-    # OTEL_EXPORTER_OTLP_INSECURE:
+    OTEL_EXPORTER_OTLP_ENDPOINT: jaeger:4317
+    OTEL_EXPORTER_OTLP_INSECURE: true
   image:
     repository: "localhost:5001/flasher"
     tag: latest
