@@ -81,17 +81,19 @@ spec:
               memory: 100M
           ports:
             - name: metrics-port
-              containerPort: 9001
+              containerPort: 9090
           livenessProbe:
             httpGet:
               path: /metrics
               port: metrics-port
             initialDelaySeconds: 60
+            periodSeconds: 60
           readinessProbe:
             httpGet:
               path: /metrics
               port: metrics-port
             initialDelaySeconds: 60
+            periodSeconds: 30
       volumes:
         - name: config-volume
           configMap:
