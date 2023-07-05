@@ -7,22 +7,34 @@ serverservice:
     pullPolicy: Always
   nats:
     publishStreamPrefix: com.hollow.sh.serverservice.events
+  env:
+    # curl https://dev-74418858.okta.com/oauth2/ausa8ldxnjsujDOq55d7/.well-known/oauth-authorization-server | jq .
+    OIDC_ENABLED: true
+    OIDC_CLAIMS_ROLES: scp
+    OIDC_CLAIMS_USERNAME: sub
+    OIDC_AUDIENCE_ENDPOINT: http://localhost:8000
+    OIDC_ISSUER_ENDPOINT: https://dev-74418858.okta.com/oauth2/ausa8vxl2aSQrpv1q5d7
+    OIDC_JWKSURI: https://dev-74418858.okta.com/oauth2/ausa8vxl2aSQrpv1q5d7/v1/keys
 
 conditionorc:
   env:
     NATS_URL: "nats://nats:4222"
     NATS_CONNECT_TIMEOUT: 60s
     SERVERSERVICE_ENDPOINT: http://serverservice:8000
-    SERVERSERVICE_DISABLE_OAUTH: true
-    # uncomment once oauth service is available in sandbox
-    #SERVERSERVICE_OIDC_AUDIENCE_ENDPOINT:
-    ## trailing forward slash is required.
-    #SERVERSERVICE_OIDC_ISSUER_ENDPOINT:
-    #SERVERSERVICE_OIDC_CLIENT_ID: conditionorc-api
-    #SERVERSERVICE_OIDC_CLIENT_SCOPES: "read:server create:server:attributes update:server:attributes delete:server:attributes"
+    SERVERSERVICE_DISABLE_OAUTH: false
+    SERVERSERVICE_OIDC_AUDIENCE_ENDPOINT: http://localhost:8000
+    SERVERSERVICE_OIDC_ISSUER_ENDPOINT: https://dev-74418858.okta.com/oauth2/ausa8vxl2aSQrpv1q5d7
+    SERVERSERVICE_OIDC_CLIENT_ID: 0oaa8wardvFx3fESW5d7
+    SERVERSERVICE_OIDC_CLIENT_SCOPES: "read:server create:server:attributes update:server:attributes delete:server:attributes"
     ## telemetry configuration
     OTEL_EXPORTER_OTLP_ENDPOINT: jaeger:4317
     OTEL_EXPORTER_OTLP_INSECURE: true
+    OIDC_ENABLED: true
+    OIDC_CLAIMS_ROLES: scp
+    OIDC_CLAIMS_USERNAME: sub
+    OIDC_AUDIENCE_ENDPOINT: http://localhost:8000
+    OIDC_ISSUER_ENDPOINT: https://dev-74418858.okta.com/oauth2/ausa8vxl2aSQrpv1q5d7
+    OIDC_JWKSURI: https://dev-74418858.okta.com/oauth2/ausa8vxl2aSQrpv1q5d7/v1/keys
   image:
     repository: "localhost:5001/conditionorc"
     tag: latest
@@ -34,7 +46,7 @@ flasher:
     NATS_CONNECT_TIMEOUT: 60s
     SERVERSERVICE_ENDPOINT: http://serverservice:8000
     SERVERSERVICE_DISABLE_OAUTH: true
-    # to uncomment once oauth service is availble in sandbox
+    # to uncomment once an oauth client is added for flasher through setup.sh
     # SERVERSERVICE_OIDC_AUDIENCE_ENDPOINT:
     # SERVERSERVICE_OIDC_ISSUER_ENDPOINT:
     # SERVERSERVICE_OIDC_CLIENT_ID: flasher
@@ -85,14 +97,14 @@ nats:
     resolver:
       type: full
       # Operator named KO
-      operator: eyJ0eXAiOiJKV1QiLCJhbGciOiJlZDI1NTE5LW5rZXkifQ.eyJqdGkiOiIyTEM1UTJTQUk2UVZPUVhDWk5SVVRPRUZRT1FQQUFMU1o1NzI1WlpMNzcyTFJaQjdBRUpRIiwiaWF0IjoxNjg3MTc4NTAyLCJpc3MiOiJPRFdZV082M1NXNUVSTkhZRlFLVFIzTzU3Sk1ETFRSWTdaRTJLTlVFVExFR0tWUFVUQ0M3SFQ3QiIsIm5hbWUiOiJLTyIsInN1YiI6Ik9EV1lXTzYzU1c1RVJOSFlGUUtUUjNPNTdKTURMVFJZN1pFMktOVUVUTEVHS1ZQVVRDQzdIVDdCIiwibmF0cyI6eyJhY2NvdW50X3NlcnZlcl91cmwiOiJuYXRzOi8vbmF0czo0MjIyIiwib3BlcmF0b3Jfc2VydmljZV91cmxzIjpbIm5hdHM6Ly9uYXRzOjQyMjIiXSwidHlwZSI6Im9wZXJhdG9yIiwidmVyc2lvbiI6Mn19.VDXtvi_4lvRpM3VzOuc3RWZe7jLxDMSgkYjs62X6Dn7qhi8D2dORsd-mRHJCyb7FbwV85TR3u7wwNVLliun4DA
+      operator: eyJ0eXAiOiJKV1QiLCJhbGciOiJlZDI1NTE5LW5rZXkifQ.eyJqdGkiOiJSWENDRzZURkk0RFlNV04zNkdGS0ZTNFBFUEpDN1NMTjRFN0ZGR01EV0xRSFdZVUxUTEZRIiwiaWF0IjoxNjg3OTM5OTk5LCJpc3MiOiJPQ0ZKUVdPNkRaS1VEM0RJNkdQNzZNNzNOQlBPWTVLNlBDWFQzTFBFTlBCNVdWRzZOMzY1RklLRCIsIm5hbWUiOiJLTyIsInN1YiI6Ik9DRkpRV082RFpLVUQzREk2R1A3Nk03M05CUE9ZNUs2UENYVDNMUEVOUEI1V1ZHNk4zNjVGSUtEIiwibmF0cyI6eyJhY2NvdW50X3NlcnZlcl91cmwiOiJuYXRzOi8vbmF0czo0MjIyIiwib3BlcmF0b3Jfc2VydmljZV91cmxzIjpbIm5hdHM6Ly9uYXRzOjQyMjIiXSwidHlwZSI6Im9wZXJhdG9yIiwidmVyc2lvbiI6Mn19.vbzPs8CYfX2x4CjW2nZdMLFu-i2KrJG5nZNulEzVCAvG8ujKsleKEKTvYa7dOlpfIyurYg8FnWSlJWOdMayMCQ
       # System account named SYS
-      systemAccount: AAD6SU2DU4IPGZQ2UA36OB7CPSCSGNCP6M6Q6XCUAAPRGYVQBEKM42Q6
+      systemAccount: ADZUFSQA2KJ3PONDGBSCHGR5VOK456EXJOXYDZ6UWAAEZCA7X6A7V5LM
       store:
         dir: "/accounts/jwt"
         size: "50Mi"
       resolverPreload:
-        AAD6SU2DU4IPGZQ2UA36OB7CPSCSGNCP6M6Q6XCUAAPRGYVQBEKM42Q6: eyJ0eXAiOiJKV1QiLCJhbGciOiJlZDI1NTE5LW5rZXkifQ.eyJqdGkiOiJEUkg1Q1c1WlBLT1I3Uk9BMlFYMlpRM1hOWFZQQVE0REFDSzJGNllJR1FKQUFYSVdVS0FRIiwiaWF0IjoxNjg3MTc4NTAyLCJpc3MiOiJPRFdZV082M1NXNUVSTkhZRlFLVFIzTzU3Sk1ETFRSWTdaRTJLTlVFVExFR0tWUFVUQ0M3SFQ3QiIsIm5hbWUiOiJTWVMiLCJzdWIiOiJBQUQ2U1UyRFU0SVBHWlEyVUEzNk9CN0NQU0NTR05DUDZNNlE2WENVQUFQUkdZVlFCRUtNNDJRNiIsIm5hdHMiOnsibGltaXRzIjp7InN1YnMiOi0xLCJkYXRhIjotMSwicGF5bG9hZCI6LTEsImltcG9ydHMiOi0xLCJleHBvcnRzIjotMSwid2lsZGNhcmRzIjp0cnVlLCJjb25uIjotMSwibGVhZiI6LTF9LCJkZWZhdWx0X3Blcm1pc3Npb25zIjp7InB1YiI6e30sInN1YiI6e319LCJhdXRob3JpemF0aW9uIjp7ImF1dGhfdXNlcnMiOm51bGx9LCJ0eXBlIjoiYWNjb3VudCIsInZlcnNpb24iOjJ9fQ.9fVvgEtpYRxFRlHgOrZHEuU0ZPCSZY-gdXK0nw7Pklz-p5wh9p4pzcUY-xWTl7J2A3IuT_NgyTfxeSzCz3uoAQ
+        ADZUFSQA2KJ3PONDGBSCHGR5VOK456EXJOXYDZ6UWAAEZCA7X6A7V5LM: eyJ0eXAiOiJKV1QiLCJhbGciOiJlZDI1NTE5LW5rZXkifQ.eyJqdGkiOiJSNlA1RzRPM0xXTUxLMlQ2WE5BMkpGSVUyNEdQNFBJTVNYTzJISkpFQVgzTTZERkNMV1VBIiwiaWF0IjoxNjg3OTM5OTk5LCJpc3MiOiJPQ0ZKUVdPNkRaS1VEM0RJNkdQNzZNNzNOQlBPWTVLNlBDWFQzTFBFTlBCNVdWRzZOMzY1RklLRCIsIm5hbWUiOiJTWVMiLCJzdWIiOiJBRFpVRlNRQTJLSjNQT05ER0JTQ0hHUjVWT0s0NTZFWEpPWFlEWjZVV0FBRVpDQTdYNkE3VjVMTSIsIm5hdHMiOnsibGltaXRzIjp7InN1YnMiOi0xLCJkYXRhIjotMSwicGF5bG9hZCI6LTEsImltcG9ydHMiOi0xLCJleHBvcnRzIjotMSwid2lsZGNhcmRzIjp0cnVlLCJjb25uIjotMSwibGVhZiI6LTF9LCJkZWZhdWx0X3Blcm1pc3Npb25zIjp7InB1YiI6e30sInN1YiI6e319LCJhdXRob3JpemF0aW9uIjp7ImF1dGhfdXNlcnMiOm51bGx9LCJ0eXBlIjoiYWNjb3VudCIsInZlcnNpb24iOjJ9fQ.o_Dl24JWU7IldUuJci0YzXcRTwmUaopn9uHcY1A-Qwy_5-gUgDqtyKRJrpsRfM46Hnf1bY0bVIDT3TYWG4yVBA
   cluster:
     enabled: false
     noAdvertise: true

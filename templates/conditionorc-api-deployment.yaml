@@ -42,6 +42,18 @@ spec:
               value: "com.hollow.sh.controllers.responses.>"
             - name: CONDITIONORC_NATS_PUBLISHERSUBJECTPREFIX
               value: "com.hollow.sh.controllers.commands"
+            - name: CONDITIONORC_API_OIDC_ENABLED
+              value: "{{ .Values.conditionorc.env.OIDC_ENABLED }}"
+            - name: CONDITIONORC_API_OIDC_AUDIENCE_ENDPOINT
+              value: "{{ .Values.conditionorc.env.OIDC_AUDIENCE_ENDPOINT }}"
+            - name: CONDITIONORC_API_OIDC_ISSUER_ENDPOINT
+              value: "{{ .Values.conditionorc.env.OIDC_ISSUER_ENDPOINT }}"
+            - name: CONDITIONORC_API_OIDC_JWKSURI
+              value: "{{ .Values.conditionorc.env.OIDC_JWKSURI }}"
+            - name: CONDITIONORC_API_OIDC_CLAIMS_ROLES
+              value: "{{ .Values.conditionorc.env.OIDC_CLAIMS_ROLES }}"
+            - name: CONDITIONORC_API_OIDC_CLAIMS_USERNAME
+              value: "{{ .Values.conditionorc.env.OIDC_CLAIMS_USERNAME }}"
             - name: CONDITIONORC_SERVERSERVICE_ENDPOINT
               value: "{{ .Values.conditionorc.env.SERVERSERVICE_ENDPOINT }}"
             - name: CONDITIONORC_SERVERSERVICE_DISABLE_OAUTH
@@ -58,11 +70,11 @@ spec:
               value: "{{ .Values.conditionorc.env.OTEL_EXPORTER_OTLP_INSECURE }}"
             - name: CONDITIONORC_SERVERSERVICE_OIDC_CLIENT_ID
               value: "{{ .Values.conditionorc.env.SERVERSERVICE_OIDC_CLIENT_ID }}"
-              #- name: CONDITIONORC_SERVERSERVICE_OIDC_CLIENT_SECRET
-              #  valueFrom:
-              #    secretKeyRef:
-              #      name: conditionorc-secrets
-              #      key: serverservice-oidc-client-secret
+            - name: CONDITIONORC_SERVERSERVICE_OIDC_CLIENT_SECRET
+              valueFrom:
+                 secretKeyRef:
+                   name: conditionorc-secrets
+                   key: serverservice-oidc-client-secret
             - name: CONDITIONORC_NATS_CREDS_FILE
               value: /etc/nats/nats.creds
           securityContext:

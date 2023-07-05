@@ -39,14 +39,24 @@ spec:
                 path: nats.creds
       containers:
         - env:
+            - name: SERVERSERVICE_OIDC_CLAIMS_ROLES
+              value: "{{ .Values.serverservice.env.OIDC_CLAIMS_ROLES }}"
+            - name: SERVERSERVICE_OIDC_CLAIMS_USERNAME
+              value: "{{ .Values.serverservice.env.OIDC_CLAIMS_USERNAME }}"
+            - name: SERVERSERVICE_OIDC_AUDIENCE
+              value: "{{ .Values.serverservice.env.OIDC_AUDIENCE_ENDPOINT }}"
+            - name: SERVERSERVICE_OIDC_ISSUER
+              value: "{{ .Values.serverservice.env.OIDC_ISSUER_ENDPOINT }}"
+            - name: SERVERSERVICE_OIDC_JWKSURI
+              value: "{{ .Values.serverservice.env.OIDC_JWKSURI }}"
             - name: SERVERSERVICE_CRDB_URI
               value: postgresql://root@crdb:26257/defaultdb?sslmode=disable
             - name: SERVERSERVICE_OIDC_ENABLED
-              value: "false"
+              value: "{{ .Values.serverservice.env.OIDC_ENABLED }}"
             - name: SERVERSERVICE_NATS_URL
               value: "nats://nats:4222"
             - name: SERVERSERVICE_NATS_STREAM_PREFIX
-              value: {{ .Values.serverservice.nats.publishStreamPrefix }}
+              value: "{{ .Values.serverservice.nats.publishStreamPrefix }}"
             - name: SERVERSERVICE_NATS_CREDS_FILE
               value: /etc/nats/nats.creds
           volumeMounts:
