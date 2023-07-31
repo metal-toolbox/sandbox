@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# - `Accounts` group users and Jetstream support is enabled/disabled at the account level NOTE: pub/sub permissions set at the Account level are not inherited by users of that account.
+# - `Signing keys` are associated with accounts and can be 'templated' with pub/sub permissions and have a `role` name set.
+# - `Users` are applications connecting to NATS to pub/sub, users can be assigned a `role`.
+
 function clean_natsserver() {
 	set +e
 	kubectl get statefulsets | grep nats && make clean-nats
@@ -16,6 +20,10 @@ function clean_natsbox() {
 }
 
 function init_natsaccounts() {
+	while ! kubectl get pods | awk '/nats-box/{print $3}' | grep "Running"; do
+		echo "waiting for nats-box to be ready... "
+		sleep 5
+	done
 
 	kubectl exec -ti deployments/nats-box -- /bin/sh <<'EOF'
 
@@ -141,7 +149,7 @@ function push_natsaccounts() {
 		sleep 5
 	done
 
-	sleep 10
+	sleep 20
 	kuexec "nsc push --system-account SYS -u nats://nats:4222 -A"
 }
 
@@ -202,7 +210,7 @@ type: Opaque" >/tmp/kind_serverservice_secret.yaml
 }
 
 function backup_accounts() {
-	kuexec "tar -czf nats-accounts.tar.gz /root/nsc /nsc"
+	kuexec "cd / && tar -czf nats-accounts.tar.gz /root/nsc /nsc"
 	kubectl cp $(kubectl get pods | awk '/nats-box/{print $1}'):/nats-accounts.tar.gz ./scripts/nats-bootstrap/nats-accounts.tar.gz
 }
 
