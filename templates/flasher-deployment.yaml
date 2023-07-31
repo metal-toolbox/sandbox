@@ -28,7 +28,7 @@ spec:
            "/etc/flasher/config.yaml",
            "--enable-pprof",
            "--log-level",
-           "trace",
+           "debug",
            "--fault-injection",
            "--use-kv",
            "--replica-count=1",
