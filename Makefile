@@ -3,10 +3,16 @@
 ## install helm chart for the sandbox env
 local-devel: kubectl-ctx-kind
 	helm install hollow-sandbox . -f values.yaml
+	kubectl get pod
+	./scripts/nats-bootstrap/boostrap.sh
 
 ## upgrade helm chart for the sandbox environment
 local-devel-upgrade: kubectl-ctx-kind
 	helm upgrade hollow-sandbox . -f values.yaml
+
+## uninstall helm chart
+uninstall-local-devel: kubectl-ctx-kind
+	helm uninstall hollow-sandbox
 
 ## port forward condition orchestrator API  (runs in foreground)
 port-forward-conditionorc-api: kubectl-ctx-kind
