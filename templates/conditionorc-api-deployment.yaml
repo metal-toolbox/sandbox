@@ -81,7 +81,7 @@ spec:
               memory: 100M
           ports:
             - name: metrics-port
-              containerPort: 9001
+              containerPort: 9090
           livenessProbe:
             httpGet:
               path: /metrics
