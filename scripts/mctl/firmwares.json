@@ -1,0 +1,96 @@
+[
+  {
+    "uuid": "f215f65a-ef5a-4af1-a035-7b890d0958f5",
+    "vendor": "supermicro",
+    "model": [
+      "x11sse-f"
+    ],
+    "filename": "X11SSE0.B25",
+    "version": "2.5",
+    "component": "bios",
+    "checksum": "md5sum:c6da4c4638c1d94c27dbea1206434cef",
+    "upstreamURL": "https://www.supermicro.com/about/policies/disclaimer.cfm?SoftwareItemID=12864",
+    "repositoryURL": "https://ARTIFACTS_ENDPOINT/firmware/files/supermicro/X11SSE0.B25"
+  },
+  {
+    "uuid": "9d6c75dc-9f06-41cf-aedc-93973ed5f372",
+    "vendor": "dell",
+    "model": [
+      "r6515",
+      "hba330"
+    ],
+    "filename": "SAS-Non-RAID_Firmware_YXWY1_WN32_16.17.00.05_A07_01.EXE",
+    "version": "16.17.00.05",
+    "component": "storagecontroller",
+    "checksum": "md5sum:7aaafabbea1be3c109a003ba667f0056",
+    "upstreamURL": "https://dl.dell.com/FOLDER05653958M/2/SAS-Non-RAID_Firmware_YXWY1_WN32_16.17.00.05_A07_01.EXE",
+    "repositoryURL": "https://ARTIFACTS_ENDPOINT/firmware/files/dell/SAS-Non-RAID_Firmware_YXWY1_WN32_16.17.00.05_A07_01.EXE"
+  },
+  {
+    "uuid": "9a01e25a-2ab3-41b9-af42-2c30dc4dd51c",
+    "vendor": "dell",
+    "model": [
+      "r750",
+      "hba355i"
+    ],
+    "filename": "SAS-Non-RAID_Firmware_2MHMF_WN64_22.15.05.00_A04.EXE",
+    "version": "22.15.05.00",
+    "component": "storagecontroller",
+    "checksum": "md5sum:b9f12aeec12b00ad5aea6e3b0fef7feb",
+    "upstreamURL": "https://dl.dell.com/FOLDER08925211M/1/SAS-Non-RAID_Firmware_2MHMF_WN64_22.15.05.00_A04.EXE",
+    "repositoryURL": "https://ARTIFACTS_ENDPOINT/firmware/files/dell/SAS-Non-RAID_Firmware_2MHMF_WN64_22.15.05.00_A04.EXE"
+  },
+  {
+    "uuid": "effec15b-b55e-4aaa-bcd4-c53e5a3b06ba",
+    "vendor": "dell",
+    "model": [
+      "r6515"
+    ],
+    "filename": "BIOS_C4FT0_WN64_2.6.6.EXE",
+    "version": "2.6.6",
+    "component": "bios",
+    "checksum": "md5sum:60fc390b456dde9b84be3e78ca6d3886",
+    "upstreamURL": "https://dl.dell.com/FOLDER08105057M/1/BIOS_C4FT0_WN64_2.6.6.EXE",
+    "repositoryURL": "https://ARTIFACTS_ENDPOINT/firmware/files/dell/BIOS_C4FT0_WN64_2.6.6.EXE"
+  },
+  {
+    "uuid": "ed4513bd-671a-48a5-945d-90a90578634d",
+    "vendor": "dell",
+    "model": [
+      "r6415"
+    ],
+    "filename": "BIOS_517K6_WN64_1.19.0.EXE",
+    "version": "1.19.0",
+    "component": "bios",
+    "checksum": "md5sum:00559360bb7d1e267689ee86593a3b54",
+    "upstreamURL": "https://dl.dell.com/FOLDER09230230M/1/BIOS_517K6_WN64_1.19.0.EXE",
+    "repositoryURL": "https://ARTIFACTS_ENDPOINT/firmware/files/dell/BIOS_517K6_WN64_1.19.0.EXE"
+  },
+  {
+    "uuid": "52f1581e-db75-44e2-9566-69982545c1b7",
+    "vendor": "dell",
+    "model": [
+      "r6415",
+      "boss-s1"
+    ],
+    "filename": "SAS-RAID_Firmware_3P39V_WN64_2.5.13.3024_A07_02.EXE",
+    "version": "2.5.13.3024",
+    "component": "storagecontroller",
+    "checksum": "md5sum:f9a156b4b077c826aa65eb8f1384efc3",
+    "upstreamURL": "https://dl.dell.com/FOLDER06189651M/3/SAS-RAID_Firmware_3P39V_WN64_2.5.13.3024_A07_02.EXE",
+    "repositoryURL": "https://ARTIFACTS_ENDPOINT/firmware/files/dell/SAS-RAID_Firmware_3P39V_WN64_2.5.13.3024_A07_02.EXE"
+  },
+  {
+    "uuid": "e5ffd884-5962-47da-b3e6-938ac6da6377",
+    "vendor": "dell",
+    "model": [
+      "r640"
+    ],
+    "filename": "BIOS_NDFHH_WN64_2.15.1.EXE",
+    "version": "2.15.1",
+    "component": "bios",
+    "checksum": "md5sum:e0bcc56ae8939b1a37ed4f18048643cc",
+    "upstreamURL": "https://dl.dell.com/FOLDER08691055M/3/BIOS_NDFHH_WN64_2.15.1.EXE",
+    "repositoryURL": "https://ARTIFACTS_ENDPOINT/firmware/files/dell/BIOS_NDFHH_WN64_2.15.1.EXE"
+  }
+]
