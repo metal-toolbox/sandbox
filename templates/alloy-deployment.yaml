@@ -33,6 +33,18 @@ spec:
           env:
             - name: ALLOY_NATS_CREDS_FILE
               value: /etc/nats/nats.creds
+            - name: SERVERSERVICE_ENDPOINT
+              value: "{{ .Values.alloy.env.SERVERSERVICE_ENDPOINT }}"
+            - name: SERVERSERVICE_SKIP_OAUTH
+              value: "{{ .Values.alloy.env.SERVERSERVICE_SKIP_OAUTH }}"
+            - name: SERVERSERVICE_FACILITY_CODE
+              value: "{{ .Values.alloy.env.SERVERSERVICE_FACILITY_CODE }}"
+            - name: ALLOY_NATS_URL
+              value: "{{ .Values.alloy.env.ALLOY_NATS_URL }}"
+            - name: ALLOY_NATS_STREAM_USER
+              value: "{{ .Values.alloy.env.ALLOY_NATS_STREAM_USER }}"
+            - name: ALLOY_NATS_STREAM_PASS
+              value: "{{ .Values.alloy.env.ALLOY_NATS_STREAM_PASS }}"
           resources:
             limits:
               cpu: 200m
