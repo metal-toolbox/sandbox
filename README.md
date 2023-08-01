@@ -65,12 +65,12 @@ go run scripts/serverservice/add-server.go \
 
 ### 4. Import firmware definitions (optional)
 
-Note: replace `ARTIFACTS_ENDPOINT` in [firmwares.yaml](./scripts/mctl/firmwares.yaml) with endpoint serving the firmware files.
+Note: replace `ARTIFACTS_ENDPOINT` in [firmwares.json](./scripts/mctl/firmwares.json) with endpoint serving the firmware files.
 
-Import firmware defs from sample file using `mcll`.
+Import firmware defs from sample file using `mctl`.
 
 ```sh
-mctl create  firmware --from-file ./scripts/mctl/firmwares.yaml
+mctl create  firmware --from-file ./scripts/mctl/firmwares.json
 ```
 
 ### 5. Create a firmware set (optional)
