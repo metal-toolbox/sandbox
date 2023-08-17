@@ -24,6 +24,8 @@ spec:
             - "--log-level"
             - "debug"
             - "--replica-count=1"
+            - "--facility"
+            - "{{ Values.location }}"
           ports:
             - containerPort: 9002
           volumeMounts:
@@ -68,6 +70,12 @@ spec:
               #      key: serverservice-oidc-client-secret
             - name: CONDITIONORC_NATS_CREDS_FILE
               value: /etc/nats/nats.creds
+            - name: CONDITIONORC_NOTIFICATIONS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: notifications-token
+                  key: slack-token
+                  optional: true
           resources:
             limits:
               cpu: 200m
