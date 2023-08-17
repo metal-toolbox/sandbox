@@ -34,3 +34,8 @@ data:
         name: conditionorc
         ack_wait: 5m
         max_ack_pending: 10
+    notifications:
+      enabled: false
+      type: "slack"
+      channel: "#bogus_channel"
+      token: "xoxb-thisisabogusslacktoken"
