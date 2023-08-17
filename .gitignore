@@ -1,2 +1,7 @@
 .*.swp
 .*.swo
+.DS_Store
+*.bke
+*.tgz
+*.tar.gz
+scripts/serverservice/add-server
