@@ -20,5 +20,6 @@ update_valuesyaml
 init_natsserver
 push_natsaccounts
 push_controller_secrets
+reload_controller_deployments
 push_serverservice_secrets
 backup_accounts

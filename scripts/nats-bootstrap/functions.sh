@@ -12,7 +12,9 @@ function clean_natsserver() {
 }
 
 function init_natsserver() {
+	kubectl get pods
 	make local-devel-upgrade
+	kubectl get pods
 }
 
 function clean_natsbox() {
@@ -106,10 +108,12 @@ nsc edit signing-key -a controllers --sk ${SK_A} \
 	--allow-pubsub '$JS.API.CONSUMER.DELETE.controllers.>' \
 	--allow-pubsub '$JS.API.CONSUMER.CREATE.KV_active-controllers' \
 	--allow-pubsub '$JS.API.CONSUMER.CREATE.KV_firmwareInstall' \
-	--allow-pubsub '$JS.API.CONSUMER.CREATE.KV_active-controllers.>' \
 	--allow-pubsub '$JS.API.CONSUMER.CREATE.KV_firmwareInstall.>' \
-	--allow-pubsub '$JS.API.CONSUMER.DELETE.KV_active-controllers.>' \
 	--allow-pubsub '$JS.API.CONSUMER.DELETE.KV_firmwareInstall.>' \
+	--allow-pubsub '$JS.API.CONSUMER.CREATE.KV_inventory' \
+	--allow-pubsub '$JS.API.CONSUMER.CREATE.KV_inventory.>' \
+	--allow-pubsub '$JS.API.CONSUMER.CREATE.KV_active-controllers.>' \
+	--allow-pubsub '$JS.API.CONSUMER.DELETE.KV_active-controllers.>' \
     --allow-pubsub '$JS.API.STREAM.INFO.KV_active-controllers' \
     --allow-pubsub '$JS.API.STREAM.INFO.KV_active-controllers.>' \
     --allow-pubsub '$JS.API.STREAM.CREATE.KV_active-controllers' \
@@ -118,6 +122,10 @@ nsc edit signing-key -a controllers --sk ${SK_A} \
     --allow-pubsub '$JS.API.STREAM.INFO.KV_firmwareInstall.>' \
     --allow-pubsub '$JS.API.STREAM.CREATE.KV_firmwareInstall' \
     --allow-pubsub '$JS.API.STREAM.CREATE.KV_firmwareInstall.>' \
+    --allow-pubsub '$JS.API.STREAM.INFO.KV_inventory' \
+    --allow-pubsub '$JS.API.STREAM.INFO.KV_inventory.>' \
+    --allow-pubsub '$JS.API.STREAM.CREATE.KV_inventory' \
+    --allow-pubsub '$JS.API.STREAM.CREATE.KV_inventory.>' \
     --allow-pubsub '$JS.ACK.controllers.>' \
 	--allow-sub 'com.hollow.sh.serverservice.events.>' \
 	--allow-pubsub 'com.hollow.sh.controllers.>' \
@@ -133,7 +141,6 @@ nsc add user -a controllers --name alloy -K controllers
 
 # create flasher user, with the controllers role
 nsc add user -a controllers --name flasher -K controllers
-
 
 EOF
 }
@@ -207,6 +214,12 @@ kind: Secret
 type: Opaque" >/tmp/kind_serverservice_secret.yaml
 
 	kubectl apply -f /tmp/kind_serverservice_secret.yaml
+}
+
+function reload_controller_deployments() {
+	echo "restarting controller deployments for NATSs changes to take effect..."
+	kubectl delete deployments.apps flasher alloy conditionorc
+	make local-devel-upgrade
 }
 
 function backup_accounts() {

@@ -20,9 +20,8 @@ spec:
           command: [
            "alloy",
            "outofband",
-           "--asset-source",
-           "serverService",
-           "--config-file",
+           "--worker",
+           "--config",
            "/etc/alloy/config.yaml",
           ]
           volumeMounts:
@@ -30,21 +29,28 @@ spec:
               mountPath: /etc/alloy
             - name: nats-creds-volume
               mountPath: /etc/nats
+              readOnly: true
           env:
-            - name: ALLOY_NATS_CREDS_FILE
-              value: /etc/nats/nats.creds
-            - name: SERVERSERVICE_ENDPOINT
+            - name: ALLOY_SERVERSERVICE_ENDPOINT
               value: "{{ .Values.alloy.env.SERVERSERVICE_ENDPOINT }}"
-            - name: SERVERSERVICE_SKIP_OAUTH
-              value: "{{ .Values.alloy.env.SERVERSERVICE_SKIP_OAUTH }}"
-            - name: SERVERSERVICE_FACILITY_CODE
+            - name: ALLOY_SERVERSERVICE_DISABLE_OAUTH
+              value: "{{ .Values.alloy.env.SERVERSERVICE_DISABLE_OAUTH }}"
+            - name: ALLOY_SERVERSERVICE_FACILITY_CODE
               value: "{{ .Values.alloy.env.SERVERSERVICE_FACILITY_CODE }}"
             - name: ALLOY_NATS_URL
               value: "{{ .Values.alloy.env.ALLOY_NATS_URL }}"
-            - name: ALLOY_NATS_STREAM_USER
-              value: "{{ .Values.alloy.env.ALLOY_NATS_STREAM_USER }}"
-            - name: ALLOY_NATS_STREAM_PASS
-              value: "{{ .Values.alloy.env.ALLOY_NATS_STREAM_PASS }}"
+            - name: ALLOY_NATS_CREDS_FILE
+              value: /etc/nats/nats.creds
+            - name: ALLOY_NATS_CONNECT_TIMEOUT
+              value: "{{ .Values.flasher.env.NATS_CONNECT_TIMEOUT }}"
+            - name: ALLOY_NATS_CONSUMER_NAME
+              value: "{{ .Values.location }}-alloy"
+            - name: ALLOY_NATS_CONSUMER_SUBSCRIBESUBJECTS
+              value: "com.hollow.sh.controllers.commands.{{ .Values.location }}.servers.inventory"
+            - name: ALLOY_NATS_CONSUMER_FILTERSUBJECT
+              value: "com.hollow.sh.controllers.commands.{{ .Values.location }}.servers.inventory"
+            - name: ALLOY_NATS_PUBLISHERSUBJECTPREFIX
+              value: "com.hollow.sh.controllers.responses.{{ .Values.location }}.servers.inventory"
           resources:
             limits:
               cpu: 200m
@@ -57,6 +63,9 @@ spec:
           configMap:
             name: alloy-config
         - name: nats-creds-volume
-          configMap:
-            name: alloy-nats-creds
+          secret:
+            secretName: alloy-secrets
+            items:
+              - key: alloy-nats-creds
+                path: nats.creds
       restartPolicy: Always

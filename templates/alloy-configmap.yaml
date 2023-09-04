@@ -11,30 +11,16 @@ data:
     collector_outofband:
       concurrency: 5
     store_kind: serverservice
-    serverservice:
-      endpoint: http://serverservice:8000
-      disable_oauth: true
-      facility_code: dc13
     events_broker_kind: nats
     nats:
-      url: nats://nats:4222
       app_name: alloy
-      publisher_subject_prefix: com.hollow.sh.controllers.responses
+      # TODO: remove deprecated stream_urn_ns field
       stream_urn_ns: hollow-controllers
-      #subscribe_subjects:
-      #  - com.hollow.sh.controllers.commands.>
-      connect_timeout: 30s
-      #creds_file:
       consumer:
         pull: true
-        name: alloy
         ack_wait: 5m
         max_ack_pending: 10
         queue_group: alloy
-        subscribe_subjects:
-          - com.hollow.sh.controllers.commands.servers.inventory.>
-        # filter_subject required to create consumer, must be unique on stream.
-        filter_subject: com.hollow.sh.controllers.commands.servers.inventory.>
       stream:
         name: controllers
         subjects:
@@ -43,3 +29,5 @@ data:
         acknowledgements: true
         duplicate_window: 5m
         retention: workQueue
+      kv:
+        replica_count: 1

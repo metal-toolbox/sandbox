@@ -10,7 +10,7 @@ data:
     store_kind: serverservice
     # conditions accepted by this API
     conditions:
-      - kind: inventoryOutofband
+      - kind: inventory
         exclusive: false
         failoncheckpointerror: false
       - kind: firmwareInstall
