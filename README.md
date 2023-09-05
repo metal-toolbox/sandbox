@@ -19,22 +19,19 @@ To understand more about the firmware install and how these services interact, c
 - Setup a local KIND cluster with a registry using the script here: https://kind.sigs.k8s.io/docs/user/local-registry/
 - Export `KUBECONFIG=~/.kube/config_kind`
 - Docker images for Serverservice, Conditionorc, Alloy
+- Install [mctl](https://github.com/metal-toolbox/mctl#getting-started) and use the configuration from [here](https://github.com/metal-toolbox/sandbox/tree/main/scripts/mctl)
 
 ### 1. Build docker images and push to local registry
 
-Clone the serverservice repository and build the docker image,
+Clone each of the repositories and run `make push-image-devel`
 
-```sh
-export GIT_TAG="localhost:5001/serverservice:latest" && \
-    GOOS=linux GOARCH=amd64 go build -o serverservice && \
-    docker build -t "${GIT_TAG}" -f Dockerfile . && \
-    docker push localhost:5001/serverservice:latest && kind load docker-image "${GIT_TAG}"
-```
+ - [Serverservice](https://github.com/metal-toolbox/hollow-serverservice)
+ - [Conditionorc](https://github.com/metal-toolbox/conditionorc)
+ - [Alloy](https://github.com/metal-toolbox/alloy)
+ - [Flasher](https://github.com/metal-toolbox/flasher/)
 
-Clone the Alloy, Conditionorc, Flasher repositories and build each of the container images using,
-```sh
-make push-image-devel
-```
+This will build and push the container images to the local container registry.
+
 
 ### 2. Deploy helm chart
 
@@ -63,7 +60,21 @@ go run scripts/serverservice/add-server.go \
         -bmc-pass foo
 ```
 
-### 4. Import firmware definitions (optional)
+### 4. Collect information on the server
+
+This collects the current firmware, health information and BIOS configuration data for a server.
+
+```sh
+mctl collect inventory --server edeff024-f62a-4288-8730-3fab8cceab78
+```
+
+Inventory collection status can be checked with,
+
+```sh
+mctl collect status --server edeff024-f62a-4288-8730-3fab8cceab78
+```
+
+### 5. Import firmware definitions (optional)
 
 Note: replace `ARTIFACTS_ENDPOINT` in [firmwares.json](./scripts/mctl/firmwares.json) with endpoint serving the firmware files.
 
@@ -73,7 +84,7 @@ Import firmware defs from sample file using `mctl`.
 mctl create  firmware --from-file ./scripts/mctl/firmwares.json
 ```
 
-### 5. Create a firmware set (optional)
+### 6. Create a firmware set (optional)
 
 List the firmware using `mctl list firmware` and create a set that can be applied to a server.
 
@@ -83,7 +94,7 @@ mctl create firmware-set --firmware-uuids 5e574c96-6ba4-4078-9650-c52a64cc8cba,a
                          --name r6515
 ```
 
-### 4. Set a `firmwareInstall` condition on a server (optional)
+### 7. Set a `firmwareInstall` condition on a server (optional)
 
 With the server added, you can now get flasher to set a `firmwareInstall` condition,
 
