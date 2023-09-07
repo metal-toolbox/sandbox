@@ -25,7 +25,7 @@ spec:
             - "debug"
             - "--replica-count=1"
             - "--facility"
-            - "{{ Values.location }}"
+            - "{{ .Values.location }}"
           ports:
             - containerPort: 9002
           volumeMounts:
