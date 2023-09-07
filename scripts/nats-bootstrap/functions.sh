@@ -13,12 +13,14 @@ function clean_natsserver() {
 
 function init_natsserver() {
 	kubectl get pods
-	make local-devel-upgrade
+	make upgrade
 	kubectl get pods
 }
 
 function clean_natsbox() {
+	set -e
 	kubectl exec -ti deployments/nats-box -- rm -rf /root/*.* /nsc
+	set +e
 }
 
 function init_natsaccounts() {
@@ -156,14 +158,18 @@ function push_natsaccounts() {
 		sleep 5
 	done
 
-	sleep 20
+	while ! kubectl exec -ti deployments/nats-box -- ping nats -W 1 -c 1; do
+		echo "waiting for nats service to be accessible on k8s.."
+		sleep 5
+	done
+
 	kuexec "nsc push --system-account SYS -u nats://nats:4222 -A"
 }
 
-function update_valuesyaml() {
+function update_values_nats_yaml() {
 	set -x
-	f=values.yaml.bk
-	cp values.yaml $f
+	f=values-nats.yaml.bk
+	cp values-nats.yaml $f
 
 	CURRENT_OPKEY=$(awk '/operator: /{print $2}' $f)
 	CURRENT_SYSKEY=$(awk '/systemAccount: /{print $2}' $f)
@@ -181,7 +187,7 @@ function update_valuesyaml() {
 	sed -ie 's/systemAccount: '${CURRENT_SYSKEY}'/systemAccount: '${SYSKEY}'/' $f
 	sed -ie 's/'${CURRENT_SYSKEY}': '${CURRENT_SYSPRELOADKEY}'/'${SYSKEY}': '${SYSPRELOADKEY}'/' $f
 
-	mv $f values.yaml
+	mv $f values-nats.yaml
 }
 
 function push_controller_secrets() {
@@ -219,7 +225,7 @@ type: Opaque" >/tmp/kind_serverservice_secret.yaml
 function reload_controller_deployments() {
 	echo "restarting controller deployments for NATSs changes to take effect..."
 	kubectl delete deployments.apps flasher alloy conditionorc
-	make local-devel-upgrade
+	make upgrade
 }
 
 function backup_accounts() {

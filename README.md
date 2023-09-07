@@ -38,7 +38,7 @@ This will build and push the container images to the local container registry.
 Deploys the helm chart and bootstrap the NATS Jetstream, K/V store.
 
 ```sh
-make local-devel
+make install
 ```
 
 ### 3. Import a server
@@ -117,13 +117,13 @@ mctl install status --server edeff024-f62a-4288-8730-3fab8cceab78
 To upgrade the helm install after changes to the templates,
 
 ```
-make local-devel-upgrade
+make upgrade
 ```
 
 To uninstall the helm chart
 
 ```
-make uninstall-local-devel
+make clean
 ```
 
 ## NATs Jetstream setup
@@ -164,13 +164,15 @@ Usage:
   make <target>
 
 Targets:
-  local-devel          install helm chart for the sandbox env
-  local-devel-upgrade  upgrade helm chart for the sandbox environment
+  install              install helm chart for the sandbox env
+  upgrade              upgrade helm chart for the sandbox environment
+  clean                uninstall helm chart
   port-forward-conditionorc-api port forward condition orchestrator API  (runs in foreground)
   port-forward-alloy-pprof port forward condition Alloy pprof endpoint  (runs in foreground)
   port-forward-hss     port forward hollow server service port (runs in foreground)
   port-forward-crdb    port forward crdb service port (runs in foreground)
   port-forward-chaos-dash port forward chaos-mesh dashboard (runs in foreground)
+  port-forward-jaeger-dash port forward jaeger frontend
   psql-crdb            connect to crdb with psql (requires port-forward-crdb)
   clean-nats           purge nats app and storage pvcs
   kubectl-ctx-kind     set kube ctx to kind cluster

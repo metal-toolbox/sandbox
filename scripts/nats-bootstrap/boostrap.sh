@@ -16,7 +16,7 @@ source scripts/nats-bootstrap/functions.sh
 clean_natsbox
 clean_natsserver
 init_natsaccounts
-update_valuesyaml
+update_values_nats_yaml
 init_natsserver
 push_natsaccounts
 push_controller_secrets

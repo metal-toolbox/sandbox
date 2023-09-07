@@ -1,18 +1,20 @@
 .DEFAULT_GOAL := help
 
 ## install helm chart for the sandbox env
-local-devel: kubectl-ctx-kind
-	helm install hollow-sandbox . -f values.yaml
+install: kubectl-ctx-kind
+	cp ./scripts/nats-bootstrap/values-nats.yaml.tmpl values-nats.yaml
+	helm install hollow-sandbox . -f values.yaml -f values-nats.yaml
 	kubectl get pod
 	./scripts/nats-bootstrap/boostrap.sh
 
 ## upgrade helm chart for the sandbox environment
-local-devel-upgrade: kubectl-ctx-kind
-	helm upgrade hollow-sandbox . -f values.yaml
+upgrade: kubectl-ctx-kind
+	helm upgrade hollow-sandbox . -f values.yaml -f values-nats.yaml
 
 ## uninstall helm chart
-uninstall-local-devel: kubectl-ctx-kind
+clean: kubectl-ctx-kind
 	helm uninstall hollow-sandbox
+	rm values-nats.yaml
 	# incase the crdb pvc is stuck in terminating
 	# kubectl patch pvc db -p '{"metadata":{"finalizers":null}}'
 
