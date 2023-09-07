@@ -23,6 +23,8 @@ spec:
            "--worker",
            "--config",
            "/etc/alloy/config.yaml",
+           "--facility-code",
+           "{{ .Values.location }}"
           ]
           volumeMounts:
             - name: config-volume
