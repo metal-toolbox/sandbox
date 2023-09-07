@@ -1,3 +1,5 @@
+## for NATS service configuration see #scripts/nats-bootstrap/values-nats.yaml.tmpl
+
 location: sandbox
 
 serverservice:
@@ -54,7 +56,7 @@ alloy:
     pullPolicy: Always
   env:
     SERVERSERVICE_ENDPOINT: http://serverservice:8000
-    SERVERSERVICE_SKIP_OAUTH: true
+    SERVERSERVICE_DISABLE_OAUTH: true
     SERVERSERVICE_FACILITY_CODE: dc13
     ALLOY_NATS_URL: "nats://nats:4222"
     ALLOY_NATS_STREAM_USER: alloy
@@ -62,47 +64,6 @@ alloy:
 
 crdb:
   image: cockroachdb/cockroach:latest-v21.1
-#
-# https://github.com/nats-io/k8s/tree/main/helm/charts/nats#using-nats-chart-as-a-dependency
-nats:
-  fullnameOverride: nats
-  nats:
-    image:
-      repository: nats
-      tag: "2.9.16-alpine"
-      pullPolicy: IfNotPresent
-    logging:
-      debug: true
-      trace: true
-      logtime: true
-    jetstream:
-      enabled: true
-      fileStorage:
-        size: 1Gi
-  auth:
-    enabled: true
-    timeout: "5s"
-    resolver:
-      type: full
-      # Operator named KO
-      operator: eyJ0eXAiOiJKV1QiLCJhbGciOiJlZDI1NTE5LW5rZXkifQ.eyJqdGkiOiJTQkZFRU5CVjNQQjdaU0k3NFlRNktSN1NNQ0pLMzUyVEVOVVlTT1NPRUlFSEdPNzVKTU9RIiwiaWF0IjoxNjkwODA0OTUzLCJpc3MiOiJPQVYyQVNOQlFCRDNWRUVZSk5YWldOWERaUUtJTzVRSTc0SElDNkJLRTVJNUI1QklWSllZQklOQiIsIm5hbWUiOiJLTyIsInN1YiI6Ik9BVjJBU05CUUJEM1ZFRVlKTlhaV05YRFpRS0lPNVFJNzRISUM2QktFNUk1QjVCSVZKWVlCSU5CIiwibmF0cyI6eyJhY2NvdW50X3NlcnZlcl91cmwiOiJuYXRzOi8vbmF0czo0MjIyIiwib3BlcmF0b3Jfc2VydmljZV91cmxzIjpbIm5hdHM6Ly9uYXRzOjQyMjIiXSwidHlwZSI6Im9wZXJhdG9yIiwidmVyc2lvbiI6Mn19.Ne9un2wGoH0LHXJLoLryaC8OBJxcQAYoAJxXcMvogpzRWWrWDo_pAr7H5Ug9tR357L-1ebMtP_puzOgomMJYBA
-      # System account named SYS
-      systemAccount: ACYKJYW6NQA6LMYWBRA6VWHHCI32KIGOO2QELS775ZTSEPFCNBHDW57M
-      store:
-        dir: "/accounts/jwt"
-        size: "50Mi"
-      resolverPreload:
-        ACYKJYW6NQA6LMYWBRA6VWHHCI32KIGOO2QELS775ZTSEPFCNBHDW57M: eyJ0eXAiOiJKV1QiLCJhbGciOiJlZDI1NTE5LW5rZXkifQ.eyJqdGkiOiJOWTJTMlJIWkdUMkNIQUJGSkc2S05LQlRUUllWS0pKTlBMQzJLSURIUlBGRldPTlhJQ0NBIiwiaWF0IjoxNjkwODA0OTUzLCJpc3MiOiJPQVYyQVNOQlFCRDNWRUVZSk5YWldOWERaUUtJTzVRSTc0SElDNkJLRTVJNUI1QklWSllZQklOQiIsIm5hbWUiOiJTWVMiLCJzdWIiOiJBQ1lLSllXNk5RQTZMTVlXQlJBNlZXSEhDSTMyS0lHT08yUUVMUzc3NVpUU0VQRkNOQkhEVzU3TSIsIm5hdHMiOnsibGltaXRzIjp7InN1YnMiOi0xLCJkYXRhIjotMSwicGF5bG9hZCI6LTEsImltcG9ydHMiOi0xLCJleHBvcnRzIjotMSwid2lsZGNhcmRzIjp0cnVlLCJjb25uIjotMSwibGVhZiI6LTF9LCJkZWZhdWx0X3Blcm1pc3Npb25zIjp7InB1YiI6e30sInN1YiI6e319LCJhdXRob3JpemF0aW9uIjp7ImF1dGhfdXNlcnMiOm51bGx9LCJ0eXBlIjoiYWNjb3VudCIsInZlcnNpb24iOjJ9fQ.D__yDBVfwfV2ABVe9ifbmT5SiNpaeWCVKhsAu96PsxLsO9C3GLW_KzoXUN1Vp_jN3M6yAgRNs_RjJt3MJRGWAA
-  cluster:
-    enabled: false
-    noAdvertise: true
-  natsbox:
-    enabled: true
-    #image: natsio/nats-box:0.13.4
-    image:
-      repository: natsio/nats-box
-      tag: 0.13.8
-      pullPolicy: IfNotPresent
 
 chaos-mesh:
   enabled: false
