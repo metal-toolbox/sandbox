@@ -53,6 +53,10 @@ spec:
               value: "com.hollow.sh.controllers.commands.{{ .Values.location }}.servers.inventory"
             - name: ALLOY_NATS_PUBLISHERSUBJECTPREFIX
               value: "com.hollow.sh.controllers.responses.{{ .Values.location }}.servers.inventory"
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "{{ .Values.alloy.env.OTEL_EXPORTER_OTLP_ENDPOINT }}"
+            - name: OTEL_EXPORTER_OTLP_INSECURE
+              value: "{{ .Values.alloy.env.OTEL_EXPORTER_OTLP_INSECURE }}"
           resources:
             limits:
               cpu: 200m
