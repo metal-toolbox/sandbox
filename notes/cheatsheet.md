@@ -26,3 +26,15 @@ Consume an event as conditionorc
 ```
 nats consumer sub --creds=/root/nsc/nkeys/creds/KO/controllers/conditionorc.creds -s nats://nats:4222
 ```
+
+
+list keys in statusKV buckets
+```
+nats -s nats://nats:4222 --creds=nsc/nkeys/creds/KO/controllers/alloy.creds kv ls firmwareInstall -v  --display-value
+nats -s nats://nats:4222 --creds=nsc/nkeys/creds/KO/controllers/alloy.creds kv ls inventory -v  --display-value
+
+consume an event as alloy
+```
+```
+nats -s nats://nats:4222 --creds=nsc/nkeys/creds/KO/controllers/alloy.creds consumer next controllers sandbox-alloy
+```
