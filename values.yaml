@@ -59,9 +59,9 @@ alloy:
     SERVERSERVICE_DISABLE_OAUTH: true
     SERVERSERVICE_FACILITY_CODE: dc13
     ALLOY_NATS_URL: "nats://nats:4222"
-    ALLOY_NATS_STREAM_USER: alloy
-    ALLOY_NATS_STREAM_PASS: password
-
+    # telemetry configuration
+    OTEL_EXPORTER_OTLP_ENDPOINT: jaeger:4317
+    OTEL_EXPORTER_OTLP_INSECURE: true
 crdb:
   image: cockroachdb/cockroach:latest-v21.1
 
