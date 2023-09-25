@@ -24,7 +24,9 @@ spec:
            "--config",
            "/etc/alloy/config.yaml",
            "--facility-code",
-           "{{ .Values.location }}"
+           "{{ .Values.location }}",
+           "--replica-count",
+           "1"
           ]
           volumeMounts:
             - name: config-volume

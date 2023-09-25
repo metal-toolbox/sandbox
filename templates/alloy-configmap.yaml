@@ -29,5 +29,3 @@ data:
         acknowledgements: true
         duplicate_window: 5m
         retention: workQueue
-      kv:
-        replica_count: 1
