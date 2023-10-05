@@ -192,34 +192,31 @@ function update_values_nats_yaml() {
 
 function push_controller_secrets() {
 	for controller in conditionorc alloy flasher; do
-		sekrit=$(kuexec "cat /root/nsc/nkeys/creds/KO/controllers/${controller}.creds" | base64)
-
-		echo "apiVersion: v1
-metadata:
-  name: ${controller}-secrets
-  namespace: default
-data:
-  ${controller}-nats-creds: $sekrit
-kind: Secret
-type: Opaque" >/tmp/kind_${controller}_secret.yaml
-
-		kubectl apply -f /tmp/kind_${controller}_secret.yaml
+		sekrit=$(kuexec "cat /root/nsc/nkeys/creds/KO/controllers/${controller}.creds" | base64 -w 0)
+    push_secret "${sekrit}" ${controller}
 	done
 }
 
 function push_serverservice_secrets() {
-	sekrit=$(kuexec "cat /root/nsc/nkeys/creds/KO/serverservice/serverservice.creds" | base64)
+	sekrit=$(kuexec "cat /root/nsc/nkeys/creds/KO/serverservice/serverservice.creds" | base64 -w 0)
+	push_secret "${sekrit}" serverservice
+}
+
+function push_secret() {
+  sekrit=$1
+  name=$2
+  file=/tmp/kind_${name}_secret.yaml
 
 	echo "apiVersion: v1
 metadata:
-  name: serverservice-secrets
+  name: ${name}-secrets
   namespace: default
 data:
-  serverservice-nats-creds: $sekrit
+  ${name}-nats-creds: ${sekrit}
 kind: Secret
-type: Opaque" >/tmp/kind_serverservice_secret.yaml
+type: Opaque" > "${file}"
 
-	kubectl apply -f /tmp/kind_serverservice_secret.yaml
+	kubectl apply -f "${file}"
 }
 
 function reload_controller_deployments() {
