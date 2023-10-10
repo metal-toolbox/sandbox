@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+  labels:
+    k8s-service: jaeger
+  name: jaeger
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-service: jaeger
+  template:
+    metadata:
+      labels:
+        k8s-service: jaeger
+    spec:
+      containers:
+        - env:
+            - name: COLLECTOR_OTLP_ENABLED
+              value: "true"
+            - name: JAEGER_REPORTER_LOG_SPANS
+              value: "true"
+          image: jaegertracing/all-in-one:1.44
+          name: jaeger
+          ports:
+            - containerPort: 16686
+            - containerPort: 4317
+            - containerPort: 14268
+      restartPolicy: Always

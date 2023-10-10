@@ -32,8 +32,11 @@ spec:
               memory: 200M
       volumes:
         - name: nats-creds-volume
-          configMap:
-            name: serverservice-nats-creds
+          secret:
+            secretName: serverservice-secrets
+            items:
+              - key: serverservice-nats-creds
+                path: nats.creds
       containers:
         - env:
             - name: SERVERSERVICE_CRDB_URI
@@ -49,6 +52,7 @@ spec:
           volumeMounts:
             - name: nats-creds-volume
               mountPath: /etc/nats
+              readOnly: true
           image: "{{ .Values.serverservice.image.repository }}:{{ .Values.serverservice.image.tag }}"
           name: serverservice
           args:

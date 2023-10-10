@@ -1,0 +1,9 @@
+.*.swp
+.*.swo
+.DS_Store
+*.bke
+*.tgz
+*.tar.gz
+values-nats.yaml
+scripts/serverservice/add-server
+.idea

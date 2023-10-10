@@ -1,0 +1,42 @@
+#
+# https://github.com/nats-io/k8s/tree/main/helm/charts/nats#using-nats-chart-as-a-dependency
+nats:
+  fullnameOverride: nats
+  nats:
+    image:
+      repository: nats
+      tag: "2.9.16-alpine"
+      pullPolicy: IfNotPresent
+    logging:
+      debug: true
+      trace: true
+      logtime: true
+    jetstream:
+      enabled: true
+      fileStorage:
+        size: 1Gi
+  auth:
+    enabled: true
+    timeout: "5s"
+    resolver:
+      type: full
+      # Operator named KO
+      operator: eyJ0eXAiOiJKV1QiLCJhbGciOiJlZDI1NTE5LW5rZXkifQ.eyJqdGkiOiJUWEFVWUFLV1E3WklGWVNWSkRPTTVaNDQ0NFdKQlpCMkxJNEYzTFFGSElPRlhPMkxXUFNBIiwiaWF0IjoxNjkzODAyODg1LCJpc3MiOiJPREJNRUpMREJWUTVMTUVGQ1QzWEVLTUVSUkdJVVlCWlo3VFA3N0lWSjNSMzMyTDc0SUVVR05YRyIsIm5hbWUiOiJLTyIsInN1YiI6Ik9EQk1FSkxEQlZRNUxNRUZDVDNYRUtNRVJSR0lVWUJaWjdUUDc3SVZKM1IzMzJMNzRJRVVHTlhHIiwibmF0cyI6eyJhY2NvdW50X3NlcnZlcl91cmwiOiJuYXRzOi8vbmF0czo0MjIyIiwib3BlcmF0b3Jfc2VydmljZV91cmxzIjpbIm5hdHM6Ly9uYXRzOjQyMjIiXSwidHlwZSI6Im9wZXJhdG9yIiwidmVyc2lvbiI6Mn19.Grx7XJ1viEPEKQuKj26osCE1fy5DbWFIG5g3VD7s55db-ZRQq1lb4xdMLwvbsnhtrI0D0o24WgVsgJ80DXRUAA
+      # System account named SYS
+      systemAccount: ABUHJSADT3SLYFXMTRQ5YVBZP2OTH5UF7LZ6MXWH4FTTNLN7ABKCLROW
+      store:
+        dir: "/accounts/jwt"
+        size: "50Mi"
+      resolverPreload:
+        ABUHJSADT3SLYFXMTRQ5YVBZP2OTH5UF7LZ6MXWH4FTTNLN7ABKCLROW: eyJ0eXAiOiJKV1QiLCJhbGciOiJlZDI1NTE5LW5rZXkifQ.eyJqdGkiOiI3TFRLMzU2VFhMQTc0UlE1NlhIN1lBSUI1SkZFWEJWNExOVk1YVkRGVElLNUxQQU43UUtRIiwiaWF0IjoxNjkzODAyODg1LCJpc3MiOiJPREJNRUpMREJWUTVMTUVGQ1QzWEVLTUVSUkdJVVlCWlo3VFA3N0lWSjNSMzMyTDc0SUVVR05YRyIsIm5hbWUiOiJTWVMiLCJzdWIiOiJBQlVISlNBRFQzU0xZRlhNVFJRNVlWQlpQMk9USDVVRjdMWjZNWFdINEZUVE5MTjdBQktDTFJPVyIsIm5hdHMiOnsibGltaXRzIjp7InN1YnMiOi0xLCJkYXRhIjotMSwicGF5bG9hZCI6LTEsImltcG9ydHMiOi0xLCJleHBvcnRzIjotMSwid2lsZGNhcmRzIjp0cnVlLCJjb25uIjotMSwibGVhZiI6LTF9LCJkZWZhdWx0X3Blcm1pc3Npb25zIjp7InB1YiI6e30sInN1YiI6e319LCJhdXRob3JpemF0aW9uIjp7ImF1dGhfdXNlcnMiOm51bGx9LCJ0eXBlIjoiYWNjb3VudCIsInZlcnNpb24iOjJ9fQ.ih3oQvM0KNoA5lcKTCbDZj-sbjNoThv-nTRkL_t5JVot_BmvxK8Rfi6ppIJrA_8k6Oh1m_x799Sy5kFJnU16DA
+  cluster:
+    enabled: false
+    noAdvertise: true
+  natsbox:
+    enabled: true
+    #image: natsio/nats-box:0.13.4
+    image:
+      repository: natsio/nats-box
+      tag: 0.13.8
+      pullPolicy: IfNotPresent
+

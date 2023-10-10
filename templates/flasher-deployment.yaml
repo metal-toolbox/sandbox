@@ -14,6 +14,7 @@ spec:
       labels:
         k8s-service: flasher
     spec:
+      terminationGracePeriodSeconds: 1200
       containers:
         - name: flasher
           image: "{{ .Values.flasher.image.repository }}:{{ .Values.flasher.image.tag }}"
@@ -27,16 +28,66 @@ spec:
            "/etc/flasher/config.yaml",
            "--enable-pprof",
            "--log-level",
-           "trace",
+           "debug",
+           "--fault-injection",
+           "--use-kv",
+           "--replica-count=1",
+           "--facility-code",
+           "{{ .Values.location }}"
           ]
           volumeMounts:
             - name: config-volume
               mountPath: /etc/flasher
             - name: nats-creds-volume
               mountPath: /etc/nats
+              readOnly: true
+            - mountPath: /tmp
+              name: downloads-scratch
           env:
+            - name: FLASHER_NATS_URL
+              value: "{{ .Values.flasher.env.NATS_URL }}"
+            - name: FLASHER_NATS_CONNECT_TIMEOUT
+              value: "{{ .Values.flasher.env.NATS_CONNECT_TIMEOUT }}"
+            - name: FLASHER_NATS_CONSUMER_NAME
+              value: "{{ .Values.location }}-flasher"
+            - name: FLASHER_NATS_CONSUMER_SUBSCRIBESUBJECTS
+              value: "com.hollow.sh.controllers.commands.{{ .Values.location }}.servers.firmwareInstall"
+            - name: FLASHER_NATS_CONSUMER_FILTERSUBJECT
+              value: "com.hollow.sh.controllers.commands.{{ .Values.location }}.servers.firmwareInstall"
+            - name: FLASHER_NATS_PUBLISHERSUBJECTPREFIX
+              value: "com.hollow.sh.controllers.responses.{{ .Values.location }}.servers.firmwareInstall"
+            - name: FLASHER_SERVERSERVICE_ENDPOINT
+              value: "{{ .Values.flasher.env.SERVERSERVICE_ENDPOINT }}"
+            - name: FLASHER_SERVERSERVICE_DISABLE_OAUTH
+              value: "{{ .Values.flasher.env.SERVERSERVICE_DISABLE_OAUTH }}"
+            - name: FLASHER_SERVERSERVICE_FACILITY_CODE
+              value: "{{ .Values.location  }}"
+            - name: FLASHER_SERVERSERVICE_OIDC_AUDIENCE_ENDPOINT
+              value: "{{ .Values.flasher.env.SERVERSERVICE_OIDC_AUDIENCE_ENDPOINT }}"
+            - name: FLASHER_SERVERSERVICE_OIDC_ISSUER_ENDPOINT
+              value: "{{ .Values.flasher.env.SERVERSERVICE_OIDC_ISSUER_ENDPOINT }}"
+            - name: FLASHER_SERVERSERVICE_OIDC_CLIENT_SCOPES
+              value: "{{ .Values.flasher.env.SERVERSERVICE_OIDC_CLIENT_SCOPES }}"
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "{{ .Values.flasher.env.OTEL_EXPORTER_OTLP_ENDPOINT }}"
+            - name: OTEL_EXPORTER_OTLP_INSECURE
+              value: "{{ .Values.flasher.env.OTEL_EXPORTER_OTLP_INSECURE }}"
+            - name: FLASHER_SERVERSERVICE_OIDC_CLIENT_ID
+              value: "{{ .Values.flasher.env.SERVERSERVICE_OIDC_CLIENT_ID }}"
+              #- name: FLASHER_SERVERSERVICE_OIDC_CLIENT_SECRET
+              #  valueFrom:
+              #    secretKeyRef:
+              #      name: flasher-secrets
+              #      key: serverservice-oidc-client-secret
             - name: FLASHER_NATS_CREDS_FILE
               value: /etc/nats/nats.creds
+          securityContext:
+            capabilities:
+              drop:
+                - NET_RAW
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1000
           resources:
             limits:
               cpu: 200m
@@ -44,11 +95,29 @@ spec:
             requests:
               cpu: 200m
               memory: 200M
+          ports:
+            - name: metrics-port
+              containerPort: 9090
+          livenessProbe:
+            httpGet:
+              path: /metrics
+              port: metrics-port
+            initialDelaySeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /metrics
+              port: metrics-port
+            initialDelaySeconds: 5
       volumes:
         - name: config-volume
           configMap:
             name: flasher-config
         - name: nats-creds-volume
-          configMap:
-            name: flasher-nats-creds
+          secret:
+            secretName: flasher-secrets
+            items:
+              - key: flasher-nats-creds
+                path: nats.creds
+        - name: downloads-scratch
+          emptyDir: {}
       restartPolicy: Always

@@ -1,12 +1,22 @@
 .DEFAULT_GOAL := help
 
 ## install helm chart for the sandbox env
-local-devel: kubectl-ctx-kind
-	helm install hollow-sandbox . -f values.yaml
+install: kubectl-ctx-kind
+	cp ./scripts/nats-bootstrap/values-nats.yaml.tmpl values-nats.yaml
+	helm install hollow-sandbox . -f values.yaml -f values-nats.yaml
+	kubectl get pod
+	./scripts/nats-bootstrap/boostrap.sh
 
 ## upgrade helm chart for the sandbox environment
-local-devel-upgrade: kubectl-ctx-kind
-	helm upgrade hollow-sandbox . -f values.yaml
+upgrade: kubectl-ctx-kind
+	helm upgrade hollow-sandbox . -f values.yaml -f values-nats.yaml
+
+## uninstall helm chart
+clean: kubectl-ctx-kind
+	helm uninstall hollow-sandbox
+	rm values-nats.yaml
+	# incase the crdb pvc is stuck in terminating
+	# kubectl patch pvc db -p '{"metadata":{"finalizers":null}}'
 
 ## port forward condition orchestrator API  (runs in foreground)
 port-forward-conditionorc-api: kubectl-ctx-kind
@@ -28,6 +38,10 @@ port-forward-crdb: kubectl-ctx-kind
 ## port forward chaos-mesh dashboard (runs in foreground)
 port-forward-chaos-dash: kubectl-ctx-kind
 	kubectl port-forward  service/chaos-dashboard 2333:2333
+
+## port forward jaeger frontend
+port-forward-jaeger-dash:
+	kubectl port-forward  service/jaeger 16686:16686
 
 
 ## connect to crdb with psql (requires port-forward-crdb)

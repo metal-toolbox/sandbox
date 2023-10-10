@@ -28,9 +28,50 @@ spec:
               mountPath: /etc/conditionorc/
             - name: nats-creds-volume
               mountPath: /etc/nats
+              readOnly: true
           env:
+            - name: CONDITIONORC_NATS_URL
+              value: "{{ .Values.conditionorc.env.NATS_URL }}"
+            - name: CONDITIONORC_NATS_CONNECT_TIMEOUT
+              value: "{{ .Values.conditionorc.env.NATS_CONNECT_TIMEOUT }}"
+            - name: CONDITIONORC_NATS_CONSUMER_NAME
+              value: "conditionorc"
+            - name: CONDITIONORC_NATS_CONSUMER_SUBSCRIBESUBJECTS
+              value: "com.hollow.sh.controllers.responses.>"
+            - name: CONDITIONORC_NATS_CONSUMER_FILTERSUBJECT
+              value: "com.hollow.sh.controllers.responses.>"
+            - name: CONDITIONORC_NATS_PUBLISHERSUBJECTPREFIX
+              value: "com.hollow.sh.controllers.commands"
+            - name: CONDITIONORC_SERVERSERVICE_ENDPOINT
+              value: "{{ .Values.conditionorc.env.SERVERSERVICE_ENDPOINT }}"
+            - name: CONDITIONORC_SERVERSERVICE_DISABLE_OAUTH
+              value: "{{ .Values.conditionorc.env.SERVERSERVICE_DISABLE_OAUTH }}"
+            - name: CONDITIONORC_SERVERSERVICE_OIDC_AUDIENCE_ENDPOINT
+              value: "{{ .Values.conditionorc.env.SERVERSERVICE_OIDC_AUDIENCE_ENDPOINT }}"
+            - name: CONDITIONORC_SERVERSERVICE_OIDC_ISSUER_ENDPOINT
+              value: "{{ .Values.conditionorc.env.SERVERSERVICE_OIDC_ISSUER_ENDPOINT }}"
+            - name: CONDITIONORC_SERVERSERVICE_OIDC_CLIENT_SCOPES
+              value: "{{ .Values.conditionorc.env.SERVERSERVICE_OIDC_CLIENT_SCOPES }}"
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "{{ .Values.conditionorc.env.OTEL_EXPORTER_OTLP_ENDPOINT }}"
+            - name: OTEL_EXPORTER_OTLP_INSECURE
+              value: "{{ .Values.conditionorc.env.OTEL_EXPORTER_OTLP_INSECURE }}"
+            - name: CONDITIONORC_SERVERSERVICE_OIDC_CLIENT_ID
+              value: "{{ .Values.conditionorc.env.SERVERSERVICE_OIDC_CLIENT_ID }}"
+              #- name: CONDITIONORC_SERVERSERVICE_OIDC_CLIENT_SECRET
+              #  valueFrom:
+              #    secretKeyRef:
+              #      name: conditionorc-secrets
+              #      key: serverservice-oidc-client-secret
             - name: CONDITIONORC_NATS_CREDS_FILE
               value: /etc/nats/nats.creds
+          securityContext:
+            capabilities:
+              drop:
+                - NET_RAW
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1000
           resources:
             limits:
               cpu: 100m
@@ -38,11 +79,29 @@ spec:
             requests:
               cpu: 100m
               memory: 100M
+          ports:
+            - name: metrics-port
+              containerPort: 9090
+          livenessProbe:
+            httpGet:
+              path: /metrics
+              port: metrics-port
+            initialDelaySeconds: 60
+            periodSeconds: 60
+          readinessProbe:
+            httpGet:
+              path: /metrics
+              port: metrics-port
+            initialDelaySeconds: 60
+            periodSeconds: 30
       volumes:
         - name: config-volume
           configMap:
             name: conditionorc-config
         - name: nats-creds-volume
-          configMap:
-            name: conditionorc-nats-creds
+          secret:
+            secretName: conditionorc-secrets
+            items:
+              - key: conditionorc-nats-creds
+                path: nats.creds
       restartPolicy: Always

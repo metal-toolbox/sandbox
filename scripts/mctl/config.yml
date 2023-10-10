@@ -1,0 +1,7 @@
+---
+serverservice_api:
+  endpoint: http://localhost:8000
+  disable: true
+conditions_api:
+  endpoint: http://localhost:9001
+  disable: true
