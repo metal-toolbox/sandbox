@@ -6,3 +6,4 @@
 *.tar.gz
 values-nats.yaml
 scripts/serverservice/add-server
+.idea
