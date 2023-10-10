@@ -192,13 +192,13 @@ function update_values_nats_yaml() {
 
 function push_controller_secrets() {
 	for controller in conditionorc alloy flasher; do
-		sekrit=$(kuexec "cat /root/nsc/nkeys/creds/KO/controllers/${controller}.creds" | base64 -w 0)
+		sekrit=$(kuexec "cat /root/nsc/nkeys/creds/KO/controllers/${controller}.creds" | gbase64 -w 0)
     push_secret "${sekrit}" ${controller}
 	done
 }
 
 function push_serverservice_secrets() {
-	sekrit=$(kuexec "cat /root/nsc/nkeys/creds/KO/serverservice/serverservice.creds" | base64 -w 0)
+	sekrit=$(kuexec "cat /root/nsc/nkeys/creds/KO/serverservice/serverservice.creds" | gbase64 -w 0)
 	push_secret "${sekrit}" serverservice
 }
 
