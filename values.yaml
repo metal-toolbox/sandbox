@@ -63,7 +63,7 @@ alloy:
     OTEL_EXPORTER_OTLP_ENDPOINT: jaeger:4317
     OTEL_EXPORTER_OTLP_INSECURE: true
 crdb:
-  image: cockroachdb/cockroach:latest-v21.1
+  image: cockroachdb/cockroach:v23.1.11
 
 chaos-mesh:
   enabled: false

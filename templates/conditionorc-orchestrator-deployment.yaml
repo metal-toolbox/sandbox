@@ -23,7 +23,6 @@ spec:
             - "/etc/conditionorc/config.yaml"
             - "--log-level"
             - "debug"
-            - "--replica-count=1"
             - "--facility"
             - "{{ .Values.location }}"
           ports:

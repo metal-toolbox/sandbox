@@ -22,7 +22,7 @@ spec:
             # https://github.com/cockroachdb/cockroach/issues/81209
             - name: COCKROACH_RAFT_CLOSEDTS_ASSERTIONS_ENABLED
               value: "false"
-          image: cockroachdb/cockroach:latest-v21.1
+          image: cockroachdb/cockroach:v23.1.11
           args:
             - start-single-node
             - --insecure
