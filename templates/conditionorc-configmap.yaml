@@ -7,7 +7,7 @@ data:
   config.yaml: |
     log_level: debug
     listen_address: 0.0.0.0:9001
-    store_kind: serverservice
+    store_kind: NATS
     # conditions accepted by this API
     conditions:
       - kind: inventory
@@ -16,6 +16,9 @@ data:
       - kind: firmwareInstall
         exclusive: true
         failoncheckpointerror: true
+    serverservice:
+      endpoint: "{{ .Values.conditionorc.env.SERVERSERVICE_ENDPOINT }}"
+      disable_oauth: "{{ .Values.conditionorc.env.SERVERSERVICE_DISABLE_OAUTH }}"
     # api server publishes commands when conditions are created.
     events_broker_kind: nats
     nats:
@@ -34,6 +37,7 @@ data:
         name: conditionorc
         ack_wait: 5m
         max_ack_pending: 10
+      kv_replication: 1
     notifications:
       enabled: false
       type: "slack"
