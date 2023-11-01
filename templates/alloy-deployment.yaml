@@ -40,7 +40,7 @@ spec:
             - name: ALLOY_SERVERSERVICE_DISABLE_OAUTH
               value: "{{ .Values.alloy.env.ALLOY_SERVERSERVICE_DISABLE_OAUTH }}"
             - name: ALLOY_SERVERSERVICE_FACILITY_CODE
-              value: "{{ .Values.alloy.env.ALLOY_SERVERSERVICE_FACILITY_CODE }}"
+              value: "{{ .Values.location }}"
             - name: ALLOY_NATS_URL
               value: "{{ .Values.alloy.env.ALLOY_NATS_URL }}"
             - name: ALLOY_NATS_CREDS_FILE

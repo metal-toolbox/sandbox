@@ -1,7 +1,6 @@
 ## for NATS service configuration see #scripts/nats-bootstrap/values-nats.yaml.tmpl
 
-#location: sandbox
-location: da11
+location: sandbox
 
 serverservice:
   image:
@@ -58,7 +57,6 @@ alloy:
   env:
     ALLOY_SERVERSERVICE_ENDPOINT: http://serverservice:8000
     ALLOY_SERVERSERVICE_DISABLE_OAUTH: true
-    ALLOY_SERVERSERVICE_FACILITY_CODE: da11
     ALLOY_NATS_URL: "nats://nats:4222"
     # telemetry configuration
     OTEL_EXPORTER_OTLP_ENDPOINT: jaeger:4317
