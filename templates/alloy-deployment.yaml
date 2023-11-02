@@ -21,12 +21,12 @@ spec:
            "alloy",
            "outofband",
            "--worker",
+           "--log-level=trace",
            "--config",
            "/etc/alloy/config.yaml",
            "--facility-code",
            "{{ .Values.location }}",
-           "--replica-count",
-           "1"
+           "--store=serverservice"
           ]
           volumeMounts:
             - name: config-volume
@@ -36,11 +36,11 @@ spec:
               readOnly: true
           env:
             - name: ALLOY_SERVERSERVICE_ENDPOINT
-              value: "{{ .Values.alloy.env.SERVERSERVICE_ENDPOINT }}"
+              value: "{{ .Values.alloy.env.ALLOY_SERVERSERVICE_ENDPOINT }}"
             - name: ALLOY_SERVERSERVICE_DISABLE_OAUTH
-              value: "{{ .Values.alloy.env.SERVERSERVICE_DISABLE_OAUTH }}"
+              value: "{{ .Values.alloy.env.ALLOY_SERVERSERVICE_DISABLE_OAUTH }}"
             - name: ALLOY_SERVERSERVICE_FACILITY_CODE
-              value: "{{ .Values.alloy.env.SERVERSERVICE_FACILITY_CODE }}"
+              value: "{{ .Values.location }}"
             - name: ALLOY_NATS_URL
               value: "{{ .Values.alloy.env.ALLOY_NATS_URL }}"
             - name: ALLOY_NATS_CREDS_FILE

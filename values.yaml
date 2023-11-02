@@ -55,9 +55,8 @@ alloy:
     tag: latest
     pullPolicy: Always
   env:
-    SERVERSERVICE_ENDPOINT: http://serverservice:8000
-    SERVERSERVICE_DISABLE_OAUTH: true
-    SERVERSERVICE_FACILITY_CODE: dc13
+    ALLOY_SERVERSERVICE_ENDPOINT: http://serverservice:8000
+    ALLOY_SERVERSERVICE_DISABLE_OAUTH: true
     ALLOY_NATS_URL: "nats://nats:4222"
     # telemetry configuration
     OTEL_EXPORTER_OTLP_ENDPOINT: jaeger:4317
