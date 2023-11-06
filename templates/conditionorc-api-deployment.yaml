@@ -31,6 +31,8 @@ spec:
               mountPath: /etc/nats
               readOnly: true
           env:
+            - name: CONDITIONORC_FLEETDB_ENABLE_SERVER_ENROLL
+              value: "true"
             - name: CONDITIONORC_NATS_URL
               value: "{{ .Values.conditionorc.env.NATS_URL }}"
             - name: CONDITIONORC_NATS_CONNECT_TIMEOUT
