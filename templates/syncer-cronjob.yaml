@@ -1,0 +1,65 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: firmware-syncer
+  labels:
+    k8s-service: firmware-syncer
+spec:
+  schedule: {{ .Values.syncer.schedule }}
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            k8s-service: firmware-syncer
+        spec:
+          volumes:
+            - name: config-volume
+              configMap:
+                name: syncer-config
+          containers:
+          - name: firmware-syncer
+            image: "{{ .Values.syncer.image.repository }}:{{ .Values.syncer.image.tag }}"
+            volumeMounts:
+              - name: config-volume
+                mountPath: /configs
+            args:
+              - --config-file
+              - /configs/config.yaml
+            env:
+              - name: SYNCER_S3_REGION
+                value: "{{ .Values.syncer.env.SYNCER_S3_REGION }}"
+              - name: SYNCER_S3_ENDPOINT
+                value: "{{ .Values.syncer.env.SYNCER_S3_ENDPOINT }}"
+              - name: SYNCER_S3_BUCKET
+                value: "{{ .Values.syncer.env.SYNCER_S3_BUCKET }}"
+              - name: SYNCER_S3_ACCESS_KEY
+                value: "{{ .Values.syncer.env.SYNCER_S3_ACCESS_KEY }}"
+              - name: SYNCER_S3_SECRET_KEY
+                value: "{{ .Values.syncer.env.SYNCER_S3_SECRET_KEY }}"
+              - name: SYNCER_SERVERSERVICE_ENDPOINT
+                value: "{{ .Values.syncer.env.SYNCER_SERVERSERVICE_ENDPOINT}}"
+              - name: SYNCER_SERVERSERVICE_DISABLE_OAUTH
+                value: "{{ .Values.syncer.env.SYNCER_SERVERSERVICE_DISABLE_OAUTH }}"
+              - name: SYNCER_ASRR_S3_REGION
+                value: "{{ .Values.syncer.env.SYNCER_ASRR_S3_REGION }}"
+              - name: SYNCER_ASRR_S3_ENDPOINT
+                value: "{{ .Values.syncer.env.SYNCER_ASRR_S3_ENDPOINT }}"
+              - name: SYNCER_ASRR_S3_BUCKET
+                value: "{{ .Values.syncer.env.SYNCER_ASRR_S3_BUCKET }}"
+              - name: SYNCER_ASRR_S3_ACCESS_KEY
+                value: "{{ .Values.syncer.env.SYNCER_ASRR_S3_ACCESS_KEY }}"
+              - name: SYNCER_ASRR_S3_SECRET_KEY
+                value: "{{ .Values.syncer.env.SYNCER_ASRR_S3_SECRET_KEY }}"
+              - name: SYNCER_GITHUB_OPENBMC_TOKEN
+                value: "{{ .Values.syncer.env.SYNCER_GITHUB_OPENBMC_TOKEN }}"
+            resources:
+              limits:
+                cpu: 200m
+                memory: 200M
+              requests:
+                cpu: 200m
+                memory: 200M
+          restartPolicy: Never
+          activeDeadlineSeconds: 10800

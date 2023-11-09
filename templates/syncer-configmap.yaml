@@ -1,0 +1,10 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: syncer-config
+  namespace: default
+data:
+  config.yaml: |
+    artifacts_url: "https://example.com"
+    firmware_manifest_url: "https://example.com/modeldata.json"
