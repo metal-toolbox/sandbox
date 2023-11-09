@@ -63,6 +63,7 @@ alloy:
     OTEL_EXPORTER_OTLP_INSECURE: true
 
 syncer:
+  enabled: false
   schedule: '"00 08 * * *"'
   image:
     repository: "localhost:5001/firmware-syncer"
