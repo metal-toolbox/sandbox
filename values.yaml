@@ -12,6 +12,7 @@ serverservice:
 
 conditionorc:
   env:
+    enable_server_enroll: true
     NATS_URL: "nats://nats:4222"
     NATS_CONNECT_TIMEOUT: 60s
     SERVERSERVICE_ENDPOINT: http://serverservice:8000
