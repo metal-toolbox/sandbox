@@ -68,6 +68,8 @@ spec:
               #      key: serverservice-oidc-client-secret
             - name: CONDITIONORC_NATS_CREDS_FILE
               value: /etc/nats/nats.creds
+            - name: CONDITIONORC_FLEETDB_ENABLE_SERVER_ENROLL
+              value: "{{ .Values.conditionorc.env.enable_server_enroll }}"
           securityContext:
             capabilities:
               drop:
