@@ -32,7 +32,7 @@ spec:
               readOnly: true
           env:
             - name: CONDITIONORC_FLEETDB_ENABLE_SERVER_ENROLL
-              value: "true"
+              value: "{{ .Values.conditionorc.env.enable_server_enroll }}"
             - name: CONDITIONORC_NATS_URL
               value: "{{ .Values.conditionorc.env.NATS_URL }}"
             - name: CONDITIONORC_NATS_CONNECT_TIMEOUT
@@ -68,8 +68,6 @@ spec:
               #      key: serverservice-oidc-client-secret
             - name: CONDITIONORC_NATS_CREDS_FILE
               value: /etc/nats/nats.creds
-            - name: CONDITIONORC_FLEETDB_ENABLE_SERVER_ENROLL
-              value: "{{ .Values.conditionorc.env.enable_server_enroll }}"
           securityContext:
             capabilities:
               drop:
