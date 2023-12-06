@@ -66,6 +66,7 @@ alloy:
 syncer:
   enable_cronjob: false
   enable_job: false
+  enable_env: false
   schedule: '"00 08 * * *"'
   image:
     repository: "localhost:5001/firmware-syncer"
@@ -88,6 +89,28 @@ syncer:
   configmap:
     artifacts_url: http://minio:9000
     firmware_manifest_url: http://modeldata/modeldata.json
+
+minio:
+  fullnameOverride: minio
+  environment:
+    MINIO_DOMAIN: minio
+  resources:
+    requests:
+      memory: 512Mi
+  replicas: 1
+  persistence:
+    enabled: false
+  mode: standalone
+  rootUser: rootuser
+  rootPassword: rootpass123
+  buckets:
+    - name: bucket1
+      policy: none
+      purge: false
+  svcaccts:
+    - user: rootuser
+      accessKey: accessKey
+      secretKey: secretKey
 
 crdb:
   image: cockroachdb/cockroach:latest-v21.1

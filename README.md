@@ -174,13 +174,12 @@ Targets:
   port-forward-chaos-dash port forward chaos-mesh dashboard (runs in foreground)
   port-forward-jaeger-dash port forward jaeger frontend
   port-forward-minio   port forward to the minio S3 port
+  firmware-syncer-env  install extra services used to test firmware-syncer
+  firmware-syncer-job  create a firmware-syncer job
+  firmware-syncer-job-clean remove the firmware-syncer job
   psql-crdb            connect to crdb with psql (requires port-forward-crdb)
   clean-nats           purge nats app and storage pvcs
   kubectl-ctx-kind     set kube ctx to kind cluster
-  syncer-env           install extra services used to test firmware-syncer
-  syncer-env-clean     uninstall extra services used to test firmware-syncer
-  syncer-job           create a firmware-syncer job
-  syncer-job-clean     remove the firmware-syncer job
   help                 Show help
 ```
 

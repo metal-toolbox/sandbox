@@ -13,3 +13,7 @@ dependencies:
   version: 2.5.1
   condition:
     chaos-mesh.enabled
+- name: minio
+  version: 5.0.14
+  repository: https://charts.min.io/
+  condition: syncer.enable_env
