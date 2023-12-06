@@ -11,10 +11,8 @@ data:
     # conditions accepted by this API
     conditions:
       - kind: inventory
-        exclusive: false
         failoncheckpointerror: false
       - kind: firmwareInstall
-        exclusive: true
         failoncheckpointerror: true
     serverservice:
       endpoint: "{{ .Values.conditionorc.env.SERVERSERVICE_ENDPOINT }}"
