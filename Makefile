@@ -22,7 +22,6 @@ clean: kubectl-ctx-kind
 port-forward-conditionorc-api: kubectl-ctx-kind
 	kubectl port-forward deployment/conditionorc-api 9001:9001
 
-
 ## port forward condition Alloy pprof endpoint  (runs in foreground)
 port-forward-alloy-pprof: kubectl-ctx-kind
 	kubectl port-forward deployment/alloy 9091:9091
@@ -43,6 +42,39 @@ port-forward-chaos-dash: kubectl-ctx-kind
 port-forward-jaeger-dash:
 	kubectl port-forward  service/jaeger 16686:16686
 
+port-forward-minio:
+	kubectl port-forward deployment/minio 9000
+
+minio:
+	helm install \
+        --set resources.requests.memory=512Mi \
+        --set replicas=1 \
+        --set persistence.enabled=false \
+        --set mode=standalone \
+        --set rootUser=rootuser,rootPassword=rootpass123 \
+        --set buckets[0].name=bucket1,buckets[0].policy=none,buckets[0].purge=false \
+        --set svcaccts[0].accessKey=accessKey,svcaccts[0].secretKey=secretKey,svcaccts[0].user=rootuser \
+        minio ./syncer-env/charts/minio
+
+minio-clean:
+	helm uninstall minio
+
+modeldata:
+	kubectl apply -f ./syncer-env/modeldata.yaml
+
+modeldata-clean:
+	kubectl delete -f ./syncer-env/modeldata.yaml
+
+syncer-env: modeldata minio
+
+syncer-env-clean: modeldata-clean minio-clean
+
+syncer-job:
+	helm template syncer . --set syncer.enable_job=true | kubectl apply -f - -l app=syncer-job
+
+syncer-job-clean:
+	kubectl delete job firmware-syncer
+	kubectl delete cm syncer-config
 
 ## connect to crdb with psql (requires port-forward-crdb)
 psql-crdb: kubectl-ctx-kind

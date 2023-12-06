@@ -64,7 +64,8 @@ alloy:
     OTEL_EXPORTER_OTLP_INSECURE: true
 
 syncer:
-  enabled: false
+  enable_cronjob: false
+  enable_job: false
   schedule: '"00 08 * * *"'
   image:
     repository: "localhost:5001/firmware-syncer"
@@ -74,16 +75,19 @@ syncer:
     SYNCER_SERVERSERVICE_ENDPOINT: http://serverservice:8000
     SYNCER_SERVERSERVICE_DISABLE_OAUTH: true
     SYNCER_S3_REGION: "us-east-1"
-    SYNCER_S3_ENDPOINT: "s3.amazonaws.com"
-    SYNCER_S3_BUCKET: "some-bucket"
-    SYNCER_S3_ACCESS_KEY: redacted
-    SYNCER_S3_SECRET_KEY: redacted
-    SYNCER_ASRR_S3_REGION: "us-east-2"
-    SYNCER_ASRR_S3_ENDPOINT: "s3.amazonaws.com"
-    SYNCER_ASRR_S3_BUCKET: "another-bucket"
-    SYNCER_ASRR_S3_ACCESS_KEY: redacted
-    SYNCER_ASRR_S3_SECRET_KEY: redacted
+    SYNCER_S3_ENDPOINT: http://minio:9000
+    SYNCER_S3_BUCKET: bucket1
+    SYNCER_S3_ACCESS_KEY: accessKey
+    SYNCER_S3_SECRET_KEY: secretKey
+    SYNCER_ASRR_S3_REGION: "us-east-1"
+    SYNCER_ASRR_S3_ENDPOINT: http://minio:9000
+    SYNCER_ASRR_S3_BUCKET: bucket1
+    SYNCER_ASRR_S3_ACCESS_KEY: accessKey
+    SYNCER_ASRR_S3_SECRET_KEY: secretKey
     SYNCER_GITHUB_OPENBMC_TOKEN: redacted
+  configmap:
+    artifacts_url: http://minio:9000
+    firmware_manifest_url: http://modeldata/modeldata.json
 
 crdb:
   image: cockroachdb/cockroach:latest-v21.1

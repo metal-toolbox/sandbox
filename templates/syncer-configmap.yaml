@@ -1,12 +1,15 @@
-{{ if .Values.syncer.enabled }}
+{{ if or .Values.syncer.enable_cronjob .Values.syncer.enable_job }}
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: syncer-config
   namespace: default
+  labels:
+    app: syncer-job
 data:
   config.yaml: |
-    artifacts_url: "https://example.com"
-    firmware_manifest_url: "https://example.com/modeldata.json"
+    log_level: debug
+    artifacts_url: "{{ .Values.syncer.configmap.artifacts_url }}"
+    firmware_manifest_url: "{{ .Values.syncer.configmap.firmware_manifest_url }}"
 {{ end }}
