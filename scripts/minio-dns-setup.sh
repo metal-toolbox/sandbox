@@ -32,14 +32,6 @@ clearDNSEntry() {
   kubectl -n kube-system get cm coredns -o yaml | grep -v minio | kubectl -n kube-system apply -f -
 }
 
-printArray() {
-  array=("$1")
-  for i in "${array[@]}"
-  do
-    echo "$i"
-  done
-}
-
 setDNSEntry() {
   echo "Setting coreDNS configuration entry"
   configmap=()
