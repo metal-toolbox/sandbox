@@ -3,6 +3,7 @@
 .DS_Store
 *.bke
 *.tgz
+!charts/*.tgz
 *.tar.gz
 values-nats.yaml
 scripts/serverservice/add-server
