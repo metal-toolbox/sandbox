@@ -155,6 +155,12 @@ Uninstall chaos mesh
 helm delete  chaos-mesh -n=default
 ```
 
+## Firmware-syncer Test Environment
+
+A test environment for firmware-syncer can be deployed post installation.
+
+Check out the [setup guide](notes/firmware-syncer.md) for more information.
+
 ### Check out make help for a list of available commands.
 
 ```
@@ -182,163 +188,4 @@ Targets:
   clean-nats           purge nats app and storage pvcs
   kubectl-ctx-kind     set kube ctx to kind cluster
   help                 Show help
-```
-
-## Firmware Syncer Test Environment Setup
-
-Additional services and resources can be deployed post setup to create an environment for testing the `firmware-syncer`.
-
-### Architecture
-
-```mermaid
-graph BT
-    A[modeldata]
-    B[minio]
-    C[firmware-syncer]
-    D[serverservice]
-    E[3rd party vendors]
-
-    subgraph sandbox
-        C-->A
-        C-->B
-        C-->D
-    end
-
-    C-->E
-```
-
-The test environment creates a few new resources:
-- An nginx server that hosts the `modeldata.json`.
-- A minIO server to host an S3 bucket.
-
-The firmware-syncer still needs internet access to download the firmware files from the various 3rd party sites.
-
-### Environment Setup
-
-#### Deploy Services
-
-Run `make syncer-env` to deploy and setup the services
-
-```shell
-make syncer-env
-```
-
-#### Setup the DNS
-
-The firmware-syncer will try to reach the bucket on with the subdomain of `bucket1.minio`. We need to tell the DNS
-service to forward this domain to the minio service.
-
-Edit the coreDNS configmap:
-
-```shell
-kubectl -n kube-system edit cm coredns
-```
-
-The configmap will look something like this:
-
-```yaml
-apiVersion: v1
-data:
-  Corefile: |
-    .:53 {
-        errors
-        health {
-           lameduck 5s
-        }
-        ready
-        kubernetes cluster.local in-addr.arpa ip6.arpa {
-           pods insecure
-           fallthrough in-addr.arpa ip6.arpa
-           ttl 30
-        }
-        prometheus :9153
-        forward . /etc/resolv.conf {
-           max_concurrent 1000
-        }
-        cache 30
-        loop
-        reload
-        loadbalance
-    }
-kind: ConfigMap
-metadata:
-  creationTimestamp: "2023-10-03T22:20:00Z"
-  name: coredns
-  namespace: kube-system
-  resourceVersion: "1547606"
-  uid: 3eea635e-c8d6-42fd-89a1-d48368b5364b
-```
-
-Add this line to the Corefile below the `ready` entry:
-
-```text
-rewrite name bucket1.minio minio.default.svc.cluster.local
-```
-
-Now the configmap should look like this:
-
-```yaml
-apiVersion: v1
-data:
-  Corefile: |
-    .:53 {
-        errors
-        health {
-           lameduck 5s
-        }
-        ready
-        rewrite name bucket1.minio minio.default.svc.cluster.local
-        kubernetes cluster.local in-addr.arpa ip6.arpa {
-           pods insecure
-           fallthrough in-addr.arpa ip6.arpa
-           ttl 30
-        }
-        prometheus :9153
-        forward . /etc/resolv.conf {
-           max_concurrent 1000
-        }
-        cache 30
-        loop
-        reload
-        loadbalance
-    }
-kind: ConfigMap
-metadata:
-  creationTimestamp: "2023-10-03T22:20:00Z"
-  name: coredns
-  namespace: kube-system
-  resourceVersion: "1547606"
-  uid: 3eea635e-c8d6-42fd-89a1-d48368b5364b
-```
-
-Restart the DNS services
-
-```shell
-kubectl -n kube-system rollout restart deploy/coredns
-```
-
-The test environment setup should now be complete
-
-#### Cleanup
-
-Take down the services with the make command:
-
-> Note: The DNS changes will have to be remove manually.
-
-```shell
-make syncer-env-clean
-```
-
-### Running a firmware-syncer job
-
-A firmware-syncer job can be run with a make command:
-
-```shell
-make syncer-job
-```
-
-The job can also be removed with the corresponding cleanup command:
-
-```shell
-make syncer-job-clean
 ```
