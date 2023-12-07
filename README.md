@@ -175,6 +175,7 @@ Targets:
   port-forward-jaeger-dash port forward jaeger frontend
   port-forward-minio   port forward to the minio S3 port
   firmware-syncer-env  install extra services used to test firmware-syncer
+  firmware-syncer-env-clean Remove extra services installed for firmware-syncer testing
   firmware-syncer-job  create a firmware-syncer job
   firmware-syncer-job-clean remove the firmware-syncer job
   psql-crdb            connect to crdb with psql (requires port-forward-crdb)

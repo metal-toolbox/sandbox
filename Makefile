@@ -49,6 +49,12 @@ port-forward-minio:
 ## install extra services used to test firmware-syncer
 firmware-syncer-env:
 	helm upgrade hollow-sandbox . -f values.yaml -f values-nats.yaml --set syncer.enable_env=true
+	./scripts/minio-dns-setup.sh set
+
+## Remove extra services installed for firmware-syncer testing
+firmware-syncer-env-clean:
+	helm rollback hollow-sandbox
+	./scripts/minio-dns-setup.sh clear
 
 ## create a firmware-syncer job
 firmware-syncer-job:
