@@ -86,7 +86,7 @@ syncer:
     SYNCER_GITHUB_OPENBMC_TOKEN: redacted
 
 crdb:
-  image: cockroachdb/cockroach:latest-v21.1
+  image: cockroachdb/cockroach:latest-v23.1.11
 
 chaos-mesh:
   enabled: false
