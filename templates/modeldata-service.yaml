@@ -1,0 +1,13 @@
+{{ if .Values.syncer.enable_env }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: modeldata
+spec:
+  selector:
+    app: modeldata
+  ports:
+    - protocol: TCP
+      targetPort: 80
+      port: 80
+{{ end }}

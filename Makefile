@@ -22,7 +22,6 @@ clean: kubectl-ctx-kind
 port-forward-conditionorc-api: kubectl-ctx-kind
 	kubectl port-forward deployment/conditionorc-api 9001:9001
 
-
 ## port forward condition Alloy pprof endpoint  (runs in foreground)
 port-forward-alloy-pprof: kubectl-ctx-kind
 	kubectl port-forward deployment/alloy 9091:9091
@@ -43,6 +42,27 @@ port-forward-chaos-dash: kubectl-ctx-kind
 port-forward-jaeger-dash:
 	kubectl port-forward  service/jaeger 16686:16686
 
+## port forward to the minio S3 port
+port-forward-minio:
+	kubectl port-forward deployment/minio 9000
+
+## install extra services used to test firmware-syncer
+firmware-syncer-env:
+	helm upgrade hollow-sandbox . -f values.yaml -f values-nats.yaml --set syncer.enable_env=true
+	./scripts/minio-dns-setup.sh set
+
+## Remove extra services installed for firmware-syncer testing
+firmware-syncer-env-clean:
+	helm rollback hollow-sandbox
+	./scripts/minio-dns-setup.sh clear
+
+## create a firmware-syncer job
+firmware-syncer-job:
+	helm template syncer . --set syncer.enable_job=true | kubectl apply -f - -l app=syncer-job
+
+## remove the firmware-syncer job
+firmware-syncer-job-clean:
+	helm template syncer . --set syncer.enable_job=true | kubectl delete -f - -l app=syncer-job
 
 ## connect to crdb with psql (requires port-forward-crdb)
 psql-crdb: kubectl-ctx-kind

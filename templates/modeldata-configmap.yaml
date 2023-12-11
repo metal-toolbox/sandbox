@@ -1,0 +1,24 @@
+{{ if .Values.syncer.enable_env }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: modeldata
+data:
+{{ (.Files.Glob "modeldata.json").AsConfig | indent 2 }}
+
+  nginx.conf: |
+    worker_processes  3;
+    events {
+      worker_connections 1024;
+    }
+    http {
+      server {
+        listen 80;
+
+        location /modeldata.json {
+          default_type application/json;
+          alias /data/modeldata.json;
+        }
+      }
+    }
+{{ end }}

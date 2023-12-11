@@ -1,0 +1,19 @@
+[
+  {
+    "model": "X12STH-SYS",
+    "manufacturer": "supermicro",
+    "firmware": {
+      "BMC": [
+        {
+          "build_date": "06/27/2022",
+          "filename": "BMC_X12AST2600-F201MS_20220627_1.13.04_STDsp.bin",
+          "firmware_version": "01.13.04",
+          "vendor_uri": "https://www.supermicro.com/about/policies/disclaimer.cfm?SoftwareItemID=15671",
+          "md5sum": "8e9d8c6bc73888379aa99793429e3a90",
+          "latest": true,
+          "prerequisite": false
+        }
+      ]
+    }
+  }
+]

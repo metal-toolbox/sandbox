@@ -1,0 +1,43 @@
+{{ if .Values.syncer.enable_env }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: modeldata
+  labels:
+    app: modeldata
+spec:
+  selector:
+    matchLabels:
+      app: modeldata
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: modeldata
+    spec:
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: modeldata
+            items:
+              - key: nginx.conf
+                path: nginx.conf
+        - name: modeldata-json
+          configMap:
+            name: modeldata
+            items:
+              - key: modeldata.json
+                path: modeldata.json
+      containers:
+        - name: modeldata
+          image: nginx
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: modeldata-json
+              mountPath: /data
+            - name: nginx-config
+              mountPath: /etc/nginx
+{{ end }}

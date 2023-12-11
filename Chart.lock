@@ -5,5 +5,8 @@ dependencies:
 - name: chaos-mesh
   repository: https://charts.chaos-mesh.org
   version: 2.5.1
-digest: sha256:41ac7b87c925224fbe49d0ba2a2b1e80f7dd379d397561723b6bfe4c21ac358b
-generated: "2023-05-09T17:07:38.86377+02:00"
+- name: minio
+  repository: https://charts.min.io/
+  version: 5.0.14
+digest: sha256:5b34fe7d55eaa3480ccc4fa5fde05894d317aae1f93e6fcecfdf5c6d32184e55
+generated: "2023-12-06T10:04:32.077852-07:00"
