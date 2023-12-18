@@ -127,3 +127,31 @@ dashboard:
 chaosDaemon:
   runtime: containerd
   socketPath: /run/containerd/containerd.sock
+
+fleetscheduler:
+  enable: false # when enabled, metal-toolbox/fleet-scheduler will need to be deployed with `make push-image-devel`
+  image:
+    repository: "localhost:5001/fleet-scheduler"
+    tag: latest
+    pullPolicy: Always
+  env:
+    log_level: debug
+    facility: fr9
+    serverservice:
+      endpoint: http://serverservice:8000
+      disable_oauth: true
+    conditionorc:
+      endpoint: http://conditionorc-api:9001
+      disable_oauth: true
+  jobs:
+    - name: createserver
+      restartPolicy: OnFailure
+      imagePullPolicy: Always
+      image: localhost:5001/fleet-scheduler
+      tag: latest
+      schedule: "*/1 * * * *"
+      command:
+      - /usr/sbin/fleet-scheduler
+      - dummyServer
+      - --config
+      - /etc/fleet-scheduler/config.yaml

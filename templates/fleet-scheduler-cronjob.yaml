@@ -1,0 +1,45 @@
+{{ if .Values.fleetscheduler.enable }}
+{{ range $job := .Values.fleetscheduler.jobs }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ $job.name }}
+  labels:
+    k8s-service: fleet-scheduler
+spec:
+  schedule: {{ $job.schedule | quote }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: {{ $job.restartPolicy }}
+          volumes:
+            - name: config-volume
+              configMap:
+                name: fleet-scheduler-config
+          containers:
+          - name: {{ $job.name }}
+            image: {{ $job.image }}:{{ $job.tag }}
+            imagePullPolicy: {{ $job.imagePullPolicy }}
+            {{- with $job.command }}
+            command:
+{{ toYaml . | indent 12 }}
+              {{- end }}
+            volumeMounts:
+              - name: config-volume
+                mountPath: /etc/fleet-scheduler
+                readOnly: true
+            env:
+              - name: FLEET_SCHEDULER_CONFIG
+                value: "/etc/fleet-scheduler/config.yaml"
+            resources:
+              limits:
+                cpu: 1000m
+                memory: 1Gi
+              requests:
+                cpu: 1000m
+                memory: 1Gi
+          restartPolicy: Never
+          activeDeadlineSeconds: 10800
+{{ end }}
+{{ end }}
