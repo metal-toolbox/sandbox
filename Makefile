@@ -8,11 +8,6 @@ CHAOS_DASH_PORT=2333
 JAEGER_DASH_PORT=16686
 MINIO_PORT=9000
 
-# Makefile function. call with $(call,<param1>,<param2>...)
-define forward-port
-		$(if $(filter-out 1,$(FOWARD_TO_LOCAL_NETWORK)),kubectl port-forward $(1) $(2):$(2),kubectl port-forward $(1) --address 0.0.0.0 $(2):$(2))
-endef
-
 ## install helm chart for the sandbox env
 install: kubectl-ctx-kind
 	cp ./scripts/nats-bootstrap/values-nats.yaml.tmpl values-nats.yaml
@@ -33,41 +28,50 @@ clean: kubectl-ctx-kind
 
 ## port forward condition orchestrator API  (runs in foreground)
 port-forward-conditionorc-api: kubectl-ctx-kind
-	$(call forward-port,deployment/conditionorc-api,${CONDITION_ORC_PORT})
+	kubectl port-forward deployment/conditionorc-api ${CONDITION_ORC_PORT}:${CONDITION_ORC_PORT}
 
 ## port forward condition Alloy pprof endpoint  (runs in foreground)
 port-forward-alloy-pprof: kubectl-ctx-kind
-	$(call forward-port,deployment/alloy,${ALLOY_PORT})
+	kubectl port-forward deployment/alloy ${ALLOY_PORT}:${ALLOY_PORT}
 
 ## port forward hollow server service port (runs in foreground)
 port-forward-hss: kubectl-ctx-kind
-	$(call forward-port,deployment/serverservice,${HSS_PORT})
+	kubectl port-forward deployment/serverservice ${HSS_PORT}:${HSS_PORT}
 
 ## port forward crdb service port (runs in foreground)
 port-forward-crdb: kubectl-ctx-kind
-	$(call forward-port,deployment/crdb,${CRDB_PORT})
+	kubectl port-forward deployment/crdb ${CRDB_PORT}:${CRDB_PORT}
 
 ## port forward chaos-mesh dashboard (runs in foreground)
 port-forward-chaos-dash: kubectl-ctx-kind
-	$(call forward-port,service/chaos-dashboard,${CHAOS_DASH_PORT})
+	kubectl port-forward service/chaos-dashboard ${CHAOS_DASH_PORT}:${CHAOS_DASH_PORT}
 
 ## port forward jaeger frontend
 port-forward-jaeger-dash:
-	$(call forward-port,service/jaeger,${JAEGER_DASH_PORT})
+	kubectl port-forward service/jaeger ${JAEGER_DASH_PORT}:${JAEGER_DASH_PORT}
 
 ## port forward to the minio S3 port
 port-forward-minio:
-	$(call forward-port,deployment/minio,${MINIO_PORT})
+	kubectl port-forward deployment/minio ${MINIO_PORT}:${MINIO_PORT}
 
 ## port forward all endpoints (runs in the background)
+port-all-with-lan:
+	kubectl port-forward deployment/conditionorc-api --address 0.0.0.0 ${CONDITION_ORC_PORT}:${CONDITION_ORC_PORT} > /dev/null 2>&1 &
+	kubectl port-forward deployment/alloy --address 0.0.0.0 ${ALLOY_PORT}:${ALLOY_PORT} > /dev/null 2>&1 &
+	kubectl port-forward deployment/serverservice --address 0.0.0.0 ${HSS_PORT}:${HSS_PORT} > /dev/null 2>&1 &
+	kubectl port-forward deployment/crdb --address 0.0.0.0 ${CRDB_PORT}:${CRDB_PORT} > /dev/null 2>&1 &
+	kubectl port-forward service/chaos-dashboard --address 0.0.0.0 ${CHAOS_DASH_PORT}:${CHAOS_DASH_PORT} > /dev/null 2>&1 &
+	kubectl port-forward service/jaeger --address 0.0.0.0 ${JAEGER_DASH_PORT}:${JAEGER_DASH_PORT} > /dev/null 2>&1 &
+	kubectl port-forward deployment/minio --address 0.0.0.0 ${MINIO_PORT}:${MINIO_PORT} > /dev/null 2>&1
+
 port-all:
-	$(MAKE) port-forward-conditionorc-api > /dev/null 2>&1 &\
-	$(MAKE) port-forward-alloy-pprof > /dev/null 2>&1 &		\
-	$(MAKE) port-forward-hss > /dev/null 2>&1 &				\
-	$(MAKE) port-forward-crdb > /dev/null 2>&1 &			\
-	$(MAKE) port-forward-chaos-dash > /dev/null 2>&1 &		\
-	$(MAKE) port-forward-jaeger-dash > /dev/null 2>&1 &		\
-	$(MAKE) port-forward-mino > /dev/null 2>&1 &
+	kubectl port-forward deployment/conditionorc-api ${CONDITION_ORC_PORT}:${CONDITION_ORC_PORT} > /dev/null 2>&1 &
+	kubectl port-forward deployment/alloy ${ALLOY_PORT}:${ALLOY_PORT} > /dev/null 2>&1 &
+	kubectl port-forward deployment/serverservice ${HSS_PORT}:${HSS_PORT} > /dev/null 2>&1 &
+	kubectl port-forward deployment/crdb ${CRDB_PORT}:${CRDB_PORT} > /dev/null 2>&1 &
+	kubectl port-forward service/chaos-dashboard ${CHAOS_DASH_PORT}:${CHAOS_DASH_PORT} > /dev/null 2>&1 &
+	kubectl port-forward service/jaeger ${JAEGER_DASH_PORT}:${JAEGER_DASH_PORT} > /dev/null 2>&1 &
+	kubectl port-forward deployment/minio ${MINIO_PORT}:${MINIO_PORT} > /dev/null 2>&1
 
 ## kill all port fowarding processes that are running in the background
 kill-all-ports:
@@ -123,10 +127,6 @@ help:
 	@echo ''
 	@echo 'Usage:'
 	@echo '  ${YELLOW}make${RESET} ${GREEN}<target>${RESET}'
-	@echo ''
-	@echo 'Flags:'
-	@echo '  ${YELLOW}FOWARD_TO_LOCAL_NETWORK=1${RESET}        ${GREEN}Expand Port forwarding to LAN${RESET}'
-	@echo '  ${YELLOW}FOWARD_TO_LOCAL_NETWORK=0${RESET}        ${GREEN}Disable port forwarding to LAN (DEFAULT)${RESET}'
 	@echo ''
 	@echo 'Targets:'
 	@awk '/^[a-zA-Z\-\\_0-9]+:/ { \
