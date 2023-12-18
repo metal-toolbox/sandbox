@@ -143,8 +143,10 @@ fleetscheduler:
     conditionorc:
       endpoint: http://conditionorc-api:9001
       disable_oauth: true
-  jobs:
-    - name: createserver
+  jobs: # technically, this is optional
+    - name: createserver # demo job that creates 16 dummy servers ever 1 minute.
+      ttl: 60 # Remove the job after 60 seconds (optional)
+      deadline: 30 # The job has 30 seconds to run the task, if it is unable to run in that 1 hour, it wont try to run again (optional)
       restartPolicy: OnFailure
       imagePullPolicy: Always
       image: localhost:5001/fleet-scheduler
@@ -153,5 +155,7 @@ fleetscheduler:
       command:
       - /usr/sbin/fleet-scheduler
       - dummyServer
+      - --serverCount
+      - "16"
       - --config
       - /etc/fleet-scheduler/config.yaml

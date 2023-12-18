@@ -7,6 +7,12 @@ metadata:
   labels:
     k8s-service: fleet-scheduler
 spec:
+  {{- with $job.ttl }}
+  ttlSecondsAfterFinished: {{ . }}
+  {{- end}}
+  {{- with $job.deadline }}
+  startingDeadline: {{ . }}
+  {{- end}}
   schedule: {{ $job.schedule | quote }}
   jobTemplate:
     spec:

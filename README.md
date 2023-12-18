@@ -30,6 +30,8 @@ Clone each of the repositories and run `make push-image-devel`
  - [Alloy](https://github.com/metal-toolbox/alloy/tree/v2) (v2 branch)
  - [Flasher](https://github.com/metal-toolbox/flasher/)
 
+- [Fleetscheduler](https://github.com/metal-toolbox/fleet-scheduler) (OPTIONAL, enable in values.yaml fleetscheduler.enable)
+
 This will build and push the container images to the local container registry.
 
 
