@@ -37,15 +37,15 @@ clean: kubectl-ctx-kind
 
 ## port forward condition orchestrator API  (runs in foreground)
 port-forward-conditionorc-api: kubectl-ctx-kind
-	kubectl port-forward deployment/conditionorc-api ${CONDITION_ORC_PORT}:${CONDITION_ORC_PORT}
+	kubectl port-forward deployment/conditionorc-api 9001:9001
 
 ## port forward condition Alloy pprof endpoint  (runs in foreground)
 port-forward-alloy-pprof: kubectl-ctx-kind
-	kubectl port-forward deployment/alloy ${ALLOY_PORT}:${ALLOY_PORT}
+	kubectl port-forward deployment/alloy 9091:9091
 
 ## port forward hollow server service port (runs in foreground)
 port-forward-hss: kubectl-ctx-kind
-	kubectl port-forward deployment/serverservice ${HSS_PORT}:${HSS_PORT}
+	kubectl port-forward deployment/serverservice 8000:8000
 
 ## port forward fleetdb port (runs in foreground)
 port-forward-fleetdb: kubectl-ctx-kind
@@ -53,7 +53,7 @@ port-forward-fleetdb: kubectl-ctx-kind
 
 ## port forward crdb service port (runs in foreground)
 port-forward-crdb: kubectl-ctx-kind
-	kubectl port-forward deployment/crdb ${CRDB_PORT}:${CRDB_PORT}
+	kubectl port-forward deployment/crdb 26257:26257
 
 ## port forward fleetdb crdb service port (runs in foreground)
 port-forward-fleetdb-crdb: kubectl-ctx-kind
@@ -61,11 +61,11 @@ port-forward-fleetdb-crdb: kubectl-ctx-kind
 
 ## port forward chaos-mesh dashboard (runs in foreground)
 port-forward-chaos-dash: kubectl-ctx-kind
-	kubectl port-forward service/chaos-dashboard ${CHAOS_DASH_PORT}:${CHAOS_DASH_PORT}
+	kubectl port-forward  service/chaos-dashboard 2333:2333
 
 ## port forward jaeger frontend
 port-forward-jaeger-dash:
-	kubectl port-forward service/jaeger ${JAEGER_DASH_PORT}:${JAEGER_DASH_PORT}
+	kubectl port-forward  service/jaeger 16686:16686
 
 ## port forward to the minio S3 port
 port-forward-minio:
@@ -129,6 +129,7 @@ psql-crdb: kubectl-ctx-kind
 ## purge nats app and storage pvcs
 clean-nats:
 	kubectl delete statefulsets.apps nats && kubectl delete pvc nats-js-pvc-nats-0 nats-jwt-pvc-nats-0
+
 #
 ## set kube ctx to kind cluster
 kubectl-ctx-kind:
