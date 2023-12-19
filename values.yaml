@@ -136,7 +136,7 @@ fleetscheduler:
     pullPolicy: Always
   env:
     log_level: debug
-    facility: fr9
+    facility: sandbox
     serverservice:
       endpoint: http://serverservice:8000
       disable_oauth: true

@@ -56,7 +56,7 @@ Note: this assumes the KIND environment on your machine can connect to server BM
 ```sh
 go run scripts/serverservice/add-server.go \
         -server-id edeff024-f62a-4288-8730-3fab8cceab78 \
-        -facility fr9 \
+        -facility sandbox \
         -bmc-addr 127.0.0.1 \
         -bmc-user bar \
         -bmc-pass foo
