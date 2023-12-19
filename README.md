@@ -30,6 +30,8 @@ Clone each of the repositories and run `make push-image-devel`
  - [Alloy](https://github.com/metal-toolbox/alloy/tree/v2) (v2 branch)
  - [Flasher](https://github.com/metal-toolbox/flasher/)
 
+- [Fleetscheduler](https://github.com/metal-toolbox/fleet-scheduler) (OPTIONAL, enable in values.yaml fleetscheduler.enable)
+
 This will build and push the container images to the local container registry.
 
 
@@ -54,7 +56,7 @@ Note: this assumes the KIND environment on your machine can connect to server BM
 ```sh
 go run scripts/serverservice/add-server.go \
         -server-id edeff024-f62a-4288-8730-3fab8cceab78 \
-        -facility fr9 \
+        -facility sandbox \
         -bmc-addr 127.0.0.1 \
         -bmc-user bar \
         -bmc-pass foo
