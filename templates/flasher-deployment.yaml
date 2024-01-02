@@ -57,7 +57,7 @@ spec:
             - name: FLASHER_NATS_PUBLISHERSUBJECTPREFIX
               value: "com.hollow.sh.controllers.responses.{{ .Values.location }}.servers.firmwareInstall"
             - name: FLASHER_SERVERSERVICE_ENDPOINT
-              value: "{{ .Values.flasher.env.SERVERSERVICE_ENDPOINT }}"
+              value: "{{ .Values.flasher.env.FLEETDB_ENDPOINT }}"
             - name: FLASHER_SERVERSERVICE_DISABLE_OAUTH
               value: "{{ .Values.flasher.env.SERVERSERVICE_DISABLE_OAUTH }}"
             - name: FLASHER_SERVERSERVICE_FACILITY_CODE

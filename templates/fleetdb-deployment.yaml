@@ -1,19 +1,19 @@
-{{- if .Values.repo_knob.use_serverservice}}
+{{- if eq .Values.repo_knob.use_serverservice false}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    k8s-service: serverservice
-  name: serverservice
+    k8s-service: fleetdb
+  name: fleetdb
 spec:
   replicas: 1
   selector:
     matchLabels:
-      k8s-service: serverservice
+      k8s-service: fleetdb
   template:
     metadata:
       labels:
-        k8s-service: serverservice
+        k8s-service: fleetdb
     spec:
       initContainers:
         - args:
@@ -21,9 +21,9 @@ spec:
             - up
           env:
             - name: SERVERSERVICE_CRDB_URI
-              value: postgresql://root@crdb:26257/defaultdb?sslmode=disable
-          image: "{{ .Values.serverservice.image.repository }}:{{ .Values.serverservice.image.tag }}"
-          name: serverservice-migrate
+              value: postgresql://root@fleetdb-crdb:26257/defaultdb?sslmode=disable
+          image: "{{ .Values.fleetdb.image.repository }}:{{ .Values.fleetdb.image.tag }}"
+          name: fleetdb-migrate
           resources:
             limits:
               cpu: 200m
@@ -41,7 +41,7 @@ spec:
       containers:
         - env:
             - name: SERVERSERVICE_CRDB_URI
-              value: postgresql://root@crdb:26257/defaultdb?sslmode=disable
+              value: postgresql://root@fleetdb-crdb:26257/defaultdb?sslmode=disable
             - name: SERVERSERVICE_OIDC_ENABLED
               value: "false"
             - name: SERVERSERVICE_NATS_URL
@@ -54,8 +54,8 @@ spec:
             - name: nats-creds-volume
               mountPath: /etc/nats
               readOnly: true
-          image: "{{ .Values.serverservice.image.repository }}:{{ .Values.serverservice.image.tag }}"
-          name: serverservice
+          image: "{{ .Values.fleetdb.image.repository }}:{{ .Values.fleetdb.image.tag }}"
+          name: fleetdb
           args:
             - serve
             # base64 key generated with,

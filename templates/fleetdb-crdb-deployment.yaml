@@ -1,29 +1,29 @@
-{{- if .Values.repo_knob.use_serverservice}}
+{{- if eq .Values.repo_knob.use_serverservice false}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    k8s-service: crdb
-  name: crdb
+    k8s-service: fleetdb-crdb
+  name: fleetdb-crdb
 spec:
   replicas: 1
   selector:
     matchLabels:
-      k8s-service: crdb
+      k8s-service: fleetdb-crdb
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        k8s-service: crdb
+        k8s-service: fleetdb-crdb
     spec:
       containers:
-        - name: crdb
+        - name: fleetdb-crdb
           env:
             # https://github.com/cockroachdb/cockroach/issues/81209
             - name: COCKROACH_RAFT_CLOSEDTS_ASSERTIONS_ENABLED
               value: "false"
-          image: cockroachdb/cockroach:latest-v21.1
+          image: cockroachdb/cockroach:v23.1.11
           args:
             - start-single-node
             - --insecure
