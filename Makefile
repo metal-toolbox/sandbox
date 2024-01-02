@@ -8,8 +8,17 @@ CHAOS_DASH_PORT=2333
 JAEGER_DASH_PORT=16686
 MINIO_PORT=9000
 
-## install helm chart for the sandbox env
+## install helm chart for the sandbox env with fleetdb(default)
 install: kubectl-ctx-kind
+	sed -i -e 's/use_serverservice: true/use_serverservice: false/g' ./values.yaml
+	cp ./scripts/nats-bootstrap/values-nats.yaml.tmpl values-nats.yaml
+	helm install hollow-sandbox . -f values.yaml -f values-nats.yaml
+	kubectl get pod
+	./scripts/nats-bootstrap/boostrap.sh
+
+## install helm chart for the sandbox env with hollow serverservice
+install-hss: kubectl-ctx-kind
+	sed -i -e 's/use_serverservice: false/use_serverservice: true/g' ./values.yaml
 	cp ./scripts/nats-bootstrap/values-nats.yaml.tmpl values-nats.yaml
 	helm install hollow-sandbox . -f values.yaml -f values-nats.yaml
 	kubectl get pod
@@ -38,9 +47,17 @@ port-forward-alloy-pprof: kubectl-ctx-kind
 port-forward-hss: kubectl-ctx-kind
 	kubectl port-forward deployment/serverservice ${HSS_PORT}:${HSS_PORT}
 
+## port forward fleetdb port (runs in foreground)
+port-forward-fleetdb: kubectl-ctx-kind
+	kubectl port-forward deployment/fleetdb 8000:8000
+
 ## port forward crdb service port (runs in foreground)
 port-forward-crdb: kubectl-ctx-kind
 	kubectl port-forward deployment/crdb ${CRDB_PORT}:${CRDB_PORT}
+
+## port forward fleetdb crdb service port (runs in foreground)
+port-forward-fleetdb-crdb: kubectl-ctx-kind
+	kubectl port-forward deployment/fleetdb-crdb 26257:26257
 
 ## port forward chaos-mesh dashboard (runs in foreground)
 port-forward-chaos-dash: kubectl-ctx-kind

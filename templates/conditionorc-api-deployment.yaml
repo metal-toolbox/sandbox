@@ -46,7 +46,7 @@ spec:
             - name: CONDITIONORC_NATS_PUBLISHERSUBJECTPREFIX
               value: "com.hollow.sh.controllers.commands"
             - name: CONDITIONORC_SERVERSERVICE_ENDPOINT
-              value: "{{ .Values.conditionorc.env.SERVERSERVICE_ENDPOINT }}"
+              value: "{{ .Values.conditionorc.env.FLEETDB_ENDPOINT }}"
             - name: CONDITIONORC_SERVERSERVICE_DISABLE_OAUTH
               value: "{{ .Values.conditionorc.env.SERVERSERVICE_DISABLE_OAUTH }}"
             - name: CONDITIONORC_SERVERSERVICE_OIDC_AUDIENCE_ENDPOINT

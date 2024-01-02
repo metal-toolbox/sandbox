@@ -36,7 +36,7 @@ spec:
               readOnly: true
           env:
             - name: ALLOY_SERVERSERVICE_ENDPOINT
-              value: "{{ .Values.alloy.env.ALLOY_SERVERSERVICE_ENDPOINT }}"
+              value: "{{ .Values.alloy.env.ALLOY_FLEETDB_ENDPOINT }}"
             - name: ALLOY_SERVERSERVICE_DISABLE_OAUTH
               value: "{{ .Values.alloy.env.ALLOY_SERVERSERVICE_DISABLE_OAUTH }}"
             - name: ALLOY_SERVERSERVICE_FACILITY_CODE

@@ -38,7 +38,7 @@ spec:
             - name: SYNCER_S3_SECRET_KEY
               value: "{{ .Values.syncer.env.SYNCER_S3_SECRET_KEY }}"
             - name: SYNCER_SERVERSERVICE_ENDPOINT
-              value: "{{ .Values.syncer.env.SYNCER_SERVERSERVICE_ENDPOINT}}"
+              value: "{{ .Values.syncer.env.SYNCER_FLEETDB_ENDPOINT}}"
             - name: SYNCER_SERVERSERVICE_DISABLE_OAUTH
               value: "{{ .Values.syncer.env.SYNCER_SERVERSERVICE_DISABLE_OAUTH }}"
             - name: SYNCER_ASRR_S3_REGION

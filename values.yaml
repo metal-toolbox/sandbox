@@ -2,9 +2,22 @@
 
 location: sandbox
 
+# This value is used as a knob to switch in between 2 repos(serverservice vs fleetdb) temporarily.
+# Will be removed once finishing migration.
+repo_knob:
+  use_serverservice: true
+
 serverservice:
   image:
     repository: "localhost:5001/serverservice"
+    tag: latest
+    pullPolicy: Always
+  nats:
+    publishStreamPrefix: com.hollow.sh.serverservice.events
+
+fleetdb:
+  image:
+    repository: "localhost:5001/fleetdb"
     tag: latest
     pullPolicy: Always
   nats:
@@ -16,6 +29,7 @@ conditionorc:
     NATS_URL: "nats://nats:4222"
     NATS_CONNECT_TIMEOUT: 60s
     SERVERSERVICE_ENDPOINT: http://serverservice:8000
+    FLEETDB_ENDPOINT: http://fleetdb:8000
     SERVERSERVICE_DISABLE_OAUTH: true
     # uncomment once oauth service is available in sandbox
     #SERVERSERVICE_OIDC_AUDIENCE_ENDPOINT:
@@ -36,6 +50,7 @@ flasher:
     NATS_URL: "nats://nats:4222"
     NATS_CONNECT_TIMEOUT: 60s
     SERVERSERVICE_ENDPOINT: http://serverservice:8000
+    FLEETDB_ENDPOINT: http://fleetdb:8000
     SERVERSERVICE_DISABLE_OAUTH: true
     # to uncomment once oauth service is availble in sandbox
     # SERVERSERVICE_OIDC_AUDIENCE_ENDPOINT:
@@ -57,6 +72,7 @@ alloy:
     pullPolicy: Always
   env:
     ALLOY_SERVERSERVICE_ENDPOINT: http://serverservice:8000
+    ALLOY_FLEETDB_ENDPOINT: http://fleetdb:8000
     ALLOY_SERVERSERVICE_DISABLE_OAUTH: true
     ALLOY_NATS_URL: "nats://nats:4222"
     # telemetry configuration
@@ -74,6 +90,7 @@ syncer:
     pullPolicy: Always
   env:
     SYNCER_SERVERSERVICE_ENDPOINT: http://serverservice:8000
+    SYNCER_FLEETDB_ENDPOINT: http://fleetdb:8000
     SYNCER_SERVERSERVICE_DISABLE_OAUTH: true
     SYNCER_S3_REGION: "us-east-1"
     SYNCER_S3_ENDPOINT: http://minio:9000
