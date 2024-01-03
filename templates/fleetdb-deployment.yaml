@@ -1,4 +1,4 @@
-{{- if eq .Values.repo_knob.use_serverservice false}}
+{{- if eq .Values.knobs.use_serverservice false}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:

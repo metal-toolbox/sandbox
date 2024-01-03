@@ -4,8 +4,8 @@ location: sandbox
 
 # This value is used as a knob to switch in between 2 repos(serverservice vs fleetdb) temporarily.
 # Will be removed once finishing migration.
-repo_knob:
-  use_serverservice: true
+knobs:
+  use_serverservice: false
 
 serverservice:
   image:
