@@ -49,7 +49,7 @@ port-forward-hss: kubectl-ctx-kind
 
 ## port forward fleetdb port (runs in foreground)
 port-forward-fleetdb: kubectl-ctx-kind
-	kubectl port-forward deployment/fleetdb 8000:8000
+	kubectl port-forward deployment/fleetdb ${HSS_PORT}:${HSS_PORT}
 
 ## port forward crdb service port (runs in foreground)
 port-forward-crdb: kubectl-ctx-kind
@@ -57,7 +57,7 @@ port-forward-crdb: kubectl-ctx-kind
 
 ## port forward fleetdb crdb service port (runs in foreground)
 port-forward-fleetdb-crdb: kubectl-ctx-kind
-	kubectl port-forward deployment/fleetdb-crdb 26257:26257
+	kubectl port-forward deployment/fleetdb-crdb ${CRDB_PORT}:${CRDB_PORT}
 
 ## port forward chaos-mesh dashboard (runs in foreground)
 port-forward-chaos-dash: kubectl-ctx-kind
@@ -77,6 +77,8 @@ port-all-with-lan:
 	kubectl port-forward deployment/alloy --address 0.0.0.0 ${ALLOY_PORT}:${ALLOY_PORT} > /dev/null 2>&1 &
 	kubectl port-forward deployment/serverservice --address 0.0.0.0 ${HSS_PORT}:${HSS_PORT} > /dev/null 2>&1 &
 	kubectl port-forward deployment/crdb --address 0.0.0.0 ${CRDB_PORT}:${CRDB_PORT} > /dev/null 2>&1 &
+	kubectl port-forward deployment/fleetdb --address 0.0.0.0 ${HSS_PORT}:${HSS_PORT} > /dev/null 2>&1 &
+	kubectl port-forward deployment/fleetdb-crdb --address 0.0.0.0 ${CRDB_PORT}:${CRDB_PORT} > /dev/null 2>&1 &
 	kubectl port-forward service/chaos-dashboard --address 0.0.0.0 ${CHAOS_DASH_PORT}:${CHAOS_DASH_PORT} > /dev/null 2>&1 &
 	kubectl port-forward service/jaeger --address 0.0.0.0 ${JAEGER_DASH_PORT}:${JAEGER_DASH_PORT} > /dev/null 2>&1 &
 	kubectl port-forward deployment/minio --address 0.0.0.0 ${MINIO_PORT}:${MINIO_PORT} > /dev/null 2>&1
@@ -86,6 +88,8 @@ port-all:
 	kubectl port-forward deployment/alloy ${ALLOY_PORT}:${ALLOY_PORT} > /dev/null 2>&1 &
 	kubectl port-forward deployment/serverservice ${HSS_PORT}:${HSS_PORT} > /dev/null 2>&1 &
 	kubectl port-forward deployment/crdb ${CRDB_PORT}:${CRDB_PORT} > /dev/null 2>&1 &
+	kubectl port-forward deployment/fleetdb ${HSS_PORT}:${HSS_PORT} > /dev/null 2>&1 &
+	kubectl port-forward deployment/fleetdb-crdb ${CRDB_PORT}:${CRDB_PORT} > /dev/null 2>&1 &
 	kubectl port-forward service/chaos-dashboard ${CHAOS_DASH_PORT}:${CHAOS_DASH_PORT} > /dev/null 2>&1 &
 	kubectl port-forward service/jaeger ${JAEGER_DASH_PORT}:${JAEGER_DASH_PORT} > /dev/null 2>&1 &
 	kubectl port-forward deployment/minio ${MINIO_PORT}:${MINIO_PORT} > /dev/null 2>&1

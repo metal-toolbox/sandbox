@@ -6,7 +6,7 @@ metadata:
   name: fleetdb
 spec:
   ports:
-    - name: "8000"
+    - name: fleetdb
       port: 8000
       targetPort: 8000
   selector:
