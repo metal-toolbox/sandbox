@@ -145,8 +145,8 @@ fleetscheduler:
       disable_oauth: true
   jobs: # technically, this is optional
     - name: inventory # This job will collect all servers and create conditions on them within the facility fleetscheduler.facility defined in this yaml
-      tt: 86400 # Remove job after 1 day. (optional)
-      deadline: 3600 # The job has 1 hour to run the task, if it cant after 1 hour, it wont run. (optional)
+      ttlSecondsAfterFinished: 86400 # Remove job after 1 day. (optional)
+      startingDeadlineSeconds: 3600 # The job has 1 hour to run the task, if it cant after 1 hour, it wont run. (optional)
       restartPolicy: OnFailure
       imagePullPolicy: Always
       image: localhost:5001/fleet-scheduler
