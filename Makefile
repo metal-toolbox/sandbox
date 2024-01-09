@@ -2,7 +2,7 @@
 
 CONDITION_ORC_PORT=9001
 ALLOY_PORT=9091
-HSS_PORT=8000
+FLEETDB_PORT=8000
 CRDB_PORT=26257
 CHAOS_DASH_PORT=2333
 JAEGER_DASH_PORT=16686
@@ -37,23 +37,23 @@ clean: kubectl-ctx-kind
 
 ## port forward condition orchestrator API  (runs in foreground)
 port-forward-conditionorc-api: kubectl-ctx-kind
-	kubectl port-forward deployment/conditionorc-api 9001:9001
+	kubectl port-forward deployment/conditionorc-api ${CONDITION_ORC_PORT}:${CONDITION_ORC_PORT}
 
 ## port forward condition Alloy pprof endpoint  (runs in foreground)
 port-forward-alloy-pprof: kubectl-ctx-kind
-	kubectl port-forward deployment/alloy 9091:9091
+	kubectl port-forward deployment/alloy ${ALLOY_PORT}:${ALLOY_PORT}
 
 ## port forward hollow server service port (runs in foreground)
 port-forward-hss: kubectl-ctx-kind
-	kubectl port-forward deployment/serverservice 8000:8000
+	kubectl port-forward deployment/serverservice ${FLEETDB_PORT}:${FLEETDB_PORT}
 
 ## port forward fleetdb port (runs in foreground)
 port-forward-fleetdb: kubectl-ctx-kind
-	kubectl port-forward deployment/fleetdb ${HSS_PORT}:${HSS_PORT}
+	kubectl port-forward deployment/fleetdb ${FLEETDB_PORT}:${FLEETDB_PORT}
 
 ## port forward crdb service port (runs in foreground)
 port-forward-crdb: kubectl-ctx-kind
-	kubectl port-forward deployment/crdb 26257:26257
+	kubectl port-forward deployment/crdb ${CRDB_PORT}:${CRDB_PORT}
 
 ## port forward fleetdb crdb service port (runs in foreground)
 port-forward-fleetdb-crdb: kubectl-ctx-kind
@@ -61,11 +61,11 @@ port-forward-fleetdb-crdb: kubectl-ctx-kind
 
 ## port forward chaos-mesh dashboard (runs in foreground)
 port-forward-chaos-dash: kubectl-ctx-kind
-	kubectl port-forward  service/chaos-dashboard 2333:2333
+	kubectl port-forward service/chaos-dashboard ${CHAOS_DASH_PORT}:${CHAOS_DASH_PORT}
 
 ## port forward jaeger frontend
 port-forward-jaeger-dash:
-	kubectl port-forward  service/jaeger 16686:16686
+	kubectl port-forward service/jaeger ${JAEGER_DASH_PORT}:${JAEGER_DASH_PORT}
 
 ## port forward to the minio S3 port
 port-forward-minio:
@@ -75,9 +75,9 @@ port-forward-minio:
 port-all-with-lan:
 	kubectl port-forward deployment/conditionorc-api --address 0.0.0.0 ${CONDITION_ORC_PORT}:${CONDITION_ORC_PORT} > /dev/null 2>&1 &
 	kubectl port-forward deployment/alloy --address 0.0.0.0 ${ALLOY_PORT}:${ALLOY_PORT} > /dev/null 2>&1 &
-	kubectl port-forward deployment/serverservice --address 0.0.0.0 ${HSS_PORT}:${HSS_PORT} > /dev/null 2>&1 &
+	kubectl port-forward deployment/serverservice --address 0.0.0.0 ${FLEETDB_PORT}:${FLEETDB_PORT} > /dev/null 2>&1 &
 	kubectl port-forward deployment/crdb --address 0.0.0.0 ${CRDB_PORT}:${CRDB_PORT} > /dev/null 2>&1 &
-	kubectl port-forward deployment/fleetdb --address 0.0.0.0 ${HSS_PORT}:${HSS_PORT} > /dev/null 2>&1 &
+	kubectl port-forward deployment/fleetdb --address 0.0.0.0 ${FLEETDB_PORT}:${FLEETDB_PORT} > /dev/null 2>&1 &
 	kubectl port-forward deployment/fleetdb-crdb --address 0.0.0.0 ${CRDB_PORT}:${CRDB_PORT} > /dev/null 2>&1 &
 	kubectl port-forward service/chaos-dashboard --address 0.0.0.0 ${CHAOS_DASH_PORT}:${CHAOS_DASH_PORT} > /dev/null 2>&1 &
 	kubectl port-forward service/jaeger --address 0.0.0.0 ${JAEGER_DASH_PORT}:${JAEGER_DASH_PORT} > /dev/null 2>&1 &
@@ -86,9 +86,9 @@ port-all-with-lan:
 port-all:
 	kubectl port-forward deployment/conditionorc-api ${CONDITION_ORC_PORT}:${CONDITION_ORC_PORT} > /dev/null 2>&1 &
 	kubectl port-forward deployment/alloy ${ALLOY_PORT}:${ALLOY_PORT} > /dev/null 2>&1 &
-	kubectl port-forward deployment/serverservice ${HSS_PORT}:${HSS_PORT} > /dev/null 2>&1 &
+	kubectl port-forward deployment/serverservice ${FLEETDB_PORT}:${FLEETDB_PORT} > /dev/null 2>&1 &
 	kubectl port-forward deployment/crdb ${CRDB_PORT}:${CRDB_PORT} > /dev/null 2>&1 &
-	kubectl port-forward deployment/fleetdb ${HSS_PORT}:${HSS_PORT} > /dev/null 2>&1 &
+	kubectl port-forward deployment/fleetdb ${FLEETDB_PORT}:${FLEETDB_PORT} > /dev/null 2>&1 &
 	kubectl port-forward deployment/fleetdb-crdb ${CRDB_PORT}:${CRDB_PORT} > /dev/null 2>&1 &
 	kubectl port-forward service/chaos-dashboard ${CHAOS_DASH_PORT}:${CHAOS_DASH_PORT} > /dev/null 2>&1 &
 	kubectl port-forward service/jaeger ${JAEGER_DASH_PORT}:${JAEGER_DASH_PORT} > /dev/null 2>&1 &
@@ -98,7 +98,7 @@ port-all:
 kill-all-ports:
 	lsof -i:${CONDITION_ORC_PORT} -t | xargs kill
 	lsof -i:${ALLOY_PORT} -t | xargs kill
-	lsof -i:${HSS_PORT} -t | xargs kill
+	lsof -i:${FLEETDB_PORT} -t | xargs kill
 	lsof -i:${CRDB_PORT} -t | xargs kill
 	lsof -i:${CHAOS_DASH_PORT} -t | xargs kill
 	lsof -i:${JAEGER_DASH_PORT} -t | xargs kill
@@ -130,7 +130,6 @@ psql-crdb: kubectl-ctx-kind
 clean-nats:
 	kubectl delete statefulsets.apps nats && kubectl delete pvc nats-js-pvc-nats-0 nats-jwt-pvc-nats-0
 
-#
 ## set kube ctx to kind cluster
 kubectl-ctx-kind:
 	export KUBECONFIG=~/.kube/config_kind
