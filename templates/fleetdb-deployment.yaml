@@ -38,6 +38,9 @@ spec:
             items:
               - key: serverservice-nats-creds
                 path: nats.creds
+        - name: config-volume
+          configMap:
+            name: fleetdb-config
       containers:
         - env:
             - name: SERVERSERVICE_CRDB_URI
@@ -54,13 +57,17 @@ spec:
             - name: nats-creds-volume
               mountPath: /etc/nats
               readOnly: true
+            - name: config-volume
+              mountPath: /etc/fleetdb/
           image: "{{ .Values.fleetdb.image.repository }}:{{ .Values.fleetdb.image.tag }}"
           name: fleetdb
           args:
             - serve
             # base64 key generated with,
             # $ echo "foobar1234567890abcdefghijklmno" | base64
+            - --config=/etc/fleetdb/config.yaml
             - --db-encryption-driver=base64key://Zm9vYmFyMTIzNDU2Nzg5MGFiY2RlZmdoaWprbG1ubwo=
+            - --oidc
           ports:
             - containerPort: 8000
           resources:
