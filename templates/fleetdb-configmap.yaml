@@ -1,0 +1,16 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fleetdb-config
+data:
+  config.yaml: |
+    oidc:
+      - audience: "https://delivery.metalkube.net"
+        issuer: "https://sso.equinixmetal.com/oauth2/default"
+        jwksuri: "https://sso.equinixmetal.com/oauth2/aus25zrmexjEfZbyd697/v1/keys"
+        enabled: true
+        claims:
+          roles: "scp"
+          username: "sub"
+    
