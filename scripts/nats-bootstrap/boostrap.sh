@@ -1,8 +1,8 @@
-#!/bin/sh
+#!/bin/bash
 
 set -e
 
-CPWD=$(PWD)
+CPWD=$(pwd)
 [[ "$(basename $CPWD)" != "sandbox" ]] && echo "This script should be executed from the repo top level directory" && exit 1
 
 echo "Note: this will purge all current NATS related k8s objects and services"
@@ -19,7 +19,23 @@ init_natsaccounts
 update_values_nats_yaml
 init_natsserver
 push_natsaccounts
-push_controller_secrets
+
+if [ "$(uname)" == "Darwin" ]; then
+	push_controller_secrets_macos
+elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
+	push_controller_secrets_linux
+else
+	echo "Unknown OS detected! push_controller_secrets not called!"
+fi
+
 reload_controller_deployments
-push_serverservice_secrets
+
+if [ "$(uname)" == "Darwin" ]; then
+	push_serverservice_secrets_macos
+elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
+	push_serverservice_secrets_linux
+else
+	echo "Unknown OS detected! push_serverservice_secrets not called!"
+fi
+
 backup_accounts
