@@ -20,7 +20,7 @@ spec:
             - migrate
             - up
           env:
-            - name: SERVERSERVICE_CRDB_URI
+            - name: FLEETDB_CRDB_URI
               value: postgresql://root@fleetdb-crdb:26257/defaultdb?sslmode=disable
           image: "{{ .Values.fleetdb.image.repository }}:{{ .Values.fleetdb.image.tag }}"
           name: fleetdb-migrate
@@ -40,15 +40,15 @@ spec:
                 path: nats.creds
       containers:
         - env:
-            - name: SERVERSERVICE_CRDB_URI
+            - name: FLEETDB_CRDB_URI
               value: postgresql://root@fleetdb-crdb:26257/defaultdb?sslmode=disable
-            - name: SERVERSERVICE_OIDC_ENABLED
+            - name: FLEETDB_OIDC_ENABLED
               value: "false"
-            - name: SERVERSERVICE_NATS_URL
+            - name: FLEETDB_NATS_URL
               value: "nats://nats:4222"
-            - name: SERVERSERVICE_NATS_STREAM_PREFIX
+            - name: FLEETDB_NATS_STREAM_PREFIX
               value: {{ .Values.serverservice.nats.publishStreamPrefix }}
-            - name: SERVERSERVICE_NATS_CREDS_FILE
+            - name: FLEETDB_NATS_CREDS_FILE
               value: /etc/nats/nats.creds
           volumeMounts:
             - name: nats-creds-volume
