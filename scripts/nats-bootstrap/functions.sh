@@ -4,8 +4,6 @@
 # - `Signing keys` are associated with accounts and can be 'templated' with pub/sub permissions and have a `role` name set.
 # - `Users` are applications connecting to NATS to pub/sub, users can be assigned a `role`.
 
-source scripts/nats-bootstrap/validation.sh
-
 function clean_natsserver() {
 	set +e
 	kubectl get statefulsets | grep nats && make clean-nats
@@ -200,15 +198,27 @@ function update_values_nats_yaml() {
 	mv $f values-nats.yaml
 }
 
-function push_controller_secrets() {
+function push_controller_secrets_macos() {
 	for controller in conditionorc alloy flasher; do
-		sekrit=$(kuexec "cat /root/nsc/nkeys/creds/KO/controllers/${controller}.creds" | "${os_base64[@]}" -w 0)
+		sekrit=$(kuexec "cat /root/nsc/nkeys/creds/KO/controllers/${controller}.creds" | gbase64 -w 0)
 		push_secret "${sekrit}" ${controller}
 	done
 }
 
-function push_serverservice_secrets() {
-	sekrit=$(kuexec "cat /root/nsc/nkeys/creds/KO/serverservice/serverservice.creds" | "${os_base64[@]}" -w 0)
+function push_controller_secrets_linux() {
+		for controller in conditionorc alloy flasher; do
+			sekrit=$(kuexec "cat /root/nsc/nkeys/creds/KO/controllers/${controller}.creds" | base64 | tr -d "\n")
+			push_secret "${sekrit}" ${controller}
+		done
+}
+
+function push_serverservice_secrets_macos() {
+	sekrit=$(kuexec "cat /root/nsc/nkeys/creds/KO/serverservice/serverservice.creds" | gbase64 -w 0)
+	push_secret "${sekrit}" serverservice
+}
+
+function push_serverservice_secrets_linux() {
+	sekrit=$(kuexec "cat /root/nsc/nkeys/creds/KO/serverservice/serverservice.creds" | base64 | tr -d "\n")
 	push_secret "${sekrit}" serverservice
 }
 

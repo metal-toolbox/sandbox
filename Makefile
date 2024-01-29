@@ -37,72 +37,72 @@ clean: kubectl-ctx-kind
 
 ## port forward condition orchestrator API  (runs in foreground)
 port-forward-conditionorc-api: kubectl-ctx-kind
-	kubectl port-forward deployment/conditionorc-api ${CONDITION_ORC_PORT}:${CONDITION_ORC_PORT}
+	kubectl port-forward deployment/conditionorc-api $(CONDITION_ORC_PORT):$(CONDITION_ORC_PORT)
 
 ## port forward condition Alloy pprof endpoint  (runs in foreground)
 port-forward-alloy-pprof: kubectl-ctx-kind
-	kubectl port-forward deployment/alloy ${ALLOY_PORT}:${ALLOY_PORT}
+	kubectl port-forward deployment/alloy $(ALLOY_PORT):$(ALLOY_PORT)
 
 ## port forward hollow server service port (runs in foreground)
 port-forward-hss: kubectl-ctx-kind
-	kubectl port-forward deployment/serverservice ${HSS_PORT}:${HSS_PORT}
+	kubectl port-forward deployment/serverservice $(HSS_PORT):$(HSS_PORT)
 
 ## port forward fleetdb port (runs in foreground)
 port-forward-fleetdb: kubectl-ctx-kind
-	kubectl port-forward deployment/fleetdb ${HSS_PORT}:${HSS_PORT}
+	kubectl port-forward deployment/fleetdb $(HSS_PORT):$(HSS_PORT)
 
 ## port forward crdb service port (runs in foreground)
 port-forward-crdb: kubectl-ctx-kind
-	kubectl port-forward deployment/crdb ${CRDB_PORT}:${CRDB_PORT}
+	kubectl port-forward deployment/crdb $(CRDB_PORT):$(CRDB_PORT)
 
 ## port forward fleetdb crdb service port (runs in foreground)
 port-forward-fleetdb-crdb: kubectl-ctx-kind
-	kubectl port-forward deployment/fleetdb-crdb ${CRDB_PORT}:${CRDB_PORT}
+	kubectl port-forward deployment/fleetdb-crdb $(CRDB_PORT):$(CRDB_PORT)
 
 ## port forward chaos-mesh dashboard (runs in foreground)
 port-forward-chaos-dash: kubectl-ctx-kind
-	kubectl port-forward service/chaos-dashboard ${CHAOS_DASH_PORT}:${CHAOS_DASH_PORT}
+	kubectl port-forward service/chaos-dashboard $(CHAOS_DASH_PORT):$(CHAOS_DASH_PORT)
 
 ## port forward jaeger frontend
 port-forward-jaeger-dash:
-	kubectl port-forward service/jaeger ${JAEGER_DASH_PORT}:${JAEGER_DASH_PORT}
+	kubectl port-forward service/jaeger $(JAEGER_DASH_PORT):$(JAEGER_DASH_PORT)
 
 ## port forward to the minio S3 port
 port-forward-minio:
-	kubectl port-forward deployment/minio ${MINIO_PORT}:${MINIO_PORT}
+	kubectl port-forward deployment/minio $(MINIO_PORT):$(MINIO_PORT)
 
 ## port forward all endpoints (runs in the background)
 port-all-with-lan:
-	kubectl port-forward deployment/conditionorc-api --address 0.0.0.0 ${CONDITION_ORC_PORT}:${CONDITION_ORC_PORT} > /dev/null 2>&1 &
-	kubectl port-forward deployment/alloy --address 0.0.0.0 ${ALLOY_PORT}:${ALLOY_PORT} > /dev/null 2>&1 &
-	kubectl port-forward deployment/serverservice --address 0.0.0.0 ${HSS_PORT}:${HSS_PORT} > /dev/null 2>&1 &
-	kubectl port-forward deployment/crdb --address 0.0.0.0 ${CRDB_PORT}:${CRDB_PORT} > /dev/null 2>&1 &
-	kubectl port-forward deployment/fleetdb --address 0.0.0.0 ${HSS_PORT}:${HSS_PORT} > /dev/null 2>&1 &
-	kubectl port-forward deployment/fleetdb-crdb --address 0.0.0.0 ${CRDB_PORT}:${CRDB_PORT} > /dev/null 2>&1 &
-	kubectl port-forward service/chaos-dashboard --address 0.0.0.0 ${CHAOS_DASH_PORT}:${CHAOS_DASH_PORT} > /dev/null 2>&1 &
-	kubectl port-forward service/jaeger --address 0.0.0.0 ${JAEGER_DASH_PORT}:${JAEGER_DASH_PORT} > /dev/null 2>&1 &
-	kubectl port-forward deployment/minio --address 0.0.0.0 ${MINIO_PORT}:${MINIO_PORT} > /dev/null 2>&1
+	kubectl port-forward deployment/conditionorc-api --address 0.0.0.0 $(CONDITION_ORC_PORT):$(CONDITION_ORC_PORT) > /dev/null 2>&1 &
+	kubectl port-forward deployment/alloy --address 0.0.0.0 $(ALLOY_PORT):$(ALLOY_PORT) > /dev/null 2>&1 &
+	kubectl port-forward deployment/serverservice --address 0.0.0.0 $(HSS_PORT):$(HSS_PORT) > /dev/null 2>&1 &
+	kubectl port-forward deployment/crdb --address 0.0.0.0 $(CRDB_PORT):$(CRDB_PORT) > /dev/null 2>&1 &
+	kubectl port-forward deployment/fleetdb --address 0.0.0.0 $(HSS_PORT):$(HSS_PORT) > /dev/null 2>&1 &
+	kubectl port-forward deployment/fleetdb-crdb --address 0.0.0.0 $(CRDB_PORT):$(CRDB_PORT) > /dev/null 2>&1 &
+	kubectl port-forward service/chaos-dashboard --address 0.0.0.0 $(CHAOS_DASH_PORT):$(CHAOS_DASH_PORT) > /dev/null 2>&1 &
+	kubectl port-forward service/jaeger --address 0.0.0.0 $(JAEGER_DASH_PORT):$(JAEGER_DASH_PORT) > /dev/null 2>&1 &
+	kubectl port-forward deployment/minio --address 0.0.0.0 $(MINIO_PORT):$(MINIO_PORT) > /dev/null 2>&1
 
 port-all:
-	kubectl port-forward deployment/conditionorc-api ${CONDITION_ORC_PORT}:${CONDITION_ORC_PORT} > /dev/null 2>&1 &
-	kubectl port-forward deployment/alloy ${ALLOY_PORT}:${ALLOY_PORT} > /dev/null 2>&1 &
-	kubectl port-forward deployment/serverservice ${HSS_PORT}:${HSS_PORT} > /dev/null 2>&1 &
-	kubectl port-forward deployment/crdb ${CRDB_PORT}:${CRDB_PORT} > /dev/null 2>&1 &
-	kubectl port-forward deployment/fleetdb ${HSS_PORT}:${HSS_PORT} > /dev/null 2>&1 &
-	kubectl port-forward deployment/fleetdb-crdb ${CRDB_PORT}:${CRDB_PORT} > /dev/null 2>&1 &
-	kubectl port-forward service/chaos-dashboard ${CHAOS_DASH_PORT}:${CHAOS_DASH_PORT} > /dev/null 2>&1 &
-	kubectl port-forward service/jaeger ${JAEGER_DASH_PORT}:${JAEGER_DASH_PORT} > /dev/null 2>&1 &
-	kubectl port-forward deployment/minio ${MINIO_PORT}:${MINIO_PORT} > /dev/null 2>&1
+	kubectl port-forward deployment/conditionorc-api $(CONDITION_ORC_PORT):$(CONDITION_ORC_PORT) > /dev/null 2>&1 &
+	kubectl port-forward deployment/alloy $(ALLOY_PORT):$(ALLOY_PORT) > /dev/null 2>&1 &
+	kubectl port-forward deployment/serverservice $(HSS_PORT):$(HSS_PORT) > /dev/null 2>&1 &
+	kubectl port-forward deployment/crdb $(CRDB_PORT):$(CRDB_PORT) > /dev/null 2>&1 &
+	kubectl port-forward deployment/fleetdb $(HSS_PORT):$(HSS_PORT) > /dev/null 2>&1 &
+	kubectl port-forward deployment/fleetdb-crdb $(CRDB_PORT):$(CRDB_PORT) > /dev/null 2>&1 &
+	kubectl port-forward service/chaos-dashboard $(CHAOS_DASH_PORT):$(CHAOS_DASH_PORT) > /dev/null 2>&1 &
+	kubectl port-forward service/jaeger $(JAEGER_DASH_PORT):$(JAEGER_DASH_PORT) > /dev/null 2>&1 &
+	kubectl port-forward deployment/minio $(MINIO_PORT):$(MINIO_PORT) > /dev/null 2>&1
 
 ## kill all port fowarding processes that are running in the background
 kill-all-ports:
-	lsof -i:${CONDITION_ORC_PORT} -t | xargs kill
-	lsof -i:${ALLOY_PORT} -t | xargs kill
-	lsof -i:${HSS_PORT} -t | xargs kill
-	lsof -i:${CRDB_PORT} -t | xargs kill
-	lsof -i:${CHAOS_DASH_PORT} -t | xargs kill
-	lsof -i:${JAEGER_DASH_PORT} -t | xargs kill
-	lsof -i:${MINIO_PORT} -t | xargs kill
+	lsof -i:$(CONDITION_ORC_PORT) -t | xargs kill
+	lsof -i:$(ALLOY_PORT) -t | xargs kill
+	lsof -i:$(HSS_PORT) -t | xargs kill
+	lsof -i:$(CRDB_PORT) -t | xargs kill
+	lsof -i:$(CHAOS_DASH_PORT) -t | xargs kill
+	lsof -i:$(JAEGER_DASH_PORT) -t | xargs kill
+	lsof -i:$(MINIO_PORT) -t | xargs kill
 
 ## install extra services used to test firmware-syncer
 firmware-syncer-env:
@@ -147,7 +147,7 @@ TARGET_MAX_CHAR_NUM=32
 help:
 	@echo ''
 	@echo 'Usage:'
-	@echo '  ${YELLOW}make${RESET} ${GREEN}<target>${RESET}'
+	@echo '  $(YELLOW)make$(RESET) $(GREEN)<target>$(RESET)'
 	@echo ''
 	@echo 'Targets:'
 	@awk '/^[a-zA-Z\-\\_0-9]+:/ { \
@@ -155,7 +155,7 @@ help:
 		if (helpMessage) { \
 			helpCommand = substr($$1, 0, index($$1, ":")-1); \
 			helpMessage = substr(lastLine, RSTART + 3, RLENGTH); \
-			printf "  ${YELLOW}%-${TARGET_MAX_CHAR_NUM}s${RESET} ${GREEN}%s${RESET}\n", helpCommand, helpMessage; \
+			printf "  $(YELLOW)%-$(TARGET_MAX_CHAR_NUM)s$(RESET) $(GREEN)%s$(RESET)\n", helpCommand, helpMessage; \
 		} \
 	} \
-	{ lastLine = $$0 }' ${MAKEFILE_LIST}
+	{ lastLine = $$0 }' $(MAKEFILE_LIST)
