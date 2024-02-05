@@ -198,27 +198,27 @@ function update_values_nats_yaml() {
 	mv $f values-nats.yaml
 }
 
-function push_controller_secrets_macos() {
+function encode_creds_base64() {
+	if [ "$(uname)" == "Darwin" ]; then
+		cred_temp=$(kuexec "${1}" | gbase64 -w 0)
+	elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
+		cred_temp=$(kuexec "${1}" | base64 | tr -d "\n")
+	else
+		cred_temp="Unknown OS detected! Couldnt encode credentials!"
+	fi
+
+	echo "${cred_temp}"
+}
+
+function push_controller_secrets() {
 	for controller in conditionorc alloy flasher; do
-		sekrit=$(kuexec "cat /root/nsc/nkeys/creds/KO/controllers/${controller}.creds" | gbase64 -w 0)
+		sekrit=$(encode_creds_base64 "cat /root/nsc/nkeys/creds/KO/controllers/${controller}.creds")
 		push_secret "${sekrit}" ${controller}
 	done
 }
 
-function push_controller_secrets_linux() {
-		for controller in conditionorc alloy flasher; do
-			sekrit=$(kuexec "cat /root/nsc/nkeys/creds/KO/controllers/${controller}.creds" | base64 | tr -d "\n")
-			push_secret "${sekrit}" ${controller}
-		done
-}
-
-function push_serverservice_secrets_macos() {
-	sekrit=$(kuexec "cat /root/nsc/nkeys/creds/KO/serverservice/serverservice.creds" | gbase64 -w 0)
-	push_secret "${sekrit}" serverservice
-}
-
-function push_serverservice_secrets_linux() {
-	sekrit=$(kuexec "cat /root/nsc/nkeys/creds/KO/serverservice/serverservice.creds" | base64 | tr -d "\n")
+function push_serverservice_secrets() {
+	sekrit=$(encode_creds_base64 "cat /root/nsc/nkeys/creds/KO/serverservice/serverservice.creds")
 	push_secret "${sekrit}" serverservice
 }
 
