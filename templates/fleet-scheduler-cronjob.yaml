@@ -7,15 +7,15 @@ metadata:
   labels:
     k8s-service: fleet-scheduler
 spec:
-  {{- with $job.ttl }}
-  ttlSecondsAfterFinished: {{ . }}
-  {{- end}}
   {{- with $job.deadline }}
-  startingDeadline: {{ . }}
+  startingDeadlineSeconds: {{ . }}
   {{- end}}
   schedule: {{ $job.schedule | quote }}
   jobTemplate:
     spec:
+      {{- with $job.ttl }}
+      ttlSecondsAfterFinished: {{ . }}
+      {{- end}}
       template:
         spec:
           restartPolicy: {{ $job.restartPolicy }}
@@ -25,7 +25,7 @@ spec:
                 name: fleet-scheduler-config
           containers:
           - name: {{ $job.name }}
-            image: {{ $job.image }}:{{ $job.tag }}
+            image: {{ $.Values.repository }}:{{ $job.tag }}
             imagePullPolicy: {{ $job.imagePullPolicy }}
             {{- with $job.command }}
             command:

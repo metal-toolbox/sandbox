@@ -1,8 +1,10 @@
-#!/bin/sh
+#!/bin/bash
 
 # - `Accounts` group users and Jetstream support is enabled/disabled at the account level NOTE: pub/sub permissions set at the Account level are not inherited by users of that account.
 # - `Signing keys` are associated with accounts and can be 'templated' with pub/sub permissions and have a `role` name set.
 # - `Users` are applications connecting to NATS to pub/sub, users can be assigned a `role`.
+
+source scripts/nats-bootstrap/validation.sh
 
 function clean_natsserver() {
 	set +e
@@ -93,7 +95,7 @@ nsc edit signing-key -a controllers --sk ${SK_A} --role controllers
 
 # https://docs.nats.io/reference/reference-protocols/nats_api_reference
 nsc edit signing-key -a controllers --sk ${SK_A} \
-    --allow-pubsub '$KV.>' \
+	--allow-pubsub '$KV.>' \
 	--allow-pubsub '$JS.API.DIRECT.GET.>' \
 	--allow-pubsub '$JS.API.INFO' \
 	--allow-pubsub '$JS.API.STREAM.INFO.controllers' \
@@ -120,23 +122,23 @@ nsc edit signing-key -a controllers --sk ${SK_A} \
 	--allow-pubsub '$JS.API.CONSUMER.CREATE.KV_active-conditions' \
 	--allow-pubsub '$JS.API.CONSUMER.CREATE.KV_active-conditions.>' \
 	--allow-pubsub '$JS.API.CONSUMER.DELETE.KV_active-conditions.>' \
-    --allow-pubsub '$JS.API.STREAM.INFO.KV_active-conditions' \
-    --allow-pubsub '$JS.API.STREAM.INFO.KV_active-conditions.>' \
-    --allow-pubsub '$JS.API.STREAM.CREATE.KV_active-conditions' \
-    --allow-pubsub '$JS.API.STREAM.CREATE.KV_active-conditions.>' \
-    --allow-pubsub '$JS.API.STREAM.INFO.KV_active-controllers' \
-    --allow-pubsub '$JS.API.STREAM.INFO.KV_active-controllers.>' \
-    --allow-pubsub '$JS.API.STREAM.CREATE.KV_active-controllers' \
-    --allow-pubsub '$JS.API.STREAM.CREATE.KV_active-controllers.>' \
-    --allow-pubsub '$JS.API.STREAM.INFO.KV_firmwareInstall' \
-    --allow-pubsub '$JS.API.STREAM.INFO.KV_firmwareInstall.>' \
-    --allow-pubsub '$JS.API.STREAM.CREATE.KV_firmwareInstall' \
-    --allow-pubsub '$JS.API.STREAM.CREATE.KV_firmwareInstall.>' \
-    --allow-pubsub '$JS.API.STREAM.INFO.KV_inventory' \
-    --allow-pubsub '$JS.API.STREAM.INFO.KV_inventory.>' \
-    --allow-pubsub '$JS.API.STREAM.CREATE.KV_inventory' \
-    --allow-pubsub '$JS.API.STREAM.CREATE.KV_inventory.>' \
-    --allow-pubsub '$JS.ACK.controllers.>' \
+	--allow-pubsub '$JS.API.STREAM.INFO.KV_active-conditions' \
+	--allow-pubsub '$JS.API.STREAM.INFO.KV_active-conditions.>' \
+	--allow-pubsub '$JS.API.STREAM.CREATE.KV_active-conditions' \
+	--allow-pubsub '$JS.API.STREAM.CREATE.KV_active-conditions.>' \
+	--allow-pubsub '$JS.API.STREAM.INFO.KV_active-controllers' \
+	--allow-pubsub '$JS.API.STREAM.INFO.KV_active-controllers.>' \
+	--allow-pubsub '$JS.API.STREAM.CREATE.KV_active-controllers' \
+	--allow-pubsub '$JS.API.STREAM.CREATE.KV_active-controllers.>' \
+	--allow-pubsub '$JS.API.STREAM.INFO.KV_firmwareInstall' \
+	--allow-pubsub '$JS.API.STREAM.INFO.KV_firmwareInstall.>' \
+	--allow-pubsub '$JS.API.STREAM.CREATE.KV_firmwareInstall' \
+	--allow-pubsub '$JS.API.STREAM.CREATE.KV_firmwareInstall.>' \
+	--allow-pubsub '$JS.API.STREAM.INFO.KV_inventory' \
+	--allow-pubsub '$JS.API.STREAM.INFO.KV_inventory.>' \
+	--allow-pubsub '$JS.API.STREAM.CREATE.KV_inventory' \
+	--allow-pubsub '$JS.API.STREAM.CREATE.KV_inventory.>' \
+	--allow-pubsub '$JS.ACK.controllers.>' \
 	--allow-sub 'com.hollow.sh.serverservice.events.>' \
 	--allow-pubsub 'com.hollow.sh.controllers.>' \
 	--allow-sub 'com.hollow.sh.controllers.commands.>' \
@@ -186,7 +188,7 @@ function update_values_nats_yaml() {
 	OPKEY=$(kuexec "nsc generate config --sys-account SYS --nats-resolver | awk  '/operator: /{print \$2}' | tr -d '\\r' ")
 	SYSKEY=$(kuexec "nsc generate config --sys-account SYS --nats-resolver | awk '/system_account: /{print \$2}' | tr -d '\\r' ")
 	SYSPRELOADKEY=$(kuexec "nsc generate config --sys-account SYS  --nats-resolver |  \
-    grep resolver_preload -A1 | sed -e 's/,//g' -e 's/{//g'  | awk -F': ' '/: /{print \$2}' | tr -d '\r' ")
+	grep resolver_preload -A1 | sed -e 's/,//g' -e 's/{//g'  | awk -F': ' '/: /{print \$2}' | tr -d '\r' ")
 
 	OPKEY=$(echo $OPKEY | tr -d '\r')
 	SYSKEY=$(echo $SYSKEY | tr -d '\r')
@@ -200,31 +202,30 @@ function update_values_nats_yaml() {
 
 function push_controller_secrets() {
 	for controller in conditionorc alloy flasher; do
-		sekrit=$(kuexec "cat /root/nsc/nkeys/creds/KO/controllers/${controller}.creds" | gbase64 -w 0)
-    push_secret "${sekrit}" ${controller}
+		sekrit=$(kuexec "cat /root/nsc/nkeys/creds/KO/controllers/${controller}.creds" | "${os_base64[@]}" -w 0)
+		push_secret "${sekrit}" ${controller}
 	done
 }
 
 function push_serverservice_secrets() {
-	sekrit=$(kuexec "cat /root/nsc/nkeys/creds/KO/serverservice/serverservice.creds" | gbase64 -w 0)
+	sekrit=$(kuexec "cat /root/nsc/nkeys/creds/KO/serverservice/serverservice.creds" | "${os_base64[@]}" -w 0)
 	push_secret "${sekrit}" serverservice
 }
 
 function push_secret() {
-  sekrit=$1
-  name=$2
-  file=/tmp/kind_${name}_secret.yaml
+	sekrit=$1
+	name=$2
 
-	echo "apiVersion: v1
-metadata:
-  name: ${name}-secrets
-  namespace: default
-data:
-  ${name}-nats-creds: ${sekrit}
-kind: Secret
-type: Opaque" > "${file}"
-
-	kubectl apply -f "${file}"
+	cat <<-EOF | kubectl apply -f -
+		apiVersion: v1
+		metadata:
+		  name: ${name}-secrets
+		  namespace: default
+		data:
+		  ${name}-nats-creds: ${sekrit}
+		kind: Secret
+		type: Opaque
+	EOF
 }
 
 function reload_controller_deployments() {
