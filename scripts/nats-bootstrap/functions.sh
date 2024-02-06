@@ -4,16 +4,7 @@
 # - `Signing keys` are associated with accounts and can be 'templated' with pub/sub permissions and have a `role` name set.
 # - `Users` are applications connecting to NATS to pub/sub, users can be assigned a `role`.
 
-# While "base64" exists on MacOS, it seems to be an older verison without the '-w' option.
-# So we will use os_base64 to make it work cleanly on linux and macos
-if [ "$(uname)" == "Darwin" ]; then
-	os_base64=(gbase64)
-elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
-	os_base64=(base64)
-else
-	echo "Unknown OS detected! Couldnt encode credentials!"
-	exit 1
-fi
+source scripts/nats-bootstrap/validation.sh
 
 function clean_natsserver() {
 	set +e
