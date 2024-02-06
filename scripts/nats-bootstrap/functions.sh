@@ -4,6 +4,17 @@
 # - `Signing keys` are associated with accounts and can be 'templated' with pub/sub permissions and have a `role` name set.
 # - `Users` are applications connecting to NATS to pub/sub, users can be assigned a `role`.
 
+# While "base64" exists on MacOS, it seems to be an older verison without the '-w' option.
+# So we will use os_base64 to make it work cleanly on linux and macos
+if [ "$(uname)" == "Darwin" ]; then
+	os_base64=(gbase64)
+elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
+	os_base64=(base64)
+else
+	echo "Unknown OS detected! Couldnt encode credentials!"
+	exit 1
+fi
+
 function clean_natsserver() {
 	set +e
 	kubectl get statefulsets | grep nats && make clean-nats
@@ -198,27 +209,15 @@ function update_values_nats_yaml() {
 	mv $f values-nats.yaml
 }
 
-function encode_creds_base64() {
-	if [ "$(uname)" == "Darwin" ]; then
-		cred_temp=$(kuexec "${1}" | gbase64 -w 0)
-	elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
-		cred_temp=$(kuexec "${1}" | base64 | tr -d "\n")
-	else
-		cred_temp="Unknown OS detected! Couldnt encode credentials!"
-	fi
-
-	echo "${cred_temp}"
-}
-
 function push_controller_secrets() {
 	for controller in conditionorc alloy flasher; do
-		sekrit=$(encode_creds_base64 "cat /root/nsc/nkeys/creds/KO/controllers/${controller}.creds")
+		sekrit=$(kuexec "cat /root/nsc/nkeys/creds/KO/controllers/${controller}.creds" | "${os_base64[@]}" -w 0)
 		push_secret "${sekrit}" ${controller}
 	done
 }
 
 function push_serverservice_secrets() {
-	sekrit=$(encode_creds_base64 "cat /root/nsc/nkeys/creds/KO/serverservice/serverservice.creds")
+	sekrit=$(kuexec "cat /root/nsc/nkeys/creds/KO/serverservice/serverservice.creds" | "${os_base64[@]}" -w 0)
 	push_secret "${sekrit}" serverservice
 }
 
