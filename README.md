@@ -4,7 +4,7 @@ This chart deploys the various metal-toolbox/hollow services in docker KIND for 
 
  - [Serverservice](https://github.com/metal-toolbox/hollow-serverservice) with the CrDB backend.
  - [Conditionorc](https://github.com/metal-toolbox/conditionorc)
- - [Alloy](https://github.com/metal-toolbox/alloy/tree/v2) (v2 branch)
+ - [Alloy](https://github.com/metal-toolbox/alloy)
  - [Flasher](https://github.com/metal-toolbox/flasher/)
  - NATS Jetstream and K/V
  - Chaos mesh
@@ -27,7 +27,7 @@ Clone each of the repositories and run `make push-image-devel`
 
  - [Serverservice](https://github.com/metal-toolbox/hollow-serverservice)
  - [Conditionorc](https://github.com/metal-toolbox/conditionorc)
- - [Alloy](https://github.com/metal-toolbox/alloy/tree/v2) (v2 branch)
+ - [Alloy](https://github.com/metal-toolbox/alloy/)
  - [Flasher](https://github.com/metal-toolbox/flasher/)
 
 - [Fleetscheduler](https://github.com/metal-toolbox/fleet-scheduler) (OPTIONAL, enable in values.yaml fleetscheduler.enable)
