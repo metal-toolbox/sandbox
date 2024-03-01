@@ -11,8 +11,8 @@ data:
     store_kind: fleet-scheduler
     facility_code: {{ .Values.clusterInfo.facility }}
     fleetdb_api:
-      disable_oauth: {{ .Values.fleetscheduler.env.serverservice.disable_oauth }}
-      endpoint: {{ .Values.fleetscheduler.env.serverservice.endpoint }}
+      disable_oauth: {{ .Values.fleetscheduler.env.fleetdb.disable_oauth }}
+      endpoint: {{ .Values.fleetscheduler.env.fleetdb.endpoint }}
     conditionorc_api:
       disable_oauth: {{ .Values.fleetscheduler.env.conditionorc.disable_oauth }}
       endpoint: {{ .Values.fleetscheduler.env.conditionorc.endpoint }}

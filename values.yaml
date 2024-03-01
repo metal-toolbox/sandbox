@@ -1,11 +1,13 @@
 ## for NATS service configuration see #scripts/nats-bootstrap/values-nats.yaml.tmpl
 
-location: sandbox
 
 # This value is used as a knob to switch in between 2 repos(serverservice vs fleetdb) temporarily.
 # Will be removed once finishing migration.
 knobs:
   use_serverservice: false
+
+clusterInfo:
+  facility: sandbox
 
 serverservice:
   image:
@@ -150,26 +152,37 @@ fleetscheduler:
   image:
     repository: "localhost:5001/fleet-scheduler"
     tag: latest
-    pullPolicy: Always
+    imagePullPolicy: Always
   env:
     log_level: debug
-    facility: sandbox
-    serverservice:
-      endpoint: http://serverservice:8000
+    fleetdb:
+      endpoint: http://fleetdb:8000
       disable_oauth: true
     conditionorc:
       endpoint: http://conditionorc-api:9001
       disable_oauth: true
   jobs: # technically, this is optional
+    - name: test # This job will be removed once I verify everything works. It currently does nothing but authenticate, no functionality is present.
+      ttlSecondsAfterFinished: 360 # clears after 1 hour
+      startingDeadlineSeconds: 0 # dont retry
+      restartPolicy: Never
+      schedule: "0 * * * *" # Run once per hour
+      command:
+      - /usr/sbin/fleet-scheduler
+      - test
+      - --config
+      - /etc/fleet-scheduler/config.yaml
     - name: inventory # This job will collect all servers and create conditions on them within the facility fleetscheduler.facility defined in this yaml
       ttlSecondsAfterFinished: 86400 # Remove job after 1 day. (optional)
       startingDeadlineSeconds: 3600 # The job has 1 hour to run the task, if it cant after 1 hour, it wont run. (optional)
       restartPolicy: OnFailure
-      imagePullPolicy: Always
-      tag: latest
-      schedule: "0 9 * * *" # Run every day at 9am
+      schedule: "10 * * * *" # Run once per hour
       command:
       - /usr/sbin/fleet-scheduler
-      - inventory
       - --config
       - /etc/fleet-scheduler/config.yaml
+      - inventory
+      - page-size
+      - "4"
+      - inflight-pages
+      - "2"

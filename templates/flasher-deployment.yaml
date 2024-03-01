@@ -33,7 +33,7 @@ spec:
            "--use-kv",
            "--replica-count=1",
            "--facility-code",
-           "{{ .Values.location }}"
+           "{{ .Values.clusterInfo.facility }}"
           ]
           volumeMounts:
             - name: config-volume
@@ -49,19 +49,19 @@ spec:
             - name: FLASHER_NATS_CONNECT_TIMEOUT
               value: "{{ .Values.flasher.env.NATS_CONNECT_TIMEOUT }}"
             - name: FLASHER_NATS_CONSUMER_NAME
-              value: "{{ .Values.location }}-flasher"
+              value: "{{ .Values.clusterInfo.facility }}-flasher"
             - name: FLASHER_NATS_CONSUMER_SUBSCRIBESUBJECTS
-              value: "com.hollow.sh.controllers.commands.{{ .Values.location }}.servers.firmwareInstall"
+              value: "com.hollow.sh.controllers.commands.{{ .Values.clusterInfo.facility }}.servers.firmwareInstall"
             - name: FLASHER_NATS_CONSUMER_FILTERSUBJECT
-              value: "com.hollow.sh.controllers.commands.{{ .Values.location }}.servers.firmwareInstall"
+              value: "com.hollow.sh.controllers.commands.{{ .Values.clusterInfo.facility }}.servers.firmwareInstall"
             - name: FLASHER_NATS_PUBLISHERSUBJECTPREFIX
-              value: "com.hollow.sh.controllers.responses.{{ .Values.location }}.servers.firmwareInstall"
+              value: "com.hollow.sh.controllers.responses.{{ .Values.clusterInfo.facility }}.servers.firmwareInstall"
             - name: FLASHER_SERVERSERVICE_ENDPOINT
               value: "{{ .Values.flasher.env.FLEETDB_ENDPOINT }}"
             - name: FLASHER_SERVERSERVICE_DISABLE_OAUTH
               value: "{{ .Values.flasher.env.SERVERSERVICE_DISABLE_OAUTH }}"
             - name: FLASHER_SERVERSERVICE_FACILITY_CODE
-              value: "{{ .Values.location  }}"
+              value: "{{ .Values.clusterInfo.facility  }}"
             - name: FLASHER_SERVERSERVICE_OIDC_AUDIENCE_ENDPOINT
               value: "{{ .Values.flasher.env.SERVERSERVICE_OIDC_AUDIENCE_ENDPOINT }}"
             - name: FLASHER_SERVERSERVICE_OIDC_ISSUER_ENDPOINT

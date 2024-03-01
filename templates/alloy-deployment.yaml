@@ -25,7 +25,7 @@ spec:
            "--config",
            "/etc/alloy/config.yaml",
            "--facility-code",
-           "{{ .Values.location }}",
+           "{{ .Values.clusterInfo.facility }}",
            "--store=serverservice"
           ]
           volumeMounts:
@@ -40,7 +40,7 @@ spec:
             - name: ALLOY_SERVERSERVICE_DISABLE_OAUTH
               value: "{{ .Values.alloy.env.ALLOY_SERVERSERVICE_DISABLE_OAUTH }}"
             - name: ALLOY_SERVERSERVICE_FACILITY_CODE
-              value: "{{ .Values.location }}"
+              value: "{{ .Values.clusterInfo.facility }}"
             - name: ALLOY_NATS_URL
               value: "{{ .Values.alloy.env.ALLOY_NATS_URL }}"
             - name: ALLOY_NATS_CREDS_FILE
@@ -48,13 +48,13 @@ spec:
             - name: ALLOY_NATS_CONNECT_TIMEOUT
               value: "{{ .Values.flasher.env.NATS_CONNECT_TIMEOUT }}"
             - name: ALLOY_NATS_CONSUMER_NAME
-              value: "{{ .Values.location }}-alloy"
+              value: "{{ .Values.clusterInfo.facility }}-alloy"
             - name: ALLOY_NATS_CONSUMER_SUBSCRIBESUBJECTS
-              value: "com.hollow.sh.controllers.commands.{{ .Values.location }}.servers.inventory"
+              value: "com.hollow.sh.controllers.commands.{{ .Values.clusterInfo.facility }}.servers.inventory"
             - name: ALLOY_NATS_CONSUMER_FILTERSUBJECT
-              value: "com.hollow.sh.controllers.commands.{{ .Values.location }}.servers.inventory"
+              value: "com.hollow.sh.controllers.commands.{{ .Values.clusterInfo.facility }}.servers.inventory"
             - name: ALLOY_NATS_PUBLISHERSUBJECTPREFIX
-              value: "com.hollow.sh.controllers.responses.{{ .Values.location }}.servers.inventory"
+              value: "com.hollow.sh.controllers.responses.{{ .Values.clusterInfo.facility }}.servers.inventory"
             - name: OTEL_EXPORTER_OTLP_ENDPOINT
               value: "{{ .Values.alloy.env.OTEL_EXPORTER_OTLP_ENDPOINT }}"
             - name: OTEL_EXPORTER_OTLP_INSECURE
