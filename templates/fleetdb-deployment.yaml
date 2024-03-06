@@ -1,4 +1,3 @@
-{{- if eq .Values.knobs.use_serverservice false}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -31,29 +30,12 @@ spec:
             requests:
               cpu: 200m
               memory: 200M
-      volumes:
-        - name: nats-creds-volume
-          secret:
-            secretName: serverservice-secrets
-            items:
-              - key: serverservice-nats-creds
-                path: nats.creds
       containers:
         - env:
             - name: SERVERSERVICE_CRDB_URI
               value: postgresql://root@fleetdb-crdb:26257/defaultdb?sslmode=disable
             - name: SERVERSERVICE_OIDC_ENABLED
               value: "false"
-            - name: SERVERSERVICE_NATS_URL
-              value: "nats://nats:4222"
-            - name: SERVERSERVICE_NATS_STREAM_PREFIX
-              value: {{ .Values.serverservice.nats.publishStreamPrefix }}
-            - name: SERVERSERVICE_NATS_CREDS_FILE
-              value: /etc/nats/nats.creds
-          volumeMounts:
-            - name: nats-creds-volume
-              mountPath: /etc/nats
-              readOnly: true
           image: "{{ .Values.fleetdb.image.repository }}:{{ .Values.fleetdb.image.tag }}"
           name: fleetdb
           args:
@@ -71,4 +53,3 @@ spec:
               cpu: 200m
               memory: 200M
       restartPolicy: Always
-{{- end }}

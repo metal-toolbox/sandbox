@@ -2,7 +2,7 @@
 
 This chart deploys the various metal-toolbox/hollow services in docker KIND for development and testing.
 
- - [Serverservice](https://github.com/metal-toolbox/hollow-serverservice) with the CrDB backend.
+ - [FleetDB](https://github.com/metal-toolbox/fleetdb) with the CrDB backend.
  - [Conditionorc](https://github.com/metal-toolbox/conditionorc)
  - [Alloy](https://github.com/metal-toolbox/alloy)
  - [Flasher](https://github.com/metal-toolbox/flasher/)
@@ -18,14 +18,14 @@ To understand more about the firmware install and how these services interact, c
 - Install docker KIND
 - Setup a local KIND cluster with a registry using the script here: https://kind.sigs.k8s.io/docs/user/local-registry/
 - Export `KUBECONFIG=~/.kube/config_kind`
-- Docker images for Serverservice, Conditionorc, Alloy
+- Docker images for FleetDB, Conditionorc, Alloy
 - Install [mctl](https://github.com/metal-toolbox/mctl#getting-started) and use the configuration from [here](https://github.com/metal-toolbox/sandbox/tree/main/scripts/mctl)
 
 ### 1. Build docker images and push to local registry
 
 Clone each of the repositories and run `make push-image-devel`
 
- - [Serverservice](https://github.com/metal-toolbox/hollow-serverservice)
+ - [FleetDB](https://github.com/metal-toolbox/fleetdb)
  - [Conditionorc](https://github.com/metal-toolbox/conditionorc)
  - [Alloy](https://github.com/metal-toolbox/alloy/)
  - [Flasher](https://github.com/metal-toolbox/flasher/)
@@ -130,8 +130,7 @@ make clean
 
 ## NATs Jetstream setup
 
-The chart configures a NATS Jetstream that Serverservice, Orchestrator and the
-controllers sends messages on, the NATS Jetstream configuration is specified in [values.yaml](values.yaml).
+The chart configures a NATS Jetstream that Orchestrator and the controllers sends messages on, the NATS Jetstream configuration is specified in [values.yaml](values.yaml).
 
 Check out the [cheatsheet](notes/cheatsheet.md) to validate the Jetstream setup.
 
