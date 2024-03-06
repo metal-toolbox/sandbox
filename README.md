@@ -49,32 +49,56 @@ To run set [conditions](https://github.com/metal-toolbox/architecture/blob/main/
 
 Note: this assumes the KIND environment on your machine can connect to server BMC IPs.
 
-- Make sure the `Serverservice` and `CrDB` pods are running.
-- run `make port-forward-hss`.
-- Add a server using the helper script.
+- Make sure the `FleetDB` and `CrDB` pods are running.
+- In separate terminals, run `make port-forward-fleetdb`, `make port-forward-conditionorc-api`.
+- Import a server using `mctl` ()
 
 ```sh
-go run scripts/serverservice/add-server.go \
-        -server-id edeff024-f62a-4288-8730-3fab8cceab78 \
-        -facility sandbox \
-        -bmc-addr 127.0.0.1 \
-        -bmc-user bar \
-        -bmc-pass foo
+./mctl create server \
+      --bmc-addr 192.168.1.1 \
+      --bmc-user root \
+      --bmc-pass hunter2 \
+      --server ede81024-f62a-4288-8730-3fab8cceabcc
+      --facility sandbox
+
+2024/03/06 10:13:57 status=200
+msg=condition set
+conditionID=fccf1b78-c073-4897-96bd-8c03bc3bc807
+serverID=ede81024-f62a-4288-8730-3fab8cceabcc
 ```
 
-### 4. Collect information on the server
+### 4. Server and component inventory
 
-This collects the current firmware, health information and BIOS configuration data for a server.
+Importing a server with the `mctl create server` command by default triggers an
+inventory collection.
 
+To collect inventory on demand, run
 ```sh
-mctl collect inventory --server edeff024-f62a-4288-8730-3fab8cceab78
+mctl collect inventory --server ede81024-f62a-4288-8730-3fab8cceabcc
 ```
 
 Inventory collection status can be checked with,
 
 ```sh
-mctl collect status --server edeff024-f62a-4288-8730-3fab8cceab78
+mctl collect status --server ede81024-f62a-4288-8730-3fab8cceabcc
 ```
+
+Inventory for a server can be listed with,
+
+```sh
+❯ ./mctl get server -s ede81024-f62a-4288-8730-3fab8cceab78 --list-components --table
++-------------------+---------+--------------------------------+------------------+-------------+--------+---------------+
+|     COMPONENT     | VENDOR  |             MODEL              |      SERIAL      |     FW      | STATUS |   REPORTED    |
++-------------------+---------+--------------------------------+------------------+-------------+--------+---------------+
+| bios              | -       | -                              |                0 | 2.13.3      | -      | 4 minutes ago |
+| bmc               | dell    | PowerEdge R6515                |                0 | 6.10.30.20  | -      | 4 minutes ago |
+| cpld              | -       | -                              |                0 | 1.0.7       | -      | 4 minutes ago |
+| cpu               | amd     | AMD EPYC 7443P 24-Core         |                0 | 0xA0011D1   | -      | 4 minutes ago |
+|                   |         | Processor                      |                  |             |        |               |
+| drive             | intel   | SSDSCKKB240G8R                 | PHYH12430FOO     | DL6R        | -      | 4 minutes ago |
+| drive             | samsung | MZ7LH480HBHQ0D3                | S5YJNA0R8BAR     | HG58        | -      | 4 minutes ago |
+```
+
 
 ### 5. Import firmware definitions (optional)
 
@@ -105,13 +129,13 @@ make port-forward-conditionorc-api
 ```
 
 ```sh
-mctl install firmware-set --server edeff024-f62a-4288-8730-3fab8cceab78
+mctl install firmware-set --server ede81024-f62a-4288-8730-3fab8cceabcc
 ```
 
 Check condition status
 
 ```sh
-mctl install status --server edeff024-f62a-4288-8730-3fab8cceab78
+mctl install status --server ede81024-f62a-4288-8730-3fab8cceabcc
 ```
 
 ### Upgrade/uninstall helm chart.
