@@ -55,34 +55,6 @@ nsc edit operator --account-jwt-server-url nats://nats:4222
 nsc add account --name SYS
 nsc add user --name sys
 
-# create servserservice Jetstream account - with permissions to list, create JS streams
-nsc add account --name serverservice
-nsc edit account --name serverservice --js-disk-storage 256M --js-mem-storage -1 --js-consumer -1 --js-streams -1
-
-# generate a signing key to create a serverservice role
-# so we can attach various pubsub permissions to the role
-nsc edit account --sk generate --name serverservice
-SK_S=$(nsc describe account serverservice -J | jq .nats.signing_keys[0] -r)
-nsc edit signing-key -a serverservice --sk ${SK_S} --role serverservice
-
-# https://docs.nats.io/reference/reference-protocols/nats_api_reference
-nsc edit signing-key -a serverservice --sk ${SK_S} \
-	--allow-pubsub '$JS.API.INFO' \
-	--allow-pubsub '$JS.API.STREAM.INFO.serverservice' \
-	--allow-pubsub '$JS.API.STREAM.NAMES' \
-	--allow-pubsub '$JS.API.STREAM.LIST' \
-	--allow-pubsub '$JS.API.STREAM.CREATE.serverservice' \
-	--allow-pubsub '$JS.API.CONSUMER.NAMES.serverservice' \
-	--allow-pubsub '$JS.API.CONSUMER.INFO.serverservice.>' \
-	--allow-pubsub '$JS.API.CONSUMER.CREATE.serverservice.>' \
-	--allow-pubsub '$JS.API.STREAM.DELETE.serverservice' \
-	--allow-pubsub '$JS.API.CONSUMER.DELETE.serverservice.serverservice' \
-	--allow-sub '_INBOX.>' \
-	--allow-pubsub 'com.hollow.sh.serverservice.events.>'
-
-# create serverservice user, with the serverservice role
-nsc add user -a serverservice --name serverservice -K serverservice
-
 # create controllers Jetstream account - with permissions to list, create JS streams
 nsc add account --name controllers
 nsc edit account --name controllers --js-disk-storage 256M --js-mem-storage -1 --js-consumer -1 --js-streams -1
@@ -139,7 +111,6 @@ nsc edit signing-key -a controllers --sk ${SK_A} \
 	--allow-pubsub '$JS.API.STREAM.CREATE.KV_inventory' \
 	--allow-pubsub '$JS.API.STREAM.CREATE.KV_inventory.>' \
 	--allow-pubsub '$JS.ACK.controllers.>' \
-	--allow-sub 'com.hollow.sh.serverservice.events.>' \
 	--allow-pubsub 'com.hollow.sh.controllers.>' \
 	--allow-sub 'com.hollow.sh.controllers.commands.>' \
 	--allow-pubsub 'com.hollow.sh.controllers.responses' \
@@ -205,11 +176,6 @@ function push_controller_secrets() {
 		sekrit=$(kuexec "cat /root/nsc/nkeys/creds/KO/controllers/${controller}.creds" | "${os_base64[@]}" -w 0)
 		push_secret "${sekrit}" ${controller}
 	done
-}
-
-function push_serverservice_secrets() {
-	sekrit=$(kuexec "cat /root/nsc/nkeys/creds/KO/serverservice/serverservice.creds" | "${os_base64[@]}" -w 0)
-	push_secret "${sekrit}" serverservice
 }
 
 function push_secret() {
