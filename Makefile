@@ -23,8 +23,7 @@ upgrade: kubectl-ctx-kind
 clean: kubectl-ctx-kind
 	helm uninstall hollow-sandbox
 	rm values-nats.yaml
-	# incase the crdb pvc is stuck in terminating
-	# kubectl patch pvc db -p '{"metadata":{"finalizers":null}}'
+	./scripts/wait-clean.sh
 
 ## port forward condition orchestrator API  (runs in foreground)
 port-forward-conditionorc-api: kubectl-ctx-kind

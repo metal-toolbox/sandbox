@@ -5,9 +5,10 @@ set -e
 CPWD=$(pwd)
 [[ "$(basename $CPWD)" != "sandbox" ]] && echo "This script should be executed from the repo top level directory" && exit 1
 
-echo "Note: this will purge all current NATS related k8s objects and services"
+echo "!! Note: this will purge all current NATS related k8s objects and services !!"
 echo "before proceeding make sure any changes to values.yaml has been commited or backed up..."
-echo "hit enter to proceed ..."
+echo ""
+echo ">> \e[31m Hit enter to proceed \e[0m"
 
 read
 
