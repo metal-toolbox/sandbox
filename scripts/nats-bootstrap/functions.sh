@@ -85,6 +85,9 @@ nsc edit signing-key -a controllers --sk ${SK_A} \
 	--allow-pubsub '$JS.API.CONSUMER.CREATE.KV_firmwareInstall' \
 	--allow-pubsub '$JS.API.CONSUMER.CREATE.KV_firmwareInstall.>' \
 	--allow-pubsub '$JS.API.CONSUMER.DELETE.KV_firmwareInstall.>' \
+	--allow-pubsub '$JS.API.CONSUMER.CREATE.KV_serverControl' \
+	--allow-pubsub '$JS.API.CONSUMER.CREATE.KV_serverControl.>' \
+	--allow-pubsub '$JS.API.CONSUMER.DELETE.KV_serverControl.>' \
 	--allow-pubsub '$JS.API.CONSUMER.CREATE.KV_inventory' \
 	--allow-pubsub '$JS.API.CONSUMER.CREATE.KV_inventory.>' \
 	--allow-pubsub '$JS.API.CONSUMER.DELETE.KV_inventory.>' \
@@ -106,6 +109,10 @@ nsc edit signing-key -a controllers --sk ${SK_A} \
 	--allow-pubsub '$JS.API.STREAM.INFO.KV_firmwareInstall.>' \
 	--allow-pubsub '$JS.API.STREAM.CREATE.KV_firmwareInstall' \
 	--allow-pubsub '$JS.API.STREAM.CREATE.KV_firmwareInstall.>' \
+	--allow-pubsub '$JS.API.STREAM.INFO.KV_serverControl' \
+	--allow-pubsub '$JS.API.STREAM.INFO.KV_serverControl.>' \
+	--allow-pubsub '$JS.API.STREAM.CREATE.KV_serverControl' \
+	--allow-pubsub '$JS.API.STREAM.CREATE.KV_serverControl.>' \
 	--allow-pubsub '$JS.API.STREAM.INFO.KV_inventory' \
 	--allow-pubsub '$JS.API.STREAM.INFO.KV_inventory.>' \
 	--allow-pubsub '$JS.API.STREAM.CREATE.KV_inventory' \
@@ -114,16 +121,11 @@ nsc edit signing-key -a controllers --sk ${SK_A} \
 	--allow-pubsub 'com.hollow.sh.controllers.>' \
 	--allow-sub 'com.hollow.sh.controllers.commands.>' \
 	--allow-pubsub 'com.hollow.sh.controllers.responses' \
-	--allow-sub '_INBOX.>'
+    --allow-sub '_INBOX.>'
 
-# create conditionorc user, with the controllers role
-nsc add user -a controllers --name conditionorc -K controllers
-
-# create alloy user, with the controllers role
-nsc add user -a controllers --name alloy -K controllers
-
-# create flasher user, with the controllers role
-nsc add user -a controllers --name flasher -K controllers
+for controller in conditionorc alloy flasher flipflop; do
+   nsc add user -a controllers --name ${controller} -K controllers
+done
 
 EOF
 }
@@ -172,7 +174,7 @@ function update_values_nats_yaml() {
 }
 
 function push_controller_secrets() {
-	for controller in conditionorc alloy flasher; do
+	for controller in conditionorc alloy flasher flipflop; do
 		sekrit=$(kuexec "cat /root/nsc/nkeys/creds/KO/controllers/${controller}.creds" | "${os_base64[@]}" -w 0)
 		push_secret "${sekrit}" ${controller}
 	done
@@ -196,7 +198,7 @@ function push_secret() {
 
 function reload_controller_deployments() {
 	echo "restarting controller deployments for NATSs changes to take effect..."
-	kubectl delete deployments.apps flasher alloy conditionorc
+	kubectl delete deployments.apps flasher alloy conditionorc flipflop
 	make upgrade
 }
 
