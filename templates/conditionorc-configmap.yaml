@@ -14,6 +14,7 @@ data:
         failoncheckpointerror: false
       - kind: firmwareInstall
         failoncheckpointerror: true
+      - kind: serverControl
     serverservice:
       endpoint: "{{ .Values.conditionorc.env.SERVERSERVICE_ENDPOINT }}"
       disable_oauth: "{{ .Values.conditionorc.env.SERVERSERVICE_DISABLE_OAUTH }}"
