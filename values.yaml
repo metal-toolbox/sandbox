@@ -1,7 +1,6 @@
 ## for NATS service configuration see #scripts/nats-bootstrap/values-nats.yaml.tmpl
 
-clusterInfo:
-  facility: sandbox
+location: sandbox
 
 fleetdb:
   image:

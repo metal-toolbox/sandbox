@@ -24,7 +24,7 @@ spec:
             - "--log-level"
             - "debug"
             - "--facility"
-            - "{{ .Values.clusterInfo.facility }}"
+            - "{{ .Values.location }}"
           ports:
             - containerPort: 9002
           volumeMounts:
