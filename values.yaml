@@ -161,4 +161,4 @@ fleetscheduler:
       - /etc/fleet-scheduler/config.yaml
       - inventory
       - --page-size
-      - "512"
+      - "512" # how many servers to get per request to fleetdb
