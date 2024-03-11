@@ -157,6 +157,8 @@ fleetscheduler:
       schedule: "0 9 * * *" # Run every day at 9am
       command:
       - /usr/sbin/fleet-scheduler
-      - inventory
       - --config
       - /etc/fleet-scheduler/config.yaml
+      - inventory
+      - --page-size
+      - "512" # how many servers to get per request to fleetdb
