@@ -174,7 +174,7 @@ flipflop:
     # telemetry configuration
     OTEL_EXPORTER_OTLP_ENDPOINT: jaeger:4317
     OTEL_EXPORTER_OTLP_INSECURE: true
-    
+
 prometheus-pushgateway:
   fullnameOverride: fleet-pushgateway
   resources:
