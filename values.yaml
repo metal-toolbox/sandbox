@@ -157,11 +157,24 @@ fleetscheduler:
       - --config
       - /etc/fleet-scheduler/config.yaml
       - inventory
-      - page-size
-      - "4"
-      - inflight-pages
-      - "2"
+      - --page-size
+      - "512"
 
+flipflop:
+  enable: true
+  image:
+    repository: "localhost:5001/flipflop"
+    tag: latest
+    pullPolicy: Always
+  env:
+    FLEETDB_ENDPOINT: http://fleetdb:8000
+    FLEETDB_DISABLE_OAUTH: true
+    NATS_URL: "nats://nats:4222"
+    NATS_CONNECT_TIMEOUT: 60s
+    # telemetry configuration
+    OTEL_EXPORTER_OTLP_ENDPOINT: jaeger:4317
+    OTEL_EXPORTER_OTLP_INSECURE: true
+    
 prometheus-pushgateway:
   fullnameOverride: fleet-pushgateway
   resources:

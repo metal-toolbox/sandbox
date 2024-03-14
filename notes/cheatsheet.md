@@ -1,6 +1,12 @@
 ### NATS
 
-The below commands run on the nats box
+The below commands run on the nats box.
+
+Make sure the nats account creds are available in nats box
+```
+source scripts/nats-bootstrap/functions.sh && restore_accounts
+```
+
 
 ```
 kubectl exec -ti deployments/nats-box /bin/sh

@@ -6,6 +6,7 @@ This chart deploys the various metal-toolbox/hollow services in docker KIND for 
  - [Conditionorc](https://github.com/metal-toolbox/conditionorc)
  - [Alloy](https://github.com/metal-toolbox/alloy)
  - [Flasher](https://github.com/metal-toolbox/flasher/)
+ - [Flipflop](https://github.com/metal-toolbox/flipflop)
  - NATS Jetstream and K/V
  - Chaos mesh
 
@@ -29,8 +30,8 @@ Clone each of the repositories and run `make push-image-devel`
  - [Conditionorc](https://github.com/metal-toolbox/conditionorc)
  - [Alloy](https://github.com/metal-toolbox/alloy/)
  - [Flasher](https://github.com/metal-toolbox/flasher/)
-
-- [Fleetscheduler](https://github.com/metal-toolbox/fleet-scheduler) (OPTIONAL, enable in values.yaml fleetscheduler.enable)
+ - [Flipflop](https://github.com/metal-toolbox/flipflop)
+ - [Fleetscheduler](https://github.com/metal-toolbox/fleet-scheduler) (OPTIONAL, enable in values.yaml fleetscheduler.enable)
 
 This will build and push the container images to the local container registry.
 
@@ -99,8 +100,22 @@ Inventory for a server can be listed with,
 | drive             | samsung | MZ7LH480HBHQ0D3                | S5YJNA0R8BAR     | HG58        | -      | 4 minutes ago |
 ```
 
+### 5. Run server/bmc power actions
 
-### 5. Import firmware definitions (optional)
+Power off server
+```sh
+❯ mctl power --server ede81024-f62a-4288-8730-3fab8cceab78 --action off
+```
+
+Check action status
+```sh
+mctl power --server ede81024-f62a-4288-8730-3fab8cceab78 --action-status | jq .status
+{
+  "msg": "server power state set successful: off"
+}
+```
+
+### . Import firmware definitions (optional)
 
 Note: replace `ARTIFACTS_ENDPOINT` in [firmwares.json](./scripts/mctl/firmwares.json) with endpoint serving the firmware files.
 
