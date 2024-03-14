@@ -137,10 +137,9 @@ fleetscheduler:
   image:
     repository: "localhost:5001/fleet-scheduler"
     tag: latest
-    pullPolicy: Always
+    imagePullPolicy: Always
   env:
     log_level: debug
-    facility: sandbox
     fleetdb:
       endpoint: http://fleetdb:8000
       disable_oauth: true
@@ -148,20 +147,18 @@ fleetscheduler:
       endpoint: http://conditionorc-api:9001
       disable_oauth: true
   jobs: # technically, this is optional
-    - name: inventory # This job will collect all servers and create conditions on them within the facility fleetscheduler.facility defined in this yaml
+    - name: inventory # This job will collect all servers and create conditions on them
       ttlSecondsAfterFinished: 86400 # Remove job after 1 day. (optional)
       startingDeadlineSeconds: 3600 # The job has 1 hour to run the task, if it cant after 1 hour, it wont run. (optional)
       restartPolicy: OnFailure
-      imagePullPolicy: Always
-      tag: latest
-      schedule: "0 9 * * *" # Run every day at 9am
+      schedule: "10 * * * *" # Run once per hour
       command:
       - /usr/sbin/fleet-scheduler
       - --config
       - /etc/fleet-scheduler/config.yaml
       - inventory
       - --page-size
-      - "512" # how many servers to get per request to fleetdb
+      - "512"
 
 flipflop:
   enable: true
@@ -177,3 +174,15 @@ flipflop:
     # telemetry configuration
     OTEL_EXPORTER_OTLP_ENDPOINT: jaeger:4317
     OTEL_EXPORTER_OTLP_INSECURE: true
+
+prometheus-pushgateway:
+  fullnameOverride: fleet-pushgateway
+  resources:
+    limits:
+      cpu: 300m
+      memory: 150Mi
+    requests:
+      cpu: 300m
+      memory: 150Mi
+  service:
+    port: 9090

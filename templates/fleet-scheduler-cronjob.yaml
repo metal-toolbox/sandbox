@@ -25,8 +25,8 @@ spec:
                 name: fleet-scheduler-config
           containers:
           - name: {{ $job.name }}
-            image: {{ $.Values.repository }}:{{ $job.tag }}
-            imagePullPolicy: {{ $job.imagePullPolicy }}
+            image: {{ $.Values.fleetscheduler.image.repository }}:{{ $.Values.fleetscheduler.image.tag }}
+            imagePullPolicy: {{ $.Values.fleetscheduler.image.imagePullPolicy }}
             {{- with $job.command }}
             command:
 {{ toYaml . | indent 12 }}
@@ -40,12 +40,11 @@ spec:
                 value: "/etc/fleet-scheduler/config.yaml"
             resources:
               limits:
-                cpu: 1000m
+                cpu: 1
                 memory: 1Gi
               requests:
-                cpu: 1000m
+                cpu: 1
                 memory: 1Gi
-          restartPolicy: Never
           activeDeadlineSeconds: 10800
 {{ end }}
 {{ end }}

@@ -9,10 +9,10 @@ data:
   config.yaml: |
     log_level: {{ .Values.fleetscheduler.env.log_level }}
     store_kind: fleet-scheduler
-    facility_code: {{ .Values.clusterInfo.facility }}
+    facility_code: {{ .Values.location }}
     fleetdb_api:
-      disable_oauth: {{ .Values.fleetscheduler.env.serverservice.disable_oauth }}
-      endpoint: {{ .Values.fleetscheduler.env.serverservice.endpoint }}
+      disable_oauth: {{ .Values.fleetscheduler.env.fleetdb.disable_oauth }}
+      endpoint: {{ .Values.fleetscheduler.env.fleetdb.endpoint }}
     conditionorc_api:
       disable_oauth: {{ .Values.fleetscheduler.env.conditionorc.disable_oauth }}
       endpoint: {{ .Values.fleetscheduler.env.conditionorc.endpoint }}
