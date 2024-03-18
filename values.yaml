@@ -160,6 +160,19 @@ fleetscheduler:
       - --page-size
       - "512"
 
+# Enable the push gateway to collect metrics from fleetscheduler
+#prometheus-pushgateway:
+#  fullnameOverride: fleet-pushgateway
+#  resources:
+#    limits:
+#      cpu: 300m
+#      memory: 150Mi
+#    requests:
+#      cpu: 300m
+#      memory: 150Mi
+#  service:
+#    port: 9090
+
 flipflop:
   enable: true
   image:
@@ -175,14 +188,4 @@ flipflop:
     OTEL_EXPORTER_OTLP_ENDPOINT: jaeger:4317
     OTEL_EXPORTER_OTLP_INSECURE: true
 
-prometheus-pushgateway:
-  fullnameOverride: fleet-pushgateway
-  resources:
-    limits:
-      cpu: 300m
-      memory: 150Mi
-    requests:
-      cpu: 300m
-      memory: 150Mi
-  service:
-    port: 9090
+
