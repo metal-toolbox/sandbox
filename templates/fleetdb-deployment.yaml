@@ -34,12 +34,11 @@ spec:
         - env:
             - name: FLEETDB_CRDB_URI
               value: postgresql://root@fleetdb-crdb:26257/defaultdb?sslmode=disable
-            - name: FLEETDB_OIDC_ENABLED
-              value: "false"
           image: "{{ .Values.fleetdb.image.repository }}:{{ .Values.fleetdb.image.tag }}"
           name: fleetdb
           args:
             - serve
+            - "--oidc={{ .Values.fleetdb.enable_oidc }}"
             # base64 key generated with,
             # $ echo "foobar1234567890abcdefghijklmno" | base64
             - --db-encryption-driver=base64key://Zm9vYmFyMTIzNDU2Nzg5MGFiY2RlZmdoaWprbG1ubwo=

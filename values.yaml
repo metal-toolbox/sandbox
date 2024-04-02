@@ -3,6 +3,7 @@
 location: sandbox
 
 fleetdb:
+  enable_oidc: false
   image:
     repository: "localhost:5001/fleetdb"
     tag: latest
