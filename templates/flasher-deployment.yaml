@@ -25,7 +25,6 @@ spec:
            "run",
            "--store",
            "serverservice",
-           "--dry-run",
            "--config",
            "/etc/flasher/config.yaml",
            "--enable-pprof",
@@ -47,15 +46,9 @@ spec:
             - name: FLASHER_NATS_URL
               value: "{{ .Values.flasher.env.endpoints.nats.url }}"
             - name: FLASHER_NATS_CONNECT_TIMEOUT
-              value: "{{ .Values.flasher.env.endpoints.nats.timeout }}"
-            - name: FLASHER_NATS_CONSUMER_NAME
-              value: "{{ .Values.flasher.env.facility }}-flasher"
-            - name: FLASHER_NATS_CONSUMER_SUBSCRIBESUBJECTS
-              value: "com.hollow.sh.controllers.commands.{{ .Values.flasher.env.facility }}.servers.firmwareInstall"
-            - name: FLASHER_NATS_CONSUMER_FILTERSUBJECT
-              value: "com.hollow.sh.controllers.commands.{{ .Values.flasher.env.facility }}.servers.firmwareInstall"
-            - name: FLASHER_NATS_PUBLISHERSUBJECTPREFIX
-              value: "com.hollow.sh.controllers.responses.{{ .Values.flasher.env.facility }}.servers.firmwareInstall"
+              value: "{{ .Values.flasher.env.NATS_CONNECT_TIMEOUT }}"
+            - name: FLASHER_NATS_KV_REPLICAS
+              value: "0"
             - name: FLASHER_SERVERSERVICE_ENDPOINT
               value: "{{ .Values.flasher.env.endpoints.fleetdb.url }}"
             - name: FLASHER_SERVERSERVICE_DISABLE_OAUTH
