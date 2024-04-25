@@ -62,6 +62,8 @@ alloy:
     ALLOY_SERVERSERVICE_ENDPOINT: http://fleetdb:8000
     ALLOY_FLEETDB_ENDPOINT: http://fleetdb:8000
     ALLOY_SERVERSERVICE_DISABLE_OAUTH: true
+    ALLOY_COMPONENT_INVENTORY_ENDPOINT: http://component-inventory:8020
+    ALLOY_COMPONENT_INVENTORY_DISABLE_OAUTH: true
     ALLOY_NATS_URL: "nats://nats:4222"
     # telemetry configuration
     OTEL_EXPORTER_OTLP_ENDPOINT: jaeger:4317
@@ -188,5 +190,4 @@ flipflop:
     # telemetry configuration
     OTEL_EXPORTER_OTLP_ENDPOINT: jaeger:4317
     OTEL_EXPORTER_OTLP_INSECURE: true
-
 
