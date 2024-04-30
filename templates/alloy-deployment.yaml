@@ -35,11 +35,15 @@ spec:
               mountPath: /etc/nats
               readOnly: true
           env:
-            - name: ALLOY_SERVERSERVICE_ENDPOINT
+            - name: ALLOY_COMPONENT_INVENTORY_ENDPOINT
+              value: "{{ .Values.alloy.env.ALLOY_COMPONENT_INVENTORY_ENDPOINT }}"
+            - name: ALLOY_COMPONENT_INVENTORY_DISABLE_OAUTH
+              value: "{{ .Values.alloy.env.ALLOY_COMPONENT_INVENTORY_DISABLE_OAUTH }}"
+            - name: ALLOY_FLEETDB_ENDPOINT
               value: "{{ .Values.alloy.env.ALLOY_FLEETDB_ENDPOINT }}"
-            - name: ALLOY_SERVERSERVICE_DISABLE_OAUTH
+            - name: ALLOY_FLEETDB_DISABLE_OAUTH
               value: "{{ .Values.alloy.env.ALLOY_SERVERSERVICE_DISABLE_OAUTH }}"
-            - name: ALLOY_SERVERSERVICE_FACILITY_CODE
+            - name: ALLOY_FLEETDB_FACILITY_CODE
               value: "{{ .Values.location }}"
             - name: ALLOY_NATS_URL
               value: "{{ .Values.alloy.env.ALLOY_NATS_URL }}"
