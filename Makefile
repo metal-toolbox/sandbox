@@ -25,6 +25,8 @@ clean: kubectl-ctx-kind
 	rm values-nats.yaml
 	./scripts/wait-clean.sh
 
+
+
 ## port forward condition orchestrator API  (runs in foreground)
 port-forward-conditionorc-api: kubectl-ctx-kind
 	kubectl port-forward deployment/conditionorc-api ${CONDITION_ORC_PORT}:${CONDITION_ORC_PORT}
@@ -110,9 +112,14 @@ firmware-syncer-job-clean:
 psql-crdb: kubectl-ctx-kind
 	psql -d "postgresql://root@localhost:26257/defaultdb?sslmode=disable"
 
+## reinitialize nats setup
+reinit-nats: clean-nats
+	kubectl delete statefulsets nats --wait=true
+	./scripts/nats-bootstrap/boostrap.sh
+
 ## purge nats app and storage pvcs
 clean-nats:
-	kubectl delete statefulsets.apps nats && kubectl delete pvc nats-js-pvc-nats-0 nats-jwt-pvc-nats-0
+	kubectl delete statefulsets.apps nats  --wait=true && kubectl delete pvc nats-js-pvc-nats-0 nats-jwt-pvc-nats-0
 #
 ## set kube ctx to kind cluster
 kubectl-ctx-kind:

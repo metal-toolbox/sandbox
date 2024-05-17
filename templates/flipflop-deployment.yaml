@@ -18,21 +18,22 @@ spec:
       containers:
         - name: flipflop
           image: "{{ .Values.flipflop.image.repository }}:{{ .Values.flipflop.image.tag }}"
-          command: [
-           "flipflop",
-           "run",
-           "--store",
-           "fleetdb",
-           "--config",
-           "/etc/flipflop/config.yaml",
-           "--enable-pprof",
-           "--log-level",
-           "debug",
-           "--fault-injection",
-           "--replica-count=1",
-           "--facility-code",
-           "{{ .Values.location }}"
-          ]
+          command:
+            [
+              "flipflop",
+              "run",
+              "--store",
+              "fleetdb",
+              "--config",
+              "/etc/flipflop/config.yaml",
+              "--enable-pprof",
+              "--log-level",
+              "debug",
+              "--fault-injection",
+              "--replica-count=1",
+              "--facility-code",
+              "{{ .Values.location }}",
+            ]
           volumeMounts:
             - name: config-volume
               mountPath: /etc/flipflop

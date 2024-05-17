@@ -40,9 +40,11 @@ spec:
             - name: CONDITIONORC_NATS_CONSUMER_NAME
               value: "conditionorc"
             - name: CONDITIONORC_NATS_CONSUMER_SUBSCRIBESUBJECTS
-              value: "com.hollow.sh.controllers.responses.>"
+              #workaround until conditionorc is moved to rivets/events
+              value: "com.hollow.sh.controllers.commands.nonexistant.>"
             - name: CONDITIONORC_NATS_CONSUMER_FILTERSUBJECT
-              value: "com.hollow.sh.controllers.responses.>"
+              #workaround until conditionorc is moved to rivets/events
+              value: "com.hollow.sh.controllers.commands.nonexistant.>"
             - name: CONDITIONORC_NATS_PUBLISHERSUBJECTPREFIX
               value: "com.hollow.sh.controllers.commands"
             - name: CONDITIONORC_SERVERSERVICE_ENDPOINT

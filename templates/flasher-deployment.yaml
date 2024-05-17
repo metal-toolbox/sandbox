@@ -18,23 +18,22 @@ spec:
       containers:
         - name: flasher
           image: "{{ .Values.flasher.image.repository }}:{{ .Values.flasher.image.tag }}"
-          command: [
-           "flasher",
-           "run",
-           "--store",
-           "serverservice",
-           "--dry-run",
-           "--config",
-           "/etc/flasher/config.yaml",
-           "--enable-pprof",
-           "--log-level",
-           "debug",
-           "--fault-injection",
-           "--use-kv",
-           "--replica-count=1",
-           "--facility-code",
-           "{{ .Values.location }}"
-          ]
+          command:
+            [
+              "flasher",
+              "run",
+              "--store",
+              "serverservice",
+              "--dry-run",
+              "--config",
+              "/etc/flasher/config.yaml",
+              "--enable-pprof",
+              "--log-level",
+              "debug",
+              "--fault-injection",
+              "--facility-code",
+              "{{ .Values.location }}",
+            ]
           volumeMounts:
             - name: config-volume
               mountPath: /etc/flasher
@@ -48,14 +47,6 @@ spec:
               value: "{{ .Values.flasher.env.NATS_URL }}"
             - name: FLASHER_NATS_CONNECT_TIMEOUT
               value: "{{ .Values.flasher.env.NATS_CONNECT_TIMEOUT }}"
-            - name: FLASHER_NATS_CONSUMER_NAME
-              value: "{{ .Values.location }}-flasher"
-            - name: FLASHER_NATS_CONSUMER_SUBSCRIBESUBJECTS
-              value: "com.hollow.sh.controllers.commands.{{ .Values.location }}.servers.firmwareInstall"
-            - name: FLASHER_NATS_CONSUMER_FILTERSUBJECT
-              value: "com.hollow.sh.controllers.commands.{{ .Values.location }}.servers.firmwareInstall"
-            - name: FLASHER_NATS_PUBLISHERSUBJECTPREFIX
-              value: "com.hollow.sh.controllers.responses.{{ .Values.location }}.servers.firmwareInstall"
             - name: FLASHER_SERVERSERVICE_ENDPOINT
               value: "{{ .Values.flasher.env.FLEETDB_ENDPOINT }}"
             - name: FLASHER_SERVERSERVICE_DISABLE_OAUTH
