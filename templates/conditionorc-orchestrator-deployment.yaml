@@ -2,23 +2,24 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    k8s-service: conditionorc
-  name: conditionorc
+    k8s-service: condition-orchestrator
+  name: condition-orchestrator
 spec:
   replicas: 1
   selector:
     matchLabels:
-      k8s-service: conditionorc
+      k8s-service: condition-orchestrator
   template:
     metadata:
       labels:
-        k8s-service: conditionorc
+        k8s-service: condition-orchestrator
     spec:
       containers:
         - image: "{{ .Values.conditionorc.image.repository }}:{{ .Values.conditionorc.image.tag }}"
-          name: conditionorc
+          name: condition-orchestrator
           args:
             - orchestrator
+            - "--oidc=false"
             - "--config"
             - "/etc/conditionorc/config.yaml"
             - "--log-level"

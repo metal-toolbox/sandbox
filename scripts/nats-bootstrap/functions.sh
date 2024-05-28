@@ -74,6 +74,7 @@ nsc edit signing-key -a controllers --sk ${SK_A} \
 	--allow-pubsub '$JS.API.STREAM.NAMES' \
 	--allow-pubsub '$JS.API.STREAM.LIST' \
 	--allow-pubsub '$JS.API.STREAM.CREATE.controllers' \
+	--allow-pubsub '$JS.API.STREAM.UPDATE.controllers' \
 	--allow-pubsub '$JS.API.STREAM.PURGE.controllers' \
 	--allow-pubsub '$JS.API.STREAM.MSG.DELETE.controllers' \
 	--allow-pubsub '$JS.API.STREAM.MSG.GET.controllers' \
@@ -85,6 +86,9 @@ nsc edit signing-key -a controllers --sk ${SK_A} \
 	--allow-pubsub '$JS.API.CONSUMER.CREATE.KV_firmwareInstall' \
 	--allow-pubsub '$JS.API.CONSUMER.CREATE.KV_firmwareInstall.>' \
 	--allow-pubsub '$JS.API.CONSUMER.DELETE.KV_firmwareInstall.>' \
+	--allow-pubsub '$JS.API.CONSUMER.CREATE.KV_firmwareInstallInband' \
+	--allow-pubsub '$JS.API.CONSUMER.CREATE.KV_firmwareInstallInband.>' \
+	--allow-pubsub '$JS.API.CONSUMER.DELETE.KV_firmwareInstallInband.>' \
 	--allow-pubsub '$JS.API.CONSUMER.CREATE.KV_serverControl' \
 	--allow-pubsub '$JS.API.CONSUMER.CREATE.KV_serverControl.>' \
 	--allow-pubsub '$JS.API.CONSUMER.DELETE.KV_serverControl.>' \
@@ -109,6 +113,13 @@ nsc edit signing-key -a controllers --sk ${SK_A} \
 	--allow-pubsub '$JS.API.STREAM.INFO.KV_active-conditions.>' \
 	--allow-pubsub '$JS.API.STREAM.CREATE.KV_active-conditions' \
 	--allow-pubsub '$JS.API.STREAM.CREATE.KV_active-conditions.>' \
+	--allow-pubsub '$JS.API.CONSUMER.CREATE.KV_tasks' \
+	--allow-pubsub '$JS.API.CONSUMER.CREATE.KV_tasks.>' \
+	--allow-pubsub '$JS.API.CONSUMER.DELETE.KV_tasks.>' \
+	--allow-pubsub '$JS.API.STREAM.INFO.KV_tasks' \
+	--allow-pubsub '$JS.API.STREAM.INFO.KV_tasks.>' \
+	--allow-pubsub '$JS.API.STREAM.CREATE.KV_tasks' \
+	--allow-pubsub '$JS.API.STREAM.CREATE.KV_tasks.>' \
 	--allow-pubsub '$JS.API.STREAM.INFO.KV_active-controllers' \
 	--allow-pubsub '$JS.API.STREAM.INFO.KV_active-controllers.>' \
 	--allow-pubsub '$JS.API.STREAM.CREATE.KV_active-controllers' \
@@ -117,16 +128,18 @@ nsc edit signing-key -a controllers --sk ${SK_A} \
 	--allow-pubsub '$JS.API.STREAM.INFO.KV_firmwareInstall.>' \
 	--allow-pubsub '$JS.API.STREAM.CREATE.KV_firmwareInstall' \
 	--allow-pubsub '$JS.API.STREAM.CREATE.KV_firmwareInstall.>' \
+	--allow-pubsub '$JS.API.STREAM.INFO.KV_firmwareInstallInband' \
+	--allow-pubsub '$JS.API.STREAM.INFO.KV_firmwareInstallInband.>' \
+	--allow-pubsub '$JS.API.STREAM.CREATE.KV_firmwareInstallInband' \
+	--allow-pubsub '$JS.API.STREAM.CREATE.KV_firmwareInstall.>' \
 	--allow-pubsub '$JS.API.STREAM.INFO.KV_serverControl' \
 	--allow-pubsub '$JS.API.STREAM.INFO.KV_serverControl.>' \
 	--allow-pubsub '$JS.API.STREAM.CREATE.KV_serverControl' \
 	--allow-pubsub '$JS.API.STREAM.CREATE.KV_serverControl.>' \
 	--allow-pubsub '$JS.API.STREAM.INFO.KV_broker' \
 	--allow-pubsub '$JS.API.STREAM.INFO.KV_broker.>' \
-	--allow-pubsub '$JS.API.STREAM.INFO.KV_broker-tasks' \
 	--allow-pubsub '$JS.API.STREAM.CREATE.KV_broker' \
 	--allow-pubsub '$JS.API.STREAM.CREATE.KV_broker.>' \
-	--allow-pubsub '$JS.API.STREAM.CREATE.KV_broker-tasks' \
 	--allow-pubsub '$JS.API.STREAM.INFO.KV_biosControl' \
 	--allow-pubsub '$JS.API.STREAM.INFO.KV_biosControl.>' \
 	--allow-pubsub '$JS.API.STREAM.CREATE.KV_biosControl' \
@@ -216,7 +229,7 @@ function push_secret() {
 
 function reload_controller_deployments() {
 	echo "restarting controller deployments for NATSs changes to take effect..."
-	kubectl delete deployments.apps flasher alloy conditionorc flipflop broker
+	kubectl delete deployments.apps flasher alloy condition-orchestrator conditionorc-api flipflop broker
 	make upgrade
 }
 

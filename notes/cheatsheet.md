@@ -50,3 +50,20 @@ consume an event as alloy
 ```
 nats -s nats://nats:4222 --creds=nsc/nkeys/creds/KO/controllers/alloy.creds consumer next controllers sandbox-alloy
 ```
+
+view stream message without pop
+```
+~ # nats -s nats://nats:4222 --creds=nsc/nkeys/creds/KO/controllers/alloy.creds stream get
+? Select a Stream controllers
+? Message Sequence to retrieve -1
+? Subject to retrieve last message for com.hollow.sh.controllers.commands.sandbox.servers.firmwareInstallInband.ede81024-f62a-4288-8730-3fab8cceab78
+```
+
+
+purge message from stream
+```
+~ # nats -s nats://nats:4222 --creds=nsc/nkeys/creds/KO/controllers/alloy.creds stream rmm
+? Select a Stream controllers
+? Message Sequence to remove 59
+? Really remove message 59 from Stream controllers Yes
+```

@@ -38,6 +38,9 @@ spec:
             - name: nats-creds-volume
               mountPath: /etc/nats
               readOnly: true
+            - name: db
+              mountPath: /tmp/db
+              readOnly: false
           env:
             - name: METAL_BROKER_NATS_URL
               value: "{{ .Values.broker.env.NATS_URL }}"
@@ -49,13 +52,13 @@ spec:
               value: "{{ .Values.broker.env.OTEL_EXPORTER_OTLP_ENDPOINT }}"
             - name: OTEL_EXPORTER_OTLP_INSECURE
               value: "{{ .Values.broker.env.OTEL_EXPORTER_OTLP_INSECURE }}"
-          securityContext:
-            capabilities:
-              drop:
-                - NET_RAW
-            readOnlyRootFilesystem: true
-            runAsNonRoot: true
-            runAsUser: 1000
+                #securityContext:
+                #  capabilities:
+                #    drop:
+                #      - NET_RAW
+                #  readOnlyRootFilesystem: true
+                #  runAsNonRoot: true
+                #  runAsUser: 1000
           resources:
             limits:
               cpu: 200m
@@ -86,4 +89,7 @@ spec:
             items:
               - key: broker-nats-creds
                 path: nats.creds
+        - name: db
+          persistentVolumeClaim:
+            claimName: db
       restartPolicy: Always

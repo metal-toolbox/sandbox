@@ -17,6 +17,7 @@ data:
       - kind: serverControl
       - kind: biosControl
       - kind: broker
+      - kind: firmwareInstallInband
     serverservice:
       endpoint: "{{ .Values.conditionorc.env.SERVERSERVICE_ENDPOINT }}"
       disable_oauth: "{{ .Values.conditionorc.env.SERVERSERVICE_DISABLE_OAUTH }}"

@@ -52,6 +52,21 @@ flasher:
     repository: "localhost:5001/flasher"
     tag: latest
     pullPolicy: Always
+  inband:
+    env:
+      SERVERSERVICE_ENDPOINT: http://fleetdb:8000
+      FLEETDB_ENDPOINT: http://fleetdb:8000
+      SERVERSERVICE_DISABLE_OAUTH: true
+      OTEL_EXPORTER_OTLP_ENDPOINT: jaeger:4317
+      OTEL_EXPORTER_OTLP_INSECURE: true
+      ORCHESTRATOR_API_ENDPOINT: http://condition-orchestrator:9001
+      ORCHESTRATOR_API_DISABLE_OAUTH: true
+      ORCHESTRATOR_API_AUTH_TOKEN: "foo"
+      SERVERID: ede81024-f62a-4288-8730-3fab8cceab78
+    image:
+      repository: "localhost:5001/flasher"
+      tag: latest
+      pullPolicy: Always
 
 alloy:
   image:
