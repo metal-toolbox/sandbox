@@ -18,8 +18,8 @@ spec:
             name: syncer-config
       containers:
         - name: firmware-syncer
-          image: "{{ .Values.syncer.image.repository }}:{{ .Values.syncer.image.tag }}"
-          imagePullPolicy: Always
+          image: {{ .Values.syncer.image.repository.url }}/firmware-syncer:{{ .Values.syncer.image.repository.tag }}
+          imagePullPolicy: {{ $.Values.syncer.image.pullPolicy }}
           volumeMounts:
             - name: config-volume
               mountPath: /configs
@@ -28,31 +28,31 @@ spec:
             - /configs/config.yaml
           env:
             - name: SYNCER_S3_REGION
-              value: "{{ .Values.syncer.env.SYNCER_S3_REGION}}"
+              value: "{{ .Values.syncer.env.endpoints.s3.region }}"
             - name: SYNCER_S3_ENDPOINT
-              value: "{{ .Values.syncer.env.SYNCER_S3_ENDPOINT }}"
+              value: "{{ .Values.syncer.env.endpoints.s3.url }}"
             - name: SYNCER_S3_BUCKET
-              value: "{{ .Values.syncer.env.SYNCER_S3_BUCKET }}"
+              value: "{{ .Values.syncer.env.endpoints.s3.bucket }}"
             - name: SYNCER_S3_ACCESS_KEY
-              value: "{{ .Values.syncer.env.SYNCER_S3_ACCESS_KEY }}"
+              value: "{{ .Values.syncer.env.endpoints.s3.access_key }}"
             - name: SYNCER_S3_SECRET_KEY
-              value: "{{ .Values.syncer.env.SYNCER_S3_SECRET_KEY }}"
+              value: "{{ .Values.syncer.env.endpoints.s3.secret_key }}"
             - name: SYNCER_SERVERSERVICE_ENDPOINT
-              value: "{{ .Values.syncer.env.SYNCER_FLEETDB_ENDPOINT}}"
+              value: "{{ .Values.syncer.env.endpoints.fleetdb.url }}"
             - name: SYNCER_SERVERSERVICE_DISABLE_OAUTH
-              value: "{{ .Values.syncer.env.SYNCER_SERVERSERVICE_DISABLE_OAUTH }}"
+              value: "{{ not .Values.syncer.env.endpoints.fleetdb.authenticate }}"
             - name: SYNCER_ASRR_S3_REGION
-              value: "{{ .Values.syncer.env.SYNCER_ASRR_S3_REGION }}"
+              value: "{{ .Values.syncer.env.endpoints.asrr.region }}"
             - name: SYNCER_ASRR_S3_ENDPOINT
-              value: "{{ .Values.syncer.env.SYNCER_ASRR_S3_ENDPOINT }}"
+              value: "{{ .Values.syncer.env.endpoints.asrr.url }}"
             - name: SYNCER_ASRR_S3_BUCKET
-              value: "{{ .Values.syncer.env.SYNCER_ASRR_S3_BUCKET }}"
+              value: "{{ .Values.syncer.env.endpoints.asrr.bucket }}"
             - name: SYNCER_ASRR_S3_ACCESS_KEY
-              value: "{{ .Values.syncer.env.SYNCER_ASRR_S3_ACCESS_KEY }}"
+              value: "{{ .Values.syncer.env.endpoints.asrr.access_key }}"
             - name: SYNCER_ASRR_S3_SECRET_KEY
-              value: "{{ .Values.syncer.env.SYNCER_ASRR_S3_SECRET_KEY }}"
+              value: "{{ .Values.syncer.env.endpoints.asrr.secret_key }}"
             - name: SYNCER_GITHUB_OPENBMC_TOKEN
-              value: "{{ .Values.syncer.env.SYNCER_GITHUB_OPENBMC_TOKEN }}"
+              value: "{{ .Values.syncer.env.endpoints.github.openbmc_token }}"
           resources:
             limits:
               cpu: 200m

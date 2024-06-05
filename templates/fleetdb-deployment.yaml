@@ -21,7 +21,8 @@ spec:
           env:
             - name: FLEETDB_CRDB_URI
               value: postgresql://root@fleetdb-crdb:26257/defaultdb?sslmode=disable
-          image: "{{ .Values.fleetdb.image.repository }}:{{ .Values.fleetdb.image.tag }}"
+          image: {{ .Values.fleetdb.image.repository.url }}/fleetdb:{{ .Values.fleetdb.image.repository.tag }}
+          imagePullPolicy: {{ $.Values.fleetdb.image.pullPolicy }}
           name: fleetdb-migrate
           resources:
             limits:
@@ -34,7 +35,8 @@ spec:
         - env:
             - name: FLEETDB_CRDB_URI
               value: postgresql://root@fleetdb-crdb:26257/defaultdb?sslmode=disable
-          image: "{{ .Values.fleetdb.image.repository }}:{{ .Values.fleetdb.image.tag }}"
+          image: {{ .Values.fleetdb.image.repository.url }}/fleetdb:{{ .Values.fleetdb.image.repository.tag }}
+          imagePullPolicy: {{ $.Values.fleetdb.image.pullPolicy }}
           name: fleetdb
           args:
             - serve

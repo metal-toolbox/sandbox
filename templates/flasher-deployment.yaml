@@ -17,7 +17,8 @@ spec:
       terminationGracePeriodSeconds: 1200
       containers:
         - name: flasher
-          image: "{{ .Values.flasher.image.repository }}:{{ .Values.flasher.image.tag }}"
+          image: {{ .Values.flasher.image.repository.url }}/flasher:{{ .Values.flasher.image.repository.tag }}
+          imagePullPolicy: {{ $.Values.flasher.image.pullPolicy }}
           command: [
            "flasher",
            "run",
@@ -30,10 +31,8 @@ spec:
            "--log-level",
            "debug",
            "--fault-injection",
-           "--use-kv",
-           "--replica-count=1",
            "--facility-code",
-           "{{ .Values.location }}"
+           "{{ .Values.flasher.env.facility }}"
           ]
           volumeMounts:
             - name: config-volume
@@ -45,35 +44,35 @@ spec:
               name: downloads-scratch
           env:
             - name: FLASHER_NATS_URL
-              value: "{{ .Values.flasher.env.NATS_URL }}"
+              value: "{{ .Values.flasher.env.endpoints.nats.url }}"
             - name: FLASHER_NATS_CONNECT_TIMEOUT
-              value: "{{ .Values.flasher.env.NATS_CONNECT_TIMEOUT }}"
+              value: "{{ .Values.flasher.env.endpoints.nats.timeout }}"
             - name: FLASHER_NATS_CONSUMER_NAME
-              value: "{{ .Values.location }}-flasher"
+              value: "{{ .Values.flasher.env.facility }}-flasher"
             - name: FLASHER_NATS_CONSUMER_SUBSCRIBESUBJECTS
-              value: "com.hollow.sh.controllers.commands.{{ .Values.location }}.servers.firmwareInstall"
+              value: "com.hollow.sh.controllers.commands.{{ .Values.flasher.env.facility }}.servers.firmwareInstall"
             - name: FLASHER_NATS_CONSUMER_FILTERSUBJECT
-              value: "com.hollow.sh.controllers.commands.{{ .Values.location }}.servers.firmwareInstall"
+              value: "com.hollow.sh.controllers.commands.{{ .Values.flasher.env.facility }}.servers.firmwareInstall"
             - name: FLASHER_NATS_PUBLISHERSUBJECTPREFIX
-              value: "com.hollow.sh.controllers.responses.{{ .Values.location }}.servers.firmwareInstall"
+              value: "com.hollow.sh.controllers.responses.{{ .Values.flasher.env.facility }}.servers.firmwareInstall"
             - name: FLASHER_SERVERSERVICE_ENDPOINT
-              value: "{{ .Values.flasher.env.FLEETDB_ENDPOINT }}"
+              value: "{{ .Values.flasher.env.endpoints.fleetdb.url }}"
             - name: FLASHER_SERVERSERVICE_DISABLE_OAUTH
-              value: "{{ .Values.flasher.env.SERVERSERVICE_DISABLE_OAUTH }}"
+              value: "{{ not .Values.flasher.env.endpoints.fleetdb.authenticate }}"
             - name: FLASHER_SERVERSERVICE_FACILITY_CODE
-              value: "{{ .Values.location  }}"
-            - name: FLASHER_SERVERSERVICE_OIDC_AUDIENCE_ENDPOINT
-              value: "{{ .Values.flasher.env.SERVERSERVICE_OIDC_AUDIENCE_ENDPOINT }}"
-            - name: FLASHER_SERVERSERVICE_OIDC_ISSUER_ENDPOINT
-              value: "{{ .Values.flasher.env.SERVERSERVICE_OIDC_ISSUER_ENDPOINT }}"
-            - name: FLASHER_SERVERSERVICE_OIDC_CLIENT_SCOPES
-              value: "{{ .Values.flasher.env.SERVERSERVICE_OIDC_CLIENT_SCOPES }}"
+              value: "{{ .Values.flasher.env.facility }}"
             - name: OTEL_EXPORTER_OTLP_ENDPOINT
-              value: "{{ .Values.flasher.env.OTEL_EXPORTER_OTLP_ENDPOINT }}"
+              value: "{{ .Values.flasher.env.endpoints.otel.url }}"
             - name: OTEL_EXPORTER_OTLP_INSECURE
-              value: "{{ .Values.flasher.env.OTEL_EXPORTER_OTLP_INSECURE }}"
+              value: "{{ not .Values.flasher.env.endpoints.otel.authenticate }}"
+            - name: FLASHER_SERVERSERVICE_OIDC_AUDIENCE_ENDPOINT
+              value: "{{ .Values.flasher.env.endpoints.fleetdb.oidc_audience_url }}"
+            - name: FLASHER_SERVERSERVICE_OIDC_ISSUER_ENDPOINT
+              value: "{{ .Values.flasher.env.endpoints.fleetdb.oidc_issuer_url }}"
+            - name: FLASHER_SERVERSERVICE_OIDC_CLIENT_SCOPES
+              value: "{{ .Values.flasher.env.endpoints.fleetdb.oidc_client_scopes }}"
             - name: FLASHER_SERVERSERVICE_OIDC_CLIENT_ID
-              value: "{{ .Values.flasher.env.SERVERSERVICE_OIDC_CLIENT_ID }}"
+              value: "{{ .Values.flasher.env.endpoints.fleetdb.oidc_client_id }}"
               #- name: FLASHER_SERVERSERVICE_OIDC_CLIENT_SECRET
               #  valueFrom:
               #    secretKeyRef:

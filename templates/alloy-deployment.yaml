@@ -16,7 +16,8 @@ spec:
     spec:
       containers:
         - name: alloy
-          image: "{{ .Values.alloy.image.repository }}:{{ .Values.alloy.image.tag }}"
+          image: {{ .Values.alloy.image.repository.url }}/alloy:{{ .Values.alloy.image.repository.tag }}
+          imagePullPolicy: {{ $.Values.alloy.image.pullPolicy }}
           command: [
            "alloy",
            "outofband",
@@ -25,7 +26,7 @@ spec:
            "--config",
            "/etc/alloy/config.yaml",
            "--facility-code",
-           "{{ .Values.location }}",
+           "{{ .Values.alloy.env.facility }}",
            "--store=serverservice"
           ]
           volumeMounts:
@@ -36,33 +37,33 @@ spec:
               readOnly: true
           env:
             - name: ALLOY_COMPONENT_INVENTORY_ENDPOINT
-              value: "{{ .Values.alloy.env.ALLOY_COMPONENT_INVENTORY_ENDPOINT }}"
+              value: "{{ .Values.alloy.env.endpoints.component_inventory.url }}"
             - name: ALLOY_COMPONENT_INVENTORY_DISABLE_OAUTH
-              value: "{{ .Values.alloy.env.ALLOY_COMPONENT_INVENTORY_DISABLE_OAUTH }}"
+              value: "{{ not .Values.alloy.env.endpoints.component_inventory.authenticate }}"
             - name: ALLOY_FLEETDB_ENDPOINT
-              value: "{{ .Values.alloy.env.ALLOY_FLEETDB_ENDPOINT }}"
+              value: "{{ .Values.alloy.env.endpoints.fleetdb.url }}"
             - name: ALLOY_FLEETDB_DISABLE_OAUTH
-              value: "{{ .Values.alloy.env.ALLOY_SERVERSERVICE_DISABLE_OAUTH }}"
+              value: "{{ not .Values.alloy.env.endpoints.fleetdb.authenticate }}"
             - name: ALLOY_FLEETDB_FACILITY_CODE
-              value: "{{ .Values.location }}"
+              value: "{{ .Values.alloy.env.facility }}"
             - name: ALLOY_NATS_URL
-              value: "{{ .Values.alloy.env.ALLOY_NATS_URL }}"
+              value: "{{ .Values.alloy.env.endpoints.nats.url }}"
             - name: ALLOY_NATS_CREDS_FILE
               value: /etc/nats/nats.creds
             - name: ALLOY_NATS_CONNECT_TIMEOUT
-              value: "{{ .Values.flasher.env.NATS_CONNECT_TIMEOUT }}"
+              value: "{{ .Values.alloy.env.endpoints.nats.timeout }}"
             - name: ALLOY_NATS_CONSUMER_NAME
-              value: "{{ .Values.location }}-alloy"
+              value: "{{ .Values.alloy.env.facility }}-alloy"
             - name: ALLOY_NATS_CONSUMER_SUBSCRIBESUBJECTS
-              value: "com.hollow.sh.controllers.commands.{{ .Values.location }}.servers.inventory"
+              value: "com.hollow.sh.controllers.commands.{{ .Values.alloy.env.facility }}.servers.inventory"
             - name: ALLOY_NATS_CONSUMER_FILTERSUBJECT
-              value: "com.hollow.sh.controllers.commands.{{ .Values.location }}.servers.inventory"
+              value: "com.hollow.sh.controllers.commands.{{ .Values.alloy.env.facility }}.servers.inventory"
             - name: ALLOY_NATS_PUBLISHERSUBJECTPREFIX
-              value: "com.hollow.sh.controllers.responses.{{ .Values.location }}.servers.inventory"
+              value: "com.hollow.sh.controllers.responses.{{ .Values.alloy.env.facility }}.servers.inventory"
             - name: OTEL_EXPORTER_OTLP_ENDPOINT
-              value: "{{ .Values.alloy.env.OTEL_EXPORTER_OTLP_ENDPOINT }}"
+              value: "{{ .Values.alloy.env.endpoints.otel.url }}"
             - name: OTEL_EXPORTER_OTLP_INSECURE
-              value: "{{ .Values.alloy.env.OTEL_EXPORTER_OTLP_INSECURE }}"
+              value: "{{ not .Values.alloy.env.endpoints.otel.authenticate }}"
           resources:
             limits:
               cpu: 200m

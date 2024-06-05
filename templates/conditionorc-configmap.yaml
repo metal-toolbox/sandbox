@@ -17,8 +17,8 @@ data:
       - kind: serverControl
       - kind: biosControl
     serverservice:
-      endpoint: "{{ .Values.conditionorc.env.SERVERSERVICE_ENDPOINT }}"
-      disable_oauth: "{{ .Values.conditionorc.env.SERVERSERVICE_DISABLE_OAUTH }}"
+      endpoint: "{{ .Values.conditionorc.env.endpoints.fleetdb.url }}"
+      disable_oauth: "{{ not .Values.conditionorc.env.endpoints.fleetdb.authenticate }}"
     # api server publishes commands when conditions are created.
     events_broker_kind: nats
     nats:

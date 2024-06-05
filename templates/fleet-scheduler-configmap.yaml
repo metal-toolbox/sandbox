@@ -1,4 +1,4 @@
-{{ if .Values.fleetscheduler.enable }}
+{{ if .Values.fleet_scheduler.enable }}
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -7,13 +7,13 @@ metadata:
   namespace: default
 data:
   config.yaml: |
-    log_level: {{ .Values.fleetscheduler.env.log_level }}
+    log_level: {{ .Values.fleet_scheduler.env.log_level }}
     store_kind: fleet-scheduler
-    facility_code: {{ .Values.location }}
+    facility_code: {{ .Values.fleet_scheduler.env.facility }}
     fleetdb_api:
-      disable_oauth: {{ .Values.fleetscheduler.env.fleetdb.disable_oauth }}
-      endpoint: {{ .Values.fleetscheduler.env.fleetdb.endpoint }}
+      disable_oauth: {{ not .Values.fleet_scheduler.env.endpoints.fleetdb.authenticate }}
+      endpoint: {{ .Values.fleet_scheduler.env.endpoints.fleetdb.url }}
     conditionorc_api:
-      disable_oauth: {{ .Values.fleetscheduler.env.conditionorc.disable_oauth }}
-      endpoint: {{ .Values.fleetscheduler.env.conditionorc.endpoint }}
+      disable_oauth: {{ not .Values.fleet_scheduler.env.endpoints.conditionorc.authenticate }}
+      endpoint: {{ .Values.fleet_scheduler.env.endpoints.conditionorc.url }}
 {{ end }}
