@@ -1,101 +1,137 @@
 ## for NATS service configuration see #scripts/nats-bootstrap/values-nats.yaml.tmpl
 
-location: sandbox
+image: &image_anchor
+  image:
+    pullPolicy: Always
+    repository:
+      tag: latest
+      url: localhost:5001
+
+env: &env_anchor
+  env:
+    facility: sandbox
+    log_level: debug
+    endpoints:
+      nats:
+        url: nats://nats:4222
+        timeout: 60s
+      otel:
+        authenticate: false
+        url: jaeger:4317
+      fleetdb:
+        authenticate: false
+        url: http://fleetdb:8000
+        oidc_audience_url: # to be filled once oauth is available in the sandbox
+        oidc_issuer_url:   # to be filled once oauth is available in the sandbox
+        oidc_client_id: # to be filled by each service bellow
+        oidc_scopes:    # to be filled by each service bellow
+      conditionorc:
+        authenticate: false
+        url: http://conditionorc-api:9001
+        oidc_audience_url: # to be filled once oauth is available in the sandbox
+        oidc_issuer_url:   # to be filled once oauth is available in the sandbox
+        oidc_client_id: # to be filled by each service bellow
+        oidc_scopes:    # to be filled by each service bellow
+      component_inventory:
+        authenticate: false
+        url: http://component-inventory:8020
 
 fleetdb:
   enable_oidc: false
-  image:
-    repository: "localhost:5001/fleetdb"
-    tag: latest
-    pullPolicy: Always
+  <<: *image_anchor
+  <<: *env_anchor
   nats:
     publishStreamPrefix: com.hollow.sh.fleetdb.events
 
 conditionorc:
-  env:
-    enable_server_enroll: true
-    NATS_URL: "nats://nats:4222"
-    NATS_CONNECT_TIMEOUT: 60s
-    SERVERSERVICE_ENDPOINT: http://fleetdb:8000
-    FLEETDB_ENDPOINT: http://fleetdb:8000
-    SERVERSERVICE_DISABLE_OAUTH: true
-    # uncomment once oauth service is available in sandbox
-    #SERVERSERVICE_OIDC_AUDIENCE_ENDPOINT:
-    ## trailing forward slash is required.
-    #SERVERSERVICE_OIDC_ISSUER_ENDPOINT:
-    #SERVERSERVICE_OIDC_CLIENT_ID: conditionorc-api
-    #SERVERSERVICE_OIDC_CLIENT_SCOPES: "read:server create:server:attributes update:server:attributes delete:server:attributes"
-    ## telemetry configuration
-    OTEL_EXPORTER_OTLP_ENDPOINT: jaeger:4317
-    OTEL_EXPORTER_OTLP_INSECURE: true
-  image:
-    repository: "localhost:5001/conditionorc"
-    tag: latest
-    pullPolicy: Always
+  enable_server_enroll: true
+  <<: *image_anchor
+  <<: *env_anchor
+    # uncomment once oauth service is availble in sandbox
+    # env:
+    #   endpoints:
+    #     fleetdb:
+    #       client_id: conditionorc-api
+    #       client_scopes: "read:server create:server:attributes update:server:attributes delete:server:attributes"
 
 flasher:
-  env:
-    NATS_URL: "nats://nats:4222"
-    NATS_CONNECT_TIMEOUT: 60s
-    SERVERSERVICE_ENDPOINT: http://fleetdb:8000
-    FLEETDB_ENDPOINT: http://fleetdb:8000
-    SERVERSERVICE_DISABLE_OAUTH: true
-    # to uncomment once oauth service is availble in sandbox
-    # SERVERSERVICE_OIDC_AUDIENCE_ENDPOINT:
-    # SERVERSERVICE_OIDC_ISSUER_ENDPOINT:
-    # SERVERSERVICE_OIDC_CLIENT_ID: flasher
-    # SERVERSERVICE_OIDC_CLIENT_SCOPES: "read:server read:server:credentials read:server:component read:server:versioned-attributes read:server-component-firmwares read:server-component-firmware-sets"
-    # # telemetry configuration
-    OTEL_EXPORTER_OTLP_ENDPOINT: jaeger:4317
-    OTEL_EXPORTER_OTLP_INSECURE: true
-  image:
-    repository: "localhost:5001/flasher"
-    tag: latest
-    pullPolicy: Always
+  <<: *image_anchor
+  <<: *env_anchor
+    # uncomment once oauth service is availble in sandbox
+    # env:
+    #   endpoints:
+    #     fleetdb:
+    #       client_id: flasher
+    #       client_scopes: "read:server read:server:credentials read:server:component read:server:versioned-attributes read:server-component-firmwares read:server-component-firmware-sets"
 
 alloy:
-  image:
-    repository: "localhost:5001/alloy"
-    tag: latest
-    pullPolicy: Always
-  env:
-    ALLOY_SERVERSERVICE_ENDPOINT: http://fleetdb:8000
-    ALLOY_FLEETDB_ENDPOINT: http://fleetdb:8000
-    ALLOY_SERVERSERVICE_DISABLE_OAUTH: true
-    ALLOY_COMPONENT_INVENTORY_ENDPOINT: http://component-inventory:8020
-    ALLOY_COMPONENT_INVENTORY_DISABLE_OAUTH: true
-    ALLOY_NATS_URL: "nats://nats:4222"
-    # telemetry configuration
-    OTEL_EXPORTER_OTLP_ENDPOINT: jaeger:4317
-    OTEL_EXPORTER_OTLP_INSECURE: true
+  <<: *image_anchor
+  <<: *env_anchor
 
 syncer:
   enable_cronjob: false
   enable_job: false
   enable_env: false
   schedule: '"00 08 * * *"'
-  image:
-    repository: "localhost:5001/firmware-syncer"
-    tag: latest
-    pullPolicy: Always
-  env:
-    SYNCER_SERVERSERVICE_ENDPOINT: http://fleetdb:8000
-    SYNCER_FLEETDB_ENDPOINT: http://fleetdb:8000
-    SYNCER_SERVERSERVICE_DISABLE_OAUTH: true
-    SYNCER_S3_REGION: "us-east-1"
-    SYNCER_S3_ENDPOINT: http://minio:9000
-    SYNCER_S3_BUCKET: bucket1
-    SYNCER_S3_ACCESS_KEY: accessKey
-    SYNCER_S3_SECRET_KEY: secretKey
-    SYNCER_ASRR_S3_REGION: "us-east-1"
-    SYNCER_ASRR_S3_ENDPOINT: http://minio:9000
-    SYNCER_ASRR_S3_BUCKET: bucket1
-    SYNCER_ASRR_S3_ACCESS_KEY: accessKey
-    SYNCER_ASRR_S3_SECRET_KEY: secretKey
-    SYNCER_GITHUB_OPENBMC_TOKEN: redacted
-  configmap:
-    artifacts_url: http://minio:9000
-    firmware_manifest_url: http://modeldata/modeldata.json
+  <<: *image_anchor
+  <<: *env_anchor
+  endpoints:
+    s3: &s3_endpoint_anchor
+      region: us-east-1
+      url: us-east-1
+      bucket: bucket1
+      access_key: accessKey
+      secret_key: secretKet
+    asrr:
+      <<: *s3_endpoint_anchor
+    github:
+      openbmc_token: redacted
+    artifacts:
+      url: http://minio:9000
+    firmware_manifest:
+      url: http://modeldata/modeldata.json
+
+fleet_scheduler:
+  enable: false # when enabled, metal-toolbox/fleet-scheduler will need to be deployed with `make push-image-devel`
+  <<: *image_anchor
+  <<: *env_anchor
+    # uncomment once oauth service is availble in sandbox
+    # env:
+    #   endpoints:
+    #     fleetdb:
+    #       client_id: fleetscheduler
+    #       client_scopes: "read:server"
+    #   endpoints:
+    #     conditionorc:
+    #       client_id: fleetscheduler
+    #       client_scopes: "read:condition create:condition"
+  jobs: # technically, this is optional
+    - name: inventory # This job will collect all servers and create conditions on them within the facility
+      ttlSecondsAfterFinished: 86400 # Remove job after 1 day. (optional)
+      restartPolicy: Never
+      schedule: # Run every monday, starting at 12pm UTC, and randomly running over the next 6 hours
+        minute: "0"
+        hour: "12"
+        month: "*" # run every month
+        day_of_week: "1"
+        enable_random_minute: true # run randomly between all minutes between the range schedule.minute and (schedule.minute + schedule.random_minute_span)
+        random_minute_span: "57" # run anytime 59 minutes after the start minutes
+        enable_random_hour: true # run randomly between all hours between the range schedule.hour and (schedule.hour + schedule.random_hour_span)
+        random_hour_span: "6" # run anytime 6 hours after the start hour
+        enable_random_day_of_week: true # run randomly throughout the work week (monday through friday)
+        random_day_of_week_span: "5"
+      command:
+      - /usr/sbin/fleet-scheduler
+      - --config
+      - /etc/fleet-scheduler/config.yaml
+      - inventory
+      - --page-size # how many servers to get per request to fleetdb
+      - "100"
+
+flipflop:
+  enable: true
+  <<: *image_anchor
+  <<: *env_anchor
 
 minio:
   fullnameOverride: minio
@@ -135,59 +171,16 @@ chaosDaemon:
   runtime: containerd
   socketPath: /run/containerd/containerd.sock
 
-fleetscheduler:
-  enable: false # when enabled, metal-toolbox/fleet-scheduler will need to be deployed with `make push-image-devel`
-  image:
-    repository: "localhost:5001/fleet-scheduler"
-    tag: latest
-    imagePullPolicy: Always
-  env:
-    log_level: debug
-    fleetdb:
-      endpoint: http://fleetdb:8000
-      disable_oauth: true
-    conditionorc:
-      endpoint: http://conditionorc-api:9001
-      disable_oauth: true
-  jobs: # technically, this is optional
-    - name: inventory # This job will collect all servers and create conditions on them
-      ttlSecondsAfterFinished: 86400 # Remove job after 1 day. (optional)
-      startingDeadlineSeconds: 3600 # The job has 1 hour to run the task, if it cant after 1 hour, it wont run. (optional)
-      restartPolicy: OnFailure
-      schedule: "10 * * * *" # Run once per hour
-      command:
-      - /usr/sbin/fleet-scheduler
-      - --config
-      - /etc/fleet-scheduler/config.yaml
-      - inventory
-      - --page-size
-      - "512"
-
 # Enable the push gateway to collect metrics from fleetscheduler
-#prometheus-pushgateway:
-#  fullnameOverride: fleet-pushgateway
-#  resources:
-#    limits:
-#      cpu: 300m
-#      memory: 150Mi
-#    requests:
-#      cpu: 300m
-#      memory: 150Mi
-#  service:
-#    port: 9090
-
-flipflop:
+prometheus-pushgateway:
   enable: true
-  image:
-    repository: "localhost:5001/flipflop"
-    tag: latest
-    pullPolicy: Always
-  env:
-    FLEETDB_ENDPOINT: http://fleetdb:8000
-    FLEETDB_DISABLE_OAUTH: true
-    NATS_URL: "nats://nats:4222"
-    NATS_CONNECT_TIMEOUT: 60s
-    # telemetry configuration
-    OTEL_EXPORTER_OTLP_ENDPOINT: jaeger:4317
-    OTEL_EXPORTER_OTLP_INSECURE: true
-
+  fullnameOverride: fleet-pushgateway
+  resources:
+   limits:
+     cpu: 300m
+     memory: 150Mi
+   requests:
+     cpu: 300m
+     memory: 150Mi
+  service:
+   port: 9090

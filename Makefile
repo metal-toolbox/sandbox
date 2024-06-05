@@ -3,6 +3,7 @@
 CONDITION_ORC_PORT=9001
 ALLOY_PORT=9091
 FLEETDB_PORT=8000
+CRDB_UI_PORT=8081
 CRDB_PORT=26257
 CHAOS_DASH_PORT=2333
 JAEGER_DASH_PORT=16686
@@ -56,6 +57,9 @@ port-forward-jaeger-dash:
 ## port forward to the minio S3 port
 port-forward-minio:
 	kubectl port-forward deployment/minio ${MINIO_PORT}:${MINIO_PORT}
+
+port-forward-crdb-ui:
+	kubectl port-forward deployment/fleetdb-crdb --address 0.0.0.0  ${CRDB_UI_PORT}:8080
 
 ## port forward all endpoints (runs in the background)
 port-all-with-lan:

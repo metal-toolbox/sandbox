@@ -10,6 +10,6 @@ metadata:
 data:
   config.yaml: |
     log_level: debug
-    artifacts_url: "{{ .Values.syncer.configmap.artifacts_url }}"
-    firmware_manifest_url: "{{ .Values.syncer.configmap.firmware_manifest_url }}"
+    artifacts_url: {{ .Values.syncer.env.endpoints.artifacts.url }}
+    firmware_manifest_url: {{ .Values.syncer.env.endpoints.firmware_manifest.url }}
 {{ end }}

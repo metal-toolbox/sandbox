@@ -17,7 +17,8 @@ spec:
       terminationGracePeriodSeconds: 1200
       containers:
         - name: flipflop
-          image: "{{ .Values.flipflop.image.repository }}:{{ .Values.flipflop.image.tag }}"
+          image: {{ .Values.flipflop.image.repository.url }}/flipflop:{{ .Values.flipflop.image.repository.tag }}
+          imagePullPolicy: {{ $.Values.flipflop.image.pullPolicy }}
           command: [
            "flipflop",
            "run",
@@ -31,7 +32,7 @@ spec:
            "--fault-injection",
            "--replica-count=1",
            "--facility-code",
-           "{{ .Values.location }}"
+           "{{ .Values.flipflop.env.facility }}"
           ]
           volumeMounts:
             - name: config-volume
@@ -41,35 +42,35 @@ spec:
               readOnly: true
           env:
             - name: FLIPFLOP_NATS_URL
-              value: "{{ .Values.flipflop.env.NATS_URL }}"
+              value: "{{ .Values.flipflop.env.endpoints.nats.url }}"
             - name: FLIPFLOP_NATS_CONNECT_TIMEOUT
-              value: "{{ .Values.flipflop.env.NATS_CONNECT_TIMEOUT }}"
+              value: "{{ .Values.flipflop.env.endpoints.nats.timeout }}"
             - name: FLIPFLOP_NATS_CONSUMER_NAME
-              value: "{{ .Values.location }}-flipflop"
+              value: "{{ .Values.flipflop.env.facility }}-flipflop"
             - name: FLIPFLOP_NATS_CONSUMER_SUBSCRIBESUBJECTS
-              value: "com.hollow.sh.controllers.commands.{{ .Values.location }}.servers.serverControl"
+              value: "com.hollow.sh.controllers.commands.{{ .Values.flipflop.env.facility }}.servers.serverControl"
             - name: FLIPFLOP_NATS_CONSUMER_FILTERSUBJECT
-              value: "com.hollow.sh.controllers.commands.{{ .Values.location }}.servers.serverControl"
+              value: "com.hollow.sh.controllers.commands.{{ .Values.flipflop.env.facility }}.servers.serverControl"
             - name: FLIPFLOP_NATS_PUBLISHERSUBJECTPREFIX
-              value: "com.hollow.sh.controllers.responses.{{ .Values.location }}.servers.serverControl"
+              value: "com.hollow.sh.controllers.responses.{{ .Values.flipflop.env.facility }}.servers.serverControl"
             - name: FLIPFLOP_FLEETDB_ENDPOINT
-              value: "{{ .Values.flipflop.env.FLEETDB_ENDPOINT }}"
+              value: "{{ .Values.flipflop.env.endpoints.fleetdb.url }}"
             - name: FLIPFLOP_FLEETDB_DISABLE_OAUTH
-              value: "{{ .Values.flipflop.env.FLEETDB_DISABLE_OAUTH }}"
+              value: "{{ not .Values.flipflop.env.endpoints.fleetdb.authenticate }}"
             - name: FLIPFLOP_FLEETDB_FACILITY_CODE
-              value: "{{ .Values.location  }}"
-            - name: FLIPFLOP_FLEETDB_OIDC_AUDIENCE_ENDPOINT
-              value: "{{ .Values.flipflop.env.FLEETDB_OIDC_AUDIENCE_ENDPOINT }}"
-            - name: FLIPFLOP_FLEETDB_OIDC_ISSUER_ENDPOINT
-              value: "{{ .Values.flipflop.env.FLEETDB_OIDC_ISSUER_ENDPOINT }}"
-            - name: FLIPFLOP_FLEETDB_OIDC_CLIENT_SCOPES
-              value: "{{ .Values.flipflop.env.FLEETDB_OIDC_CLIENT_SCOPES }}"
+              value: "{{ .Values.flipflop.env.facility }}"
             - name: OTEL_EXPORTER_OTLP_ENDPOINT
-              value: "{{ .Values.flipflop.env.OTEL_EXPORTER_OTLP_ENDPOINT }}"
+              value: "{{ .Values.flipflop.env.endpoints.otel.url }}"
             - name: OTEL_EXPORTER_OTLP_INSECURE
-              value: "{{ .Values.flipflop.env.OTEL_EXPORTER_OTLP_INSECURE }}"
+              value: "{{ not .Values.flipflop.env.endpoints.otel.authenticate }}"
+            - name: FLIPFLOP_FLEETDB_OIDC_AUDIENCE_ENDPOINT
+              value: "{{ .Values.flipflop.env.endpoints.fleetdb.oidc_audience_url }}"
+            - name: FLIPFLOP_FLEETDB_OIDC_ISSUER_ENDPOINT
+              value: "{{ .Values.flipflop.env.endpoints.fleetdb.oidc_issuer_url }}"
+            - name: FLIPFLOP_FLEETDB_OIDC_CLIENT_SCOPES
+              value: "{{ .Values.flipflop.env.endpoints.fleetdb.oidc_client_scopes }}"
             - name: FLIPFLOP_FLEETDB_OIDC_CLIENT_ID
-              value: "{{ .Values.flipflop.env.FLEETDB_OIDC_CLIENT_ID }}"
+              value: "{{ .Values.flipflop.env.endpoints.fleetdb.oidc_client_id }}"
             - name: FLIPFLOP_NATS_CREDS_FILE
               value: /etc/nats/nats.creds
           securityContext:
