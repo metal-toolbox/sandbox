@@ -59,7 +59,7 @@ Note: this assumes the KIND environment on your machine can connect to server BM
       --bmc-addr 192.168.1.1 \
       --bmc-user root \
       --bmc-pass hunter2 \
-      --server ede81024-f62a-4288-8730-3fab8cceabcc\
+      --server ede81024-f62a-4288-8730-3fab8cceabcc \
       --facility sandbox
 
 2024/03/06 10:13:57 status=200
