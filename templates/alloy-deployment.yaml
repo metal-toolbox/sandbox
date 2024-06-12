@@ -40,11 +40,11 @@ spec:
               value: "{{ .Values.alloy.env.endpoints.component_inventory.url }}"
             - name: ALLOY_COMPONENT_INVENTORY_DISABLE_OAUTH
               value: "{{ not .Values.alloy.env.endpoints.component_inventory.authenticate }}"
-            - name: ALLOY_FLEETDB_ENDPOINT
-              value: "{{ .Values.alloy.env.endpoints.serverservice.url }}"
-            - name: ALLOY_FLEETDB_DISABLE_OAUTH
-              value: "{{ not .Values.alloy.env.endpoints.serverservice.authenticate }}"
-            - name: ALLOY_FLEETDB_FACILITY_CODE
+            - name: ALLOY_SERVERSERVICE_ENDPOINT
+              value: "{{ .Values.alloy.env.endpoints.fleetdb.url }}"
+            - name: ALLOY_SERVERSERVICE_DISABLE_OAUTH
+              value: "{{ not .Values.alloy.env.endpoints.fleetdb.authenticate }}"
+            - name: ALLOY_SERVERSERVICE_FACILITY_CODE
               value: "{{ .Values.alloy.env.facility }}"
             - name: ALLOY_NATS_URL
               value: "{{ .Values.alloy.env.endpoints.nats.url }}"
