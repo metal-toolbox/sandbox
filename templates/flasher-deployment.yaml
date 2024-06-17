@@ -25,7 +25,6 @@ spec:
               "--outofband",
               "--store",
               "serverservice",
-              "--dry-run",
               "--config",
               "/etc/flasher/config.yaml",
               "--enable-pprof",

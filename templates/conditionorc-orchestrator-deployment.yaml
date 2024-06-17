@@ -27,7 +27,7 @@ spec:
             - "--facility"
             - "{{ .Values.location }}"
           ports:
-            - containerPort: 9002
+            - containerPort: 9001
           volumeMounts:
             - name: config-volume
               mountPath: /etc/conditionorc
