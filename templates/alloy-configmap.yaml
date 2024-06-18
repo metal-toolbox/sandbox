@@ -10,7 +10,7 @@ data:
     app_kind: outofband
     collector_outofband:
       concurrency: 5
-    store_kind: serverservice
+    store_kind: fleetdb
     events_broker_kind: nats
     nats:
       app_name: alloy
