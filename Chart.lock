@@ -11,5 +11,8 @@ dependencies:
 - name: prometheus-pushgateway
   repository: https://prometheus-community.github.io/helm-charts
   version: 2.7.1
-digest: sha256:94a6285bec694dcf7093fecea298669752b293fa8d6237c6cb06033cdf7d0071
-generated: "2024-03-06T14:04:27.646537661-05:00"
+- name: fleet-scheduler
+  repository: file://../fleet-scheduler/chart
+  version: 1.0.1
+digest: sha256:c2942367d04511233dc3094202b58b5294c2661f33a9e55230e3f3545f0bd740
+generated: "2024-06-25T16:31:57.06025379-04:00"

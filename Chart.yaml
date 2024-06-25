@@ -22,8 +22,6 @@ dependencies:
     version: 2.7.1
     condition:
       prometheus-pushgateway.enabled
-  # - name: fleet-scheduler
-  #   version: 1.0.1
-  #   repository: file://../fleet-scheduler/chart
-  #   condition:
-  #     fleetscheduler.enabled
+  - name: fleet-scheduler
+    version: 1.0.1
+    repository: ghcr.io/metal-toolbox/fleet-scheduler/chart
