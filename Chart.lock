@@ -12,7 +12,7 @@ dependencies:
   repository: https://prometheus-community.github.io/helm-charts
   version: 2.7.1
 - name: fleet-scheduler
-  repository: file://../fleet-scheduler/chart
-  version: 1.0.1
-digest: sha256:c2942367d04511233dc3094202b58b5294c2661f33a9e55230e3f3545f0bd740
-generated: "2024-06-25T16:31:57.06025379-04:00"
+  repository: https://metal-toolbox.github.io/fleet-scheduler
+  version: v0.1.0
+digest: sha256:f9a21d4a9ac1157e842b6422dab9cea80429ead008009e0f1f9a6d65ffab5d64
+generated: "2024-07-02T13:01:19.956138575-04:00"
