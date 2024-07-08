@@ -13,7 +13,6 @@ env: &env_anchor
     facility: sandbox
     log_level: debug
     endpoints:
-      enable_default_secrets: true # Tell the services to use the default secrets, disable if you want to provide your own
       nats:
         url: nats://nats:4222
         timeout: 60s

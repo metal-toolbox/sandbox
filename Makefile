@@ -10,14 +10,16 @@ JAEGER_DASH_PORT=16686
 MINIO_PORT=9000
 
 ## install helm chart for the sandbox env with fleetdb(default)
-install: kubectl-ctx-kind update-depedencies
+install: kubectl-ctx-kind
 	cp ./scripts/nats-bootstrap/values-nats.yaml.tmpl values-nats.yaml
+	helm dependency update
 	helm install hollow-sandbox . -f values.yaml -f values-nats.yaml
 	kubectl get pod
 	./scripts/nats-bootstrap/boostrap.sh
 
 ## upgrade helm chart for the sandbox environment
-upgrade: kubectl-ctx-kind update-depedencies
+upgrade: kubectl-ctx-kind
+	helm dependency update
 	helm upgrade hollow-sandbox . -f values.yaml -f values-nats.yaml
 
 ## uninstall helm chart
@@ -122,10 +124,6 @@ clean-nats:
 kubectl-ctx-kind:
 	export KUBECONFIG=~/.kube/config_kind
 	kubectl config use-context kind-kind
-
-## update helm dependencies
-update-depedencies:
-	helm dependency update
 
 # https://gist.github.com/prwhite/8168133
 # COLORS
