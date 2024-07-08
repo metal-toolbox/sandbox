@@ -31,10 +31,40 @@ Clone each of the repositories and run `make push-image-devel`
  - [Alloy](https://github.com/metal-toolbox/alloy/)
  - [Flasher](https://github.com/metal-toolbox/flasher/)
  - [Flipflop](https://github.com/metal-toolbox/flipflop)
- - [Fleetscheduler](https://github.com/metal-toolbox/fleet-scheduler) (OPTIONAL, enable in values.yaml fleetscheduler.enable)
 
 This will build and push the container images to the local container registry.
 
+### 1.1. Point to local repositories (Optional)
+
+Some of our services have moved to be self contained helm charts. They are included within Chart.yaml as dependencies.
+
+ - [Fleetscheduler](https://github.com/metal-toolbox/fleet-scheduler) (OPTIONAL, enable in values.yaml fleetscheduler.enable)
+
+To replace a dependency with a local version of the dependency you are working on, you can edit the dependency within the Chart.yaml, and can refer to the [helm docs](https://helm.sh/docs/helm/helm_dependency/) for more information.
+
+For example: To replace fleet-scheduler's upstream helm chart with a local custom version, you must do the following:
+- Clone [Fleet-Scheduler](https://github.com/metal-toolbox/fleet-scheduler). Preferably in the same directory as the [Sandbox](https://github.com/metal-toolbox/sandbox)
+- Replace the repository URL for fleet-scheduler with the relative path (and prefixed with `file://`) to your cloned repository's chart folder, and make sure the versions match.
+  - So if you have this in `parentFolder/fleet-scheduler/chart/Chart.yaml`:
+    ```yaml
+    apiVersion: v2
+    name: fleet-scheduler
+    version: v0.1.7
+    description: A chart for fleet scheduled cron jobs
+    ```
+  - And the fleet-scheduler dependency within `parentFolder/sandbox/Chart.yaml` is this:
+  ```yaml
+  - name: fleet-scheduler
+    version: v0.1.0
+    repository: https://metal-toolbox.github.io/fleet-scheduler
+  ```
+  - `parentFolder/sandbox/Chart.yaml`'s fleet-scheduler dependency becomes this:
+  ```yaml
+  - name: fleet-scheduler
+    version: v0.1.7
+    repository: file://../fleet-scheduler/chart
+  ```
+  - Note: This is assuming the sandbox and fleet-scheduler have the same parent folder.
 
 ### 2. Deploy helm chart
 
@@ -115,7 +145,7 @@ mctl power --server ede81024-f62a-4288-8730-3fab8cceab78 --action-status | jq .s
 }
 ```
 
-### . Import firmware definitions (optional)
+### 6 Import firmware definitions (optional)
 
 Note: replace `ARTIFACTS_ENDPOINT` in [firmwares.json](./scripts/mctl/firmwares.json) with endpoint serving the firmware files.
 
@@ -125,7 +155,7 @@ Import firmware defs from sample file using `mctl`.
 mctl create  firmware --from-file ./scripts/mctl/firmwares.json
 ```
 
-### 6. Create a firmware set (optional)
+### 7. Create a firmware set (optional)
 
 List the firmware using `mctl list firmware` and create a set that can be applied to a server.
 
@@ -135,7 +165,7 @@ mctl create firmware-set --firmware-uuids 5e574c96-6ba4-4078-9650-c52a64cc8cba,a
                          --name r6515
 ```
 
-### 7. Set a `firmwareInstall` condition on a server (optional)
+### 8. Set a `firmwareInstall` condition on a server (optional)
 
 With the server added, you can now get flasher to set a `firmwareInstall` condition,
 
