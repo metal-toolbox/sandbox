@@ -13,6 +13,6 @@ dependencies:
   version: 2.7.1
 - name: fleet-scheduler
   repository: https://metal-toolbox.github.io/fleet-scheduler
-  version: v0.1.0
-digest: sha256:f9a21d4a9ac1157e842b6422dab9cea80429ead008009e0f1f9a6d65ffab5d64
-generated: "2024-07-08T16:39:57.94742131-04:00"
+  version: v1.0.0
+digest: sha256:6818f2a68cd90d60cbd231f1d24ff7a6aa76a4fa8d158d275cca2b3bf9583e71
+generated: "2024-07-09T09:58:40.571915826-04:00"
