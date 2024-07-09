@@ -5,7 +5,7 @@ image: &image_anchor
     pullPolicy: Always
     repository:
       tag: latest
-      url: localhost:5001
+      url: ghcr.io/metal-toolbox
 
 env: &env_anchor
   env:

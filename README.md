@@ -65,6 +65,26 @@ For example: To replace fleet-scheduler's upstream helm chart with a local custo
     repository: file://../fleet-scheduler/chart
   ```
   - Note: This is assuming the sandbox and fleet-scheduler have the same parent folder.
+- Inform the Fleet-Scheduler helm chart you are using a local docker image instead of upstream
+  - Within `parentFolder/sandbox/values.yaml`, you have this for your fleet-scheduler definition
+  ```yaml
+    fleet-scheduler:
+      enable: true # when enabled, metal-toolbox/fleet-scheduler will need to be deployed with `make push-image-devel`
+      <<: *image_anchor
+      <<: *env_anchor
+  ```
+  - Change it to this to overwrite the image url and tag
+  ```yaml
+    fleet-scheduler:
+      enable: true # when enabled, metal-toolbox/fleet-scheduler will need to be deployed with `make push-image-devel`
+      <<: *image_anchor
+      image:
+        repository:
+          tag: latest
+          url: localhost:5001
+      <<: *env_anchor
+  ```
+  - Then `cd` into the fleet-scheduler repository and run `make push-image-devel` to build and deploy the docker image for the helm chart to use.
 
 ### 2. Deploy helm chart
 
