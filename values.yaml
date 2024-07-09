@@ -39,15 +39,23 @@ env: &env_anchor
 
 fleetdb:
   enable_oidc: false
-  <<: *image_anchor
   <<: *env_anchor
+  <<: *image_anchor
+  image: # Temporary until helm chart conversion is done
+    repository:
+      tag: latest
+      url: localhost:5001
   nats:
     publishStreamPrefix: com.hollow.sh.fleetdb.events
 
 conditionorc:
   enable_server_enroll: true
-  <<: *image_anchor
   <<: *env_anchor
+  <<: *image_anchor
+  image: # Temporary until helm chart conversion is done
+    repository:
+      tag: latest
+      url: localhost:5001
     # uncomment once oauth service is availble in sandbox
     # env:
     #   endpoints:
@@ -56,8 +64,12 @@ conditionorc:
     #       client_scopes: "read:server create:server:attributes update:server:attributes delete:server:attributes"
 
 flasher:
-  <<: *image_anchor
   <<: *env_anchor
+  <<: *image_anchor
+  image: # Temporary until helm chart conversion is done
+    repository:
+      tag: latest
+      url: localhost:5001
     # uncomment once oauth service is availble in sandbox
     # env:
     #   endpoints:
@@ -66,16 +78,24 @@ flasher:
     #       client_scopes: "read:server read:server:credentials read:server:component read:server:versioned-attributes read:server-component-firmwares read:server-component-firmware-sets"
 
 alloy:
-  <<: *image_anchor
   <<: *env_anchor
+  <<: *image_anchor
+  image:
+    repository:
+      tag: latest
+      url: localhost:5001
 
 syncer:
   enable_cronjob: false
   enable_job: false
   enable_env: false
   schedule: '"00 08 * * *"'
-  <<: *image_anchor
   <<: *env_anchor
+  <<: *image_anchor
+  image: # Temporary until helm chart conversion is done
+    repository:
+      tag: latest
+      url: localhost:5001
   endpoints:
     s3: &s3_endpoint_anchor
       region: us-east-1
@@ -109,8 +129,12 @@ fleet-scheduler:
 
 flipflop:
   enable: true
-  <<: *image_anchor
   <<: *env_anchor
+  <<: *image_anchor
+  image:
+    repository:
+      tag: latest
+      url: localhost:5001
 
 minio:
   fullnameOverride: minio

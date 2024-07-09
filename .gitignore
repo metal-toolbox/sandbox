@@ -8,3 +8,4 @@
 values-nats.yaml
 scripts/serverservice/add-server
 .idea
+.local-values.yaml

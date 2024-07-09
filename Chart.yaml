@@ -11,8 +11,7 @@ dependencies:
   - name: chaos-mesh
     repository: https://charts.chaos-mesh.org
     version: 2.5.1
-    condition:
-      chaos-mesh.enabled
+    condition: chaos-mesh.enabled
   - name: minio
     version: 5.0.14
     repository: https://charts.min.io/
@@ -20,8 +19,7 @@ dependencies:
   - name: prometheus-pushgateway
     repository: https://prometheus-community.github.io/helm-charts
     version: 2.7.1
-    condition:
-      prometheus-pushgateway.enabled
+    condition: prometheus-pushgateway.enabled
   - name: fleet-scheduler
     version: v1.0.0
     repository: https://metal-toolbox.github.io/fleet-scheduler
