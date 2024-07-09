@@ -9,18 +9,24 @@ CHAOS_DASH_PORT=2333
 JAEGER_DASH_PORT=16686
 MINIO_PORT=9000
 
+ifneq ("$(wildcard $(.local-values.yaml))","")
+	OVERRIDE_VALUES_YAML=-f .local-values.yaml
+else
+	OVERRIDE_VALUES_YAML=
+endif
+
 ## install helm chart for the sandbox env with fleetdb(default)
 install: kubectl-ctx-kind
 	cp ./scripts/nats-bootstrap/values-nats.yaml.tmpl values-nats.yaml
 	helm dependency update
-	helm install hollow-sandbox . -f values.yaml -f values-nats.yaml
+	helm install hollow-sandbox . -f values.yaml -f values-nats.yaml ${OVERRIDE_VALUES_YAML}
 	kubectl get pod
 	./scripts/nats-bootstrap/boostrap.sh
 
 ## upgrade helm chart for the sandbox environment
 upgrade: kubectl-ctx-kind
 	helm dependency update
-	helm upgrade hollow-sandbox . -f values.yaml -f values-nats.yaml
+	helm upgrade hollow-sandbox . -f values.yaml -f values-nats.yaml ${OVERRIDE_VALUES_YAML}
 
 ## uninstall helm chart
 clean: kubectl-ctx-kind
@@ -125,6 +131,16 @@ kubectl-ctx-kind:
 	export KUBECONFIG=~/.kube/config_kind
 	kubectl config use-context kind-kind
 
+## Change service to local service instead of upstream. DIR is optional, defaults to "../".
+## Example: `make fleet-scheduler-local ../services/fleet-scheduler` will tell sandbox to use ../services/fleet-scheduler instead of the upstream
+%-local:
+	./scripts/helm/local.sh $(subst -local,,$@) ${DIR}
+
+## Change service to upstream service instead of local.
+## Example: `make fleet-scheduler-upstream`  will tell sandbox to use the upstream (https://metal-toolbox.github.io/fleet-scheduler) fleet-scheduler.
+%-upstream:
+	./scripts/helm/upstream.sh $(subst -upstream,,$@)
+
 # https://gist.github.com/prwhite/8168133
 # COLORS
 GREEN  := $(shell tput -Txterm setaf 2)
@@ -140,12 +156,19 @@ help:
 	@echo '  ${YELLOW}make${RESET} ${GREEN}<target>${RESET}'
 	@echo ''
 	@echo 'Targets:'
-	@awk '/^[a-zA-Z\-\\_0-9]+:/ { \
+	@awk '/^[a-zA-Z\-\\_0-9\%]+:/ { \
 		helpMessage = match(lastLine, /^## (.*)/); \
 		if (helpMessage) { \
 			helpCommand = substr($$1, 0, index($$1, ":")-1); \
 			helpMessage = substr(lastLine, RSTART + 3, RLENGTH); \
-			printf "  ${YELLOW}%-${TARGET_MAX_CHAR_NUM}s${RESET} ${GREEN}%s${RESET}\n", helpCommand, helpMessage; \
+			secondHelpMessage = match(secondLastLine, /^## (.*)/); \
+			if (secondHelpMessage) { \
+				secondHelpMessage = substr(secondLastLine, RSTART + 3, RLENGTH); \
+				printf "  ${YELLOW}%-${TARGET_MAX_CHAR_NUM}s${RESET} ${GREEN}%s${RESET}\n  %-${TARGET_MAX_CHAR_NUM}s ${GREEN}%s${RESET}\n", helpCommand, secondHelpMessage, "", helpMessage; \
+			} else { \
+				printf "  ${YELLOW}%-${TARGET_MAX_CHAR_NUM}s${RESET} ${GREEN}%s${RESET}\n", helpCommand, helpMessage; \
+			}\
 		} \
 	} \
+	{ secondLastLine = lastLine } \
 	{ lastLine = $$0 }' ${MAKEFILE_LIST}
