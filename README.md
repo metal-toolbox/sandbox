@@ -34,11 +34,22 @@ Clone each of the repositories and run `make push-image-devel`
 
 This will build and push the container images to the local container registry.
 
-### 1.1. Point to local repositories (Optional)
+## 1.1 Point to local services/repositories (Optional)
 
 Some of our services have moved to be self contained helm charts. They are included within Chart.yaml as dependencies.
-
  - [Fleetscheduler](https://github.com/metal-toolbox/fleet-scheduler) (OPTIONAL, enable in values.yaml fleetscheduler.enable)
+
+### 1.1.1 With the Makefile
+
+`make <SERVICE>-local DIR=<RELATIVE-PATH>` will automatically swap out your `<SERVICE>` with the local repo of that service found at `<RELATIVE-PATH>`. DIR is optional, and defaults to the parent folder: `../`.
+
+Example:
+- Assuming [Fleet-Scheduler](https://github.com/metal-toolbox/fleet-scheduler) is cloned into the same parent directory as the sandbox.
+- call `make fleet-scheduler-local` to now use the local service instead of the upstream service. Note: This will edit `Chart.yaml`, do not commit those changes!
+- `make install` will now install the sandbox with the local service. Note: You must still build you app and push the docker image (using `make push-image-devel`).
+  To revert back to upstream. call `make fleet-scheduler-upstream`.
+
+### 1.1.2 Manually
 
 To replace a dependency with a local version of the dependency you are working on, you can edit the dependency within the Chart.yaml, and can refer to the [helm docs](https://helm.sh/docs/helm/helm_dependency/) for more information.
 
