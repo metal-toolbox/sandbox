@@ -9,7 +9,7 @@ CHAOS_DASH_PORT=2333
 JAEGER_DASH_PORT=16686
 MINIO_PORT=9000
 
-ifneq ("$(wildcard $(.local-values.yaml))","")
+ifneq (,$(wildcard .local-values.yaml))
 	OVERRIDE_VALUES_YAML=-f .local-values.yaml
 else
 	OVERRIDE_VALUES_YAML=
@@ -133,42 +133,15 @@ kubectl-ctx-kind:
 
 ## Change service to local service instead of upstream. DIR is optional, defaults to "../".
 ## Example: `make fleet-scheduler-local ../services/fleet-scheduler` will tell sandbox to use ../services/fleet-scheduler instead of the upstream
+## Note: Use `make fleet-scheduler-upstream` to revert this process
 %-local:
-	./scripts/helm/local.sh $(subst -local,,$@) ${DIR}
+	./scripts/makefile/local.sh $(subst -local,,$@) ${DIR}
 
 ## Change service to upstream service instead of local.
-## Example: `make fleet-scheduler-upstream`  will tell sandbox to use the upstream (https://metal-toolbox.github.io/fleet-scheduler) fleet-scheduler.
+## Example: `make fleet-scheduler-upstream` will tell sandbox to use the upstream (https://metal-toolbox.github.io/fleet-scheduler) fleet-scheduler.
 %-upstream:
-	./scripts/helm/upstream.sh $(subst -upstream,,$@)
+	./scripts/makefile/upstream.sh $(subst -upstream,,$@)
 
-# https://gist.github.com/prwhite/8168133
-# COLORS
-GREEN  := $(shell tput -Txterm setaf 2)
-YELLOW := $(shell tput -Txterm setaf 3)
-WHITE  := $(shell tput -Txterm setaf 7)
-RESET  := $(shell tput -Txterm sgr0)
-
-TARGET_MAX_CHAR_NUM=32
 ## Show help
 help:
-	@echo ''
-	@echo 'Usage:'
-	@echo '  ${YELLOW}make${RESET} ${GREEN}<target>${RESET}'
-	@echo ''
-	@echo 'Targets:'
-	@awk '/^[a-zA-Z\-\\_0-9\%]+:/ { \
-		helpMessage = match(lastLine, /^## (.*)/); \
-		if (helpMessage) { \
-			helpCommand = substr($$1, 0, index($$1, ":")-1); \
-			helpMessage = substr(lastLine, RSTART + 3, RLENGTH); \
-			secondHelpMessage = match(secondLastLine, /^## (.*)/); \
-			if (secondHelpMessage) { \
-				secondHelpMessage = substr(secondLastLine, RSTART + 3, RLENGTH); \
-				printf "  ${YELLOW}%-${TARGET_MAX_CHAR_NUM}s${RESET} ${GREEN}%s${RESET}\n  %-${TARGET_MAX_CHAR_NUM}s ${GREEN}%s${RESET}\n", helpCommand, secondHelpMessage, "", helpMessage; \
-			} else { \
-				printf "  ${YELLOW}%-${TARGET_MAX_CHAR_NUM}s${RESET} ${GREEN}%s${RESET}\n", helpCommand, helpMessage; \
-			}\
-		} \
-	} \
-	{ secondLastLine = lastLine } \
-	{ lastLine = $$0 }' ${MAKEFILE_LIST}
+	./scripts/makefile/help.awk ${MAKEFILE_LIST}
