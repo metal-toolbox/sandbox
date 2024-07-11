@@ -21,6 +21,7 @@ To understand more about the firmware install and how these services interact, c
 - Export `KUBECONFIG=~/.kube/config_kind`
 - Docker images for FleetDB, Conditionorc, Alloy
 - Install [mctl](https://github.com/metal-toolbox/mctl#getting-started) and use the configuration from [here](https://github.com/metal-toolbox/sandbox/tree/main/scripts/mctl)
+- Install [yq](https://github.com/mikefarah/yq/). (MacOS: `brew install yq`; Linux: `snap install yq`)
 
 ### 1. Build docker images and push to local registry
 

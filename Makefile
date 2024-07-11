@@ -18,6 +18,7 @@ endif
 ## install helm chart for the sandbox env with fleetdb(default)
 install: kubectl-ctx-kind
 	cp ./scripts/nats-bootstrap/values-nats.yaml.tmpl values-nats.yaml
+	./scripts/makefile/stamp.sh
 	helm dependency update
 	helm install hollow-sandbox . -f values.yaml -f values-nats.yaml ${OVERRIDE_VALUES_YAML}
 	kubectl get pod
@@ -135,12 +136,18 @@ kubectl-ctx-kind:
 ## Example: `make fleet-scheduler-local ../services/fleet-scheduler` will tell sandbox to use ../services/fleet-scheduler instead of the upstream
 ## Note: Use `make fleet-scheduler-upstream` to revert this process
 %-local:
+	$(eval DIR ?= ../)
 	./scripts/makefile/local.sh $(subst -local,,$@) ${DIR}
 
 ## Change service to upstream service instead of local.
 ## Example: `make fleet-scheduler-upstream` will tell sandbox to use the upstream (https://metal-toolbox.github.io/fleet-scheduler) fleet-scheduler.
 %-upstream:
-	./scripts/makefile/upstream.sh $(subst -upstream,,$@)
+	yq -i "del(.localrepos.[] | select(.name == \"$(subst -upstream,,$@)\"))" .local-values.yaml
+
+## Get some meta info about a service.
+## Example: `make fleet-scheduler-info`
+%-info:
+	./scripts/makefile/info.sh $(subst -info,,$@)
 
 ## Show help
 help:
