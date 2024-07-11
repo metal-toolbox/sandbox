@@ -24,15 +24,15 @@ env: &env_anchor
         url: http://fleetdb:8000
         oidc_audience_url: # to be filled once oauth is available in the sandbox
         oidc_issuer_url:   # to be filled once oauth is available in the sandbox
-        oidc_client_id: # to be filled by each service below (exampe: conditionorc.env.endpoints.fleetdb.client_id and conditionorc.env.endpoints.fleetdb.client_scopes)
-        oidc_scopes:    # to be filled by each service below (exampe: conditionorc.env.endpoints.fleetdb.client_id and conditionorc.env.endpoints.fleetdb.client_scopes)
+        oidc_client_id: # to be filled by each service below (exampe: conditionorc.env.endpoints.fleetdb.client_id)
+        oidc_scopes:    # to be filled by each service below (exampe: conditionorc.env.endpoints.fleetdb.client_scopes)
       conditionorc:
         authenticate: false
         url: http://conditionorc-api:9001
         oidc_audience_url: # to be filled once oauth is available in the sandbox
         oidc_issuer_url:   # to be filled once oauth is available in the sandbox
-        oidc_client_id: # to be filled by each service below (exampe: conditionorc.env.endpoints.fleetdb.client_id and conditionorc.env.endpoints.fleetdb.client_scopes)
-        oidc_scopes:    # to be filled by each service below (exampe: conditionorc.env.endpoints.fleetdb.client_id and conditionorc.env.endpoints.fleetdb.client_scopes)
+        oidc_client_id: # to be filled by each service below (exampe: flasher.env.endpoints.conditionorc.client_id)
+        oidc_scopes:    # to be filled by each service below (exampe: flasher.env.endpoints.conditionorc.client_scopes)
       component_inventory:
         authenticate: false
         url: http://component-inventory:8020
