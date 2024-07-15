@@ -2,11 +2,7 @@
 
 # Generate files for local service overriding
 
-# Check for yq tool
-if ! command -v yq &> /dev/null; then
-	echo "yq tool could not be found, please install yq (https://github.com/mikefarah/yq/)"
-	exit 1
-fi
+./scripts/makefile/functions.sh
 
 cp Chart.yaml.tmpl Chart.yaml
 

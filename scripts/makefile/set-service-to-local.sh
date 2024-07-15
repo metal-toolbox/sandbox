@@ -4,9 +4,17 @@
 
 TEMPFILE=.local-values.yaml
 
-# Check for yq tool
-if ! command -v yq &> /dev/null; then
-	echo "yq tool could not be found, please install yq (https://github.com/mikefarah/yq/)"
+./scripts/makefile/functions.sh $1
+
+# Check to make sure a service was specified
+if [[ -z "$1" ]]; then
+	echo "No service specified. Please add it like so: \"./scripts/makefile/info.sh <SERVICE> <DIR>\""
+	exit 1
+fi
+
+# Check to make sure a directory was specified
+if [[ -z "$2" ]]; then
+	echo "No directory specified. Please add it like so: \"./scripts/makefile/info.sh <SERVICE> <DIR>\""
 	exit 1
 fi
 
