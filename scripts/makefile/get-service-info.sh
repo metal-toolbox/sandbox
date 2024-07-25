@@ -2,9 +2,7 @@
 
 # This script will get some info about a service.
 
-TEMPFILE=.local-values.yaml
-
-./scripts/makefile/functions.sh $1
+. ./scripts/makefile/functions.sh $1
 
 # Check to make sure a service was specified
 if [[ -z "$1" ]]; then
@@ -13,7 +11,8 @@ if [[ -z "$1" ]]; then
 fi
 SERVICE=$1
 
-touch $TEMPFILE
+# make sure Chart.yaml is updated
+./scripts/makefile/generate-chart.sh
 
 DOCKER_URL=$(yq ".$SERVICE.image.repository.url" $TEMPFILE)
 if [[ "$DOCKER_URL" == "null" ]]; then

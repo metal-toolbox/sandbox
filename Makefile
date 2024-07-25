@@ -137,18 +137,19 @@ kubectl-ctx-kind:
 ## Note: Use `make fleet-scheduler-upstream` to revert this process
 %-local:
 	$(eval DIR ?= ../)
-	./scripts/makefile/set-service-to-local.sh $(subst -local,,$@) ${DIR}
+	@./scripts/makefile/set-service-to-local.sh $(subst -local,,$@) ${DIR}
 
 ## Change service to upstream service instead of local.
 ## Example: `make fleet-scheduler-upstream` will tell sandbox to use the upstream (https://metal-toolbox.github.io/fleet-scheduler) fleet-scheduler.
 %-upstream:
-	yq -i "del(.localrepos.[] | select(.name == \"$(subst -upstream,,$@)\"))" .local-values.yaml
+	@touch .local-values.yaml
+	@yq -i "del(.localrepos.[] | select(.name == \"$(subst -upstream,,$@)\"))" .local-values.yaml
 
 ## Get some meta info about a service.
 ## Example: `make fleet-scheduler-info`
 %-info:
-	./scripts/makefile/get-service-info.sh $(subst -info,,$@)
+	@./scripts/makefile/get-service-info.sh $(subst -info,,$@)
 
 ## Show help
 help:
-	./scripts/makefile/help.awk ${MAKEFILE_LIST}
+	@./scripts/makefile/help.awk ${MAKEFILE_LIST}

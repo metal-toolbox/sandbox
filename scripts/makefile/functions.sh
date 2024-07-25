@@ -2,6 +2,9 @@
 
 # This script will do some checks about availability of commands and input variables.
 
+TEMPFILE=.local-values.yaml
+touch $TEMPFILE
+
 # Check for yq
 if ! command -v yq &> /dev/null; then
 	echo "yq tool could not be found, please install yq (https://github.com/mikefarah/yq/)"

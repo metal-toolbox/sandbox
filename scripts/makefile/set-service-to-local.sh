@@ -2,9 +2,7 @@
 
 # This script will swap the sandbox to a local instance of a service
 
-TEMPFILE=.local-values.yaml
-
-./scripts/makefile/functions.sh $1
+. ./scripts/makefile/functions.sh $1
 
 # Check to make sure a service was specified
 if [[ -z "$1" ]]; then
@@ -29,7 +27,5 @@ if [ ! -f "$CHARTYAML" ]; then
 	echo "Service path not found: $CHARTYAML"
 	exit 1
 fi
-
-touch $TEMPFILE
 
 yq -i ".localrepos *=d [{\"name\":\"$SERVICE\", \"relpath\":\"$DIR\"}]" $TEMPFILE

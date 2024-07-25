@@ -2,11 +2,11 @@
 
 # Generate files for local service overriding
 
-./scripts/makefile/functions.sh
+. ./scripts/makefile/functions.sh
 
 cp Chart.yaml.tmpl Chart.yaml
 
-LENGTH=$(yq ".localrepos | length" .local-values.yaml)
+LENGTH=$(yq ".localrepos | length" $TEMPFILE)
 
 for ((I=0;I<LENGTH;I++)); do
 	SERVICE=$(yq ".localrepos.[$I].name" .local-values.yaml)
