@@ -16,8 +16,9 @@ To understand more about the firmware install and how these services interact, c
 
 ### Prerequisites
 
-- Install docker KIND
-- Setup a local KIND cluster with a registry using the script here: https://kind.sigs.k8s.io/docs/user/local-registry/
+- Install docker. Test with `docker run hello-world`
+- Install docker KIND `go install sigs.k8s.io/kind@v0.23.0`
+- Setup a local KIND cluster with a registry using the script here: `./kind-with-registry.sh` (from https://kind.sigs.k8s.io/docs/user/local-registry/)
 - Export `KUBECONFIG=~/.kube/config_kind`
 - Docker images for FleetDB, Conditionorc, Alloy
 - Install [mctl](https://github.com/metal-toolbox/mctl#getting-started) and use the configuration from [here](https://github.com/metal-toolbox/sandbox/tree/main/scripts/mctl)
