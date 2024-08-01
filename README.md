@@ -38,6 +38,11 @@ This will build and push the container images to the local container registry.
 
 To point to local services/repositories, check out [this](notes/services.md).
 
+If you checkouted the sandbox beside the other projects, go into the sandbox directory and run:
+```
+for i in fleetdb flasher alloy conditionorc flipflop ; do (cd ../${i}/ && make push-image-devel) ; done
+```
+
 ### 2. Deploy helm chart
 
 Deploys the helm chart and bootstrap the NATS Jetstream, K/V store.
