@@ -35,6 +35,8 @@ spec:
               mountPath: /etc/nats
               readOnly: true
           env:
+            - name: CONDITIONORC_OIDC_ENABLED
+              value: "{{ .Values.conditionorc.env.endpoints.conditionorc.authenticate }}"
             - name: CONDITIONORC_NATS_URL
               value: "{{ .Values.conditionorc.env.endpoints.nats.url }}"
             - name: CONDITIONORC_NATS_CONNECT_TIMEOUT

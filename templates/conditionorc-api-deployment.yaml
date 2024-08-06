@@ -32,6 +32,8 @@ spec:
               mountPath: /etc/nats
               readOnly: true
           env:
+            - name: CONDITIONORC_OIDC_ENABLED
+              value: "{{ .Values.conditionorc.env.endpoints.conditionorc.authenticate }}"
             - name: CONDITIONORC_FLEETDB_ENABLE_SERVER_ENROLL
               value: "{{ .Values.conditionorc.enable_server_enroll }}"
             - name: CONDITIONORC_NATS_URL

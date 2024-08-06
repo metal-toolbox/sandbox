@@ -30,7 +30,7 @@ spec:
            "--log-level",
            "debug",
            "--fault-injection",
-           "--replica-count=1",
+           "--dry-run",
            "--facility-code",
            "{{ .Values.flipflop.env.facility }}"
           ]

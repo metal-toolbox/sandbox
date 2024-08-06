@@ -150,6 +150,10 @@ kubectl-ctx-kind:
 %-info:
 	@./scripts/makefile/get-service-info.sh $(subst -info,,$@)
 
+## Tail logs of a service
+%-log:
+	kubectl logs -f $$(kubectl get pods | grep -Po '$(subst -log,,$@)-([0-9]|[a-z])*-([0-9]|[a-z])* ')
+
 ## Show help
 help:
 	@./scripts/makefile/help.awk ${MAKEFILE_LIST}
