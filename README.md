@@ -131,7 +131,7 @@ mctl create  firmware --from-file ./scripts/mctl/firmwares.json
 List the firmware using `mctl list firmware` and create a set that can be applied to a server.
 
 ```sh
-mctl create firmware-set --firmware-uuids 5e574c96-6ba4-4078-9650-c52a64cc8cba,a7e86975-11a4-433d-9170-af53fcfc79bd \
+mctl create firmware-set --firmware-ids 5e574c96-6ba4-4078-9650-c52a64cc8cba,a7e86975-11a4-433d-9170-af53fcfc79bd \
                          --labels vendor=dell,model=r6515,latest=true \
                          --name r6515
 ```

@@ -12,6 +12,7 @@ data:
     store_kind: fleetdb
     events_broker_kind: nats
     nats:
+      kv_replication: 1
       app_name: flipflop
       # TODO: remove deprecated stream_urn_ns field
       stream_urn_ns: hollow-controllers

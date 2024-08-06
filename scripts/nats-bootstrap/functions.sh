@@ -83,6 +83,9 @@ nsc edit signing-key -a controllers --sk ${SK_A} \
 	--allow-pubsub '$JS.API.CONSUMER.CREATE.controllers.>' \
 	--allow-pubsub '$JS.API.CONSUMER.MSG.NEXT.controllers.>' \
 	--allow-pubsub '$JS.API.CONSUMER.DELETE.controllers.>' \
+	--allow-pubsub '$JS.API.CONSUMER.CREATE.KV_tasks' \
+	--allow-pubsub '$JS.API.CONSUMER.CREATE.KV_tasks.>' \
+	--allow-pubsub '$JS.API.CONSUMER.DELETE.KV_tasks.>' \
 	--allow-pubsub '$JS.API.CONSUMER.CREATE.KV_firmwareInstall' \
 	--allow-pubsub '$JS.API.CONSUMER.CREATE.KV_firmwareInstall.>' \
 	--allow-pubsub '$JS.API.CONSUMER.DELETE.KV_firmwareInstall.>' \
@@ -109,6 +112,10 @@ nsc edit signing-key -a controllers --sk ${SK_A} \
 	--allow-pubsub '$JS.API.STREAM.INFO.KV_active-controllers.>' \
 	--allow-pubsub '$JS.API.STREAM.CREATE.KV_active-controllers' \
 	--allow-pubsub '$JS.API.STREAM.CREATE.KV_active-controllers.>' \
+	--allow-pubsub '$JS.API.STREAM.INFO.KV_tasks' \
+	--allow-pubsub '$JS.API.STREAM.INFO.KV_tasks.>' \
+	--allow-pubsub '$JS.API.STREAM.CREATE.KV_tasks' \
+	--allow-pubsub '$JS.API.STREAM.CREATE.KV_tasks.>' \
 	--allow-pubsub '$JS.API.STREAM.INFO.KV_firmwareInstall' \
 	--allow-pubsub '$JS.API.STREAM.INFO.KV_firmwareInstall.>' \
 	--allow-pubsub '$JS.API.STREAM.CREATE.KV_firmwareInstall' \
