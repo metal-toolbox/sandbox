@@ -16,6 +16,7 @@ data:
         failoncheckpointerror: true
       - kind: serverControl
       - kind: biosControl
+      - kind: broker
     serverservice:
       endpoint: "{{ .Values.conditionorc.env.endpoints.fleetdb.url }}"
       disable_oauth: "{{ not .Values.conditionorc.env.endpoints.fleetdb.authenticate }}"
