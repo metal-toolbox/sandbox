@@ -154,6 +154,10 @@ kubectl-ctx-kind:
 %-log:
 	kubectl logs -f $$(kubectl get pods | grep -Po '$(subst -log,,$@)-([0-9]|[a-z])*-([0-9]|[a-z])* ')
 
+## Enter a pod with bash
+%-bash:
+	kubectl exec -ti $$(kubectl get pods | grep -Po '$(subst -bash,,$@)-([0-9]|[a-z])*-([0-9]|[a-z])* ') -- /bin/sh
+
 ## Show help
 help:
 	@./scripts/makefile/help.awk ${MAKEFILE_LIST}
