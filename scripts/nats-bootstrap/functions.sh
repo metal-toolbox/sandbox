@@ -95,6 +95,11 @@ nsc edit signing-key -a controllers --sk ${SK_A} \
 	--allow-pubsub '$JS.API.CONSUMER.CREATE.KV_biosControl' \
 	--allow-pubsub '$JS.API.CONSUMER.CREATE.KV_biosControl.>' \
 	--allow-pubsub '$JS.API.CONSUMER.DELETE.KV_biosControl.>' \
+	--allow-pubsub '$JS.API.CONSUMER.CREATE.KV_broker' \
+	--allow-pubsub '$JS.API.CONSUMER.CREATE.KV_broker.>' \
+	--allow-pubsub '$JS.API.CONSUMER.DELETE.KV_broker.>' \
+	--allow-pubsub '$JS.API.CONSUMER.CREATE.KV_broker-tasks' \
+	--allow-pubsub '$JS.API.CONSUMER.DELETE.KV_broker-tasks' \
 	--allow-pubsub '$JS.API.CONSUMER.CREATE.KV_inventory' \
 	--allow-pubsub '$JS.API.CONSUMER.CREATE.KV_inventory.>' \
 	--allow-pubsub '$JS.API.CONSUMER.DELETE.KV_inventory.>' \
@@ -124,6 +129,12 @@ nsc edit signing-key -a controllers --sk ${SK_A} \
 	--allow-pubsub '$JS.API.STREAM.INFO.KV_serverControl.>' \
 	--allow-pubsub '$JS.API.STREAM.CREATE.KV_serverControl' \
 	--allow-pubsub '$JS.API.STREAM.CREATE.KV_serverControl.>' \
+	--allow-pubsub '$JS.API.STREAM.INFO.KV_broker' \
+	--allow-pubsub '$JS.API.STREAM.INFO.KV_broker.>' \
+	--allow-pubsub '$JS.API.STREAM.INFO.KV_broker-tasks' \
+	--allow-pubsub '$JS.API.STREAM.CREATE.KV_broker' \
+	--allow-pubsub '$JS.API.STREAM.CREATE.KV_broker.>' \
+	--allow-pubsub '$JS.API.STREAM.CREATE.KV_broker-tasks' \
 	--allow-pubsub '$JS.API.STREAM.INFO.KV_biosControl' \
 	--allow-pubsub '$JS.API.STREAM.INFO.KV_biosControl.>' \
 	--allow-pubsub '$JS.API.STREAM.CREATE.KV_biosControl' \
@@ -138,7 +149,7 @@ nsc edit signing-key -a controllers --sk ${SK_A} \
 	--allow-pubsub 'com.hollow.sh.controllers.responses' \
     --allow-sub '_INBOX.>'
 
-for controller in conditionorc alloy flasher flipflop bioscfg; do
+for controller in conditionorc alloy flasher flipflop bioscfg broker; do
    nsc add user -a controllers --name ${controller} -K controllers
 done
 
@@ -189,7 +200,7 @@ function update_values_nats_yaml() {
 }
 
 function push_controller_secrets() {
-	for controller in conditionorc alloy flasher flipflop bioscfg; do
+	for controller in conditionorc alloy flasher flipflop bioscfg broker; do
 		sekrit=$(kuexec "cat /root/nsc/nkeys/creds/KO/controllers/${controller}.creds" | "${os_base64[@]}" -w 0)
 		push_secret "${sekrit}" ${controller}
 	done
@@ -213,7 +224,7 @@ function push_secret() {
 
 function reload_controller_deployments() {
 	echo "restarting controller deployments for NATSs changes to take effect..."
-	kubectl delete deployments.apps flasher alloy conditionorc flipflop
+	kubectl delete deployments.apps flasher alloy conditionorc flipflop broker
 	make upgrade
 }
 
