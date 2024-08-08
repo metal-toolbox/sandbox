@@ -113,7 +113,7 @@ syncer:
       url: http://modeldata/modeldata.json
 
 fleet-scheduler:
-  enable: true # when enabled, metal-toolbox/fleet-scheduler will need to be deployed with `make push-image-devel`
+  enable: false # when enabled, metal-toolbox/fleet-scheduler will need to be deployed with `make push-image-devel`
   <<: *image_anchor
   <<: *env_anchor
     # uncomment once oauth service is availble in sandbox
@@ -176,7 +176,7 @@ chaosDaemon:
 
 # Enable the push gateway to collect metrics from fleetscheduler
 prometheus-pushgateway:
-  enable: true
+  enable: false
   fullnameOverride: fleet-pushgateway
   resources:
    limits:
