@@ -189,14 +189,10 @@ prometheus-pushgateway:
    port: 9090
 
 broker:
-  enable: true
+  enable: false
+  <<: *env_anchor
+  <<: *image_anchor
   image:
     repository: "localhost:5001/metal-broker"
     tag: latest
     pullPolicy: Always
-  env:
-    NATS_URL: "nats://nats:4222"
-    NATS_CONNECT_TIMEOUT: 60s
-    # telemetry configuration
-    OTEL_EXPORTER_OTLP_ENDPOINT: jaeger:4317
-    OTEL_EXPORTER_OTLP_INSECURE: true
