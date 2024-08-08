@@ -30,7 +30,7 @@ spec:
               "debug",
               "--fault-injection",
               "--facility-code",
-              "{{ .Values.location }}",
+              "{{ .Values.broker.env.facility }}",
             ]
           volumeMounts:
             - name: config-volume
@@ -40,15 +40,15 @@ spec:
               readOnly: true
           env:
             - name: METAL_BROKER_NATS_URL
-              value: "{{ .Values.broker.env.NATS_URL }}"
+              value: "{{ .Values.broker.env.endpoints.nats.url }}"
             - name: METAL_BROKER_NATS_CONNECT_TIMEOUT
-              value: "{{ .Values.broker.env.NATS_CONNECT_TIMEOUT }}"
+              value: "{{ .Values.broker.env.endpoints.nats.timeout }}"
             - name: METAL_BROKER_NATS_CREDS_FILE
               value: /etc/nats/nats.creds
             - name: OTEL_EXPORTER_OTLP_ENDPOINT
-              value: "{{ .Values.broker.env.OTEL_EXPORTER_OTLP_ENDPOINT }}"
+              value: "{{ .Values.broker.env.endpoints.otel.url }}"
             - name: OTEL_EXPORTER_OTLP_INSECURE
-              value: "{{ .Values.broker.env.OTEL_EXPORTER_OTLP_INSECURE }}"
+              value: "{{ not .Values.broker.env.endpoints.otel.authenticate }}"
           securityContext:
             capabilities:
               drop:
