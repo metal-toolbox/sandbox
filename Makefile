@@ -26,7 +26,6 @@ install: kubectl-ctx-kind
 
 ## upgrade helm chart for the sandbox environment
 upgrade: kubectl-ctx-kind
-	helm dependency update
 	helm upgrade hollow-sandbox . -f values.yaml -f values-nats.yaml ${OVERRIDE_VALUES_YAML}
 
 ## uninstall helm chart
