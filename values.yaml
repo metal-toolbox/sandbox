@@ -187,3 +187,12 @@ prometheus-pushgateway:
      memory: 150Mi
   service:
    port: 9090
+
+broker:
+  enable: false
+  <<: *env_anchor
+  <<: *image_anchor
+  image:
+    repository: "localhost:5001/metal-broker"
+    tag: latest
+    pullPolicy: Always

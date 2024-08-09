@@ -16,8 +16,9 @@ To understand more about the firmware install and how these services interact, c
 
 ### Prerequisites
 
-- Install docker KIND
-- Setup a local KIND cluster with a registry using the script here: https://kind.sigs.k8s.io/docs/user/local-registry/
+- Install docker. Test with `docker run hello-world`
+- Install docker KIND `go install sigs.k8s.io/kind@v0.23.0`
+- Setup a local KIND cluster with a registry using the script here: `./kind-with-registry.sh` (from https://kind.sigs.k8s.io/docs/user/local-registry/)
 - Export `KUBECONFIG=~/.kube/config_kind`
 - Docker images for FleetDB, Conditionorc, Alloy
 - Install [mctl](https://github.com/metal-toolbox/mctl#getting-started) and use the configuration from [here](https://github.com/metal-toolbox/sandbox/tree/main/scripts/mctl)
@@ -36,6 +37,11 @@ Clone each of the repositories and run `make push-image-devel`
 This will build and push the container images to the local container registry.
 
 To point to local services/repositories, check out [this](notes/services.md).
+
+If you checkouted the sandbox beside the other projects, go into the sandbox directory and run:
+```
+for i in fleetdb flasher alloy conditionorc flipflop ; do (cd ../${i}/ && make push-image-devel) ; done
+```
 
 ### 2. Deploy helm chart
 
