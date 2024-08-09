@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   labels:
     k8s-service: flipflop
+    kind: controller
   name: flipflop
 spec:
   replicas: 1

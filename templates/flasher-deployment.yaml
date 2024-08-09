@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   labels:
     k8s-service: flasher
+    kind: controller
   name: flasher
 spec:
   replicas: 1

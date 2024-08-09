@@ -5,6 +5,7 @@ kind: Deployment
 metadata:
   labels:
     k8s-service: broker
+    kind: controller
   name: broker
 spec:
   replicas: 1

@@ -224,7 +224,7 @@ function push_secret() {
 
 function reload_controller_deployments() {
 	echo "restarting controller deployments for NATSs changes to take effect..."
-	kubectl delete deployments.apps flasher alloy conditionorc flipflop broker
+	kubectl delete deployments.apps -l kind=controller
 	make upgrade
 }
 
