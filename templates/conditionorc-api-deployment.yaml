@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   labels:
     k8s-service: conditionorc-api
+    kind: controller
   name: conditionorc-api
 spec:
   replicas: 1
