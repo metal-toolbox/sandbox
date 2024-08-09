@@ -189,7 +189,7 @@ prometheus-pushgateway:
    port: 9090
 
 broker:
-  enable: true
+  enable: false
   <<: *env_anchor
   <<: *image_anchor
   image:
