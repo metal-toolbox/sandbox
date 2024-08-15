@@ -122,9 +122,13 @@ firmware-syncer-job-clean:
 psql-crdb: kubectl-ctx-kind
 	psql -d "postgresql://root@localhost:26257/defaultdb?sslmode=disable"
 
-## purge nats app and storage pvcs
+## bootstrap just the nats setup - after an updated configurtion
+bootstrap-nats: clean-nats
+	./scripts/nats-bootstrap/boostrap.sh
+
+## purge nats app and related storage pvcs
 clean-nats:
-	kubectl delete statefulsets.apps nats && kubectl delete pvc nats-js-pvc-nats-0 nats-jwt-pvc-nats-0
+	kubectl delete statefulsets.apps nats --wait=true && kubectl delete pvc nats-js-pvc-nats-0 nats-jwt-pvc-nats-0
 
 ## set kube ctx to kind cluster
 kubectl-ctx-kind:
