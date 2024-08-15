@@ -23,6 +23,7 @@ spec:
           command: [
            "flasher",
            "run",
+           "--outofband",
            "--store",
            "serverservice",
            "--config",
