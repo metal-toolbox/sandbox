@@ -15,7 +15,7 @@ dependencies:
   repository: https://metal-toolbox.github.io/fleet-scheduler
   version: v1.0.0
 - name: flipflop
-  repository: file://../flipflop/chart
-  version: v0.1.0
-digest: sha256:590cb84877d9f66fabd0efccbd672d82234d70f3bd70415e81ebc8a658aff830
-generated: "2024-08-12T15:39:23.561838503-04:00"
+  repository: https://metal-toolbox.github.io/flipflop
+  version: v0.0.3
+digest: sha256:c52ac0f2e440bc856a87d4e2e67894a2fe3e7893e0eea2ea064733120f5e68d1
+generated: "2024-08-14T15:22:35.317529573-04:00"
