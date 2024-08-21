@@ -89,6 +89,9 @@ nsc edit signing-key -a controllers --sk ${SK_A} \
 	--allow-pubsub '$JS.API.CONSUMER.CREATE.KV_firmwareInstall' \
 	--allow-pubsub '$JS.API.CONSUMER.CREATE.KV_firmwareInstall.>' \
 	--allow-pubsub '$JS.API.CONSUMER.DELETE.KV_firmwareInstall.>' \
+	--allow-pubsub '$JS.API.CONSUMER.CREATE.KV_firmwareInstallInband' \
+	--allow-pubsub '$JS.API.CONSUMER.CREATE.KV_firmwareInstallInband.>' \
+	--allow-pubsub '$JS.API.CONSUMER.DELETE.KV_firmwareInstallInband.>' \
 	--allow-pubsub '$JS.API.CONSUMER.CREATE.KV_serverControl' \
 	--allow-pubsub '$JS.API.CONSUMER.CREATE.KV_serverControl.>' \
 	--allow-pubsub '$JS.API.CONSUMER.DELETE.KV_serverControl.>' \
@@ -125,6 +128,9 @@ nsc edit signing-key -a controllers --sk ${SK_A} \
 	--allow-pubsub '$JS.API.STREAM.INFO.KV_firmwareInstall.>' \
 	--allow-pubsub '$JS.API.STREAM.CREATE.KV_firmwareInstall' \
 	--allow-pubsub '$JS.API.STREAM.CREATE.KV_firmwareInstall.>' \
+	--allow-pubsub '$JS.API.STREAM.INFO.KV_firmwareInstallInband' \
+	--allow-pubsub '$JS.API.STREAM.INFO.KV_firmwareInstallInband.>' \
+	--allow-pubsub '$JS.API.STREAM.CREATE.KV_firmwareInstallInband' \
 	--allow-pubsub '$JS.API.STREAM.INFO.KV_serverControl' \
 	--allow-pubsub '$JS.API.STREAM.INFO.KV_serverControl.>' \
 	--allow-pubsub '$JS.API.STREAM.CREATE.KV_serverControl' \
