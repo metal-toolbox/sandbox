@@ -24,11 +24,11 @@ spec:
             - "--config"
             - "/etc/conditionorc/config.yaml"
             - "--log-level"
-            - "debug"
+            - "trace"
             - "--facility"
             - "{{ .Values.conditionorc.env.facility }}"
           ports:
-            - containerPort: 9002
+            - containerPort: 9001
           volumeMounts:
             - name: config-volume
               mountPath: /etc/conditionorc
