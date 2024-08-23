@@ -104,7 +104,7 @@ spec:
       volumes:
         - name: config-volume
           configMap:
-            name: conditionorc-config
+            name: condition-orchestrator-config
         - name: nats-creds-volume
           secret:
             secretName: conditionorc-secrets

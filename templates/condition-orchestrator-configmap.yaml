@@ -2,7 +2,8 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: conditionorc-config
+  # both the Conditions API, Orchestrator share this configuration file
+  name: condition-orchestrator-config
 data:
   config.yaml: |
     log_level: debug
