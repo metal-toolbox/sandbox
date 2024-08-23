@@ -38,7 +38,7 @@ clean: kubectl-ctx-kind
 
 ## port forward conditions API (runs in foreground)
 port-forward-condition-api: kubectl-ctx-kind
-	kubectl port-forward deployment/conditionorc-api ${CONDITION_API_PORT_FW}
+	kubectl port-forward deployment/conditions-api ${CONDITION_API_PORT_FW}
 
 ## port forward conditions Orchestrator API (runs in foreground)
 port-forward-condition-orc-api: kubectl-ctx-kind
@@ -74,7 +74,7 @@ port-forward-crdb-ui:
 
 ## port forward all endpoints (runs in the background)
 port-all-with-lan:
-	kubectl port-forward deployment/conditionorc-api --address 0.0.0.0 ${CONDITION_API_PORT_FW} > /dev/null 2>&1 &
+	kubectl port-forward deployment/conditions-api --address 0.0.0.0 ${CONDITION_API_PORT_FW} > /dev/null 2>&1 &
 	kubectl port-forward deployment/alloy --address 0.0.0.0 ${ALLOY_PORT_FW} > /dev/null 2>&1 &
 	kubectl port-forward deployment/crdb --address 0.0.0.0 ${CRDB_PORT_FW} > /dev/null 2>&1 &
 	kubectl port-forward deployment/fleetdb --address 0.0.0.0 ${FLEETDB_PORT_FW} > /dev/null 2>&1 &
@@ -84,7 +84,7 @@ port-all-with-lan:
 	kubectl port-forward deployment/minio --address 0.0.0.0 ${MINIO_PORT_FW} > /dev/null 2>&1
 
 port-all:
-	kubectl port-forward deployment/conditionorc-api ${CONDITION_API_PORT_FW} > /dev/null 2>&1 &
+	kubectl port-forward deployment/conditions-api ${CONDITION_API_PORT_FW} > /dev/null 2>&1 &
 	kubectl port-forward deployment/alloy ${ALLOY_PORT_FW} > /dev/null 2>&1 &
 	kubectl port-forward deployment/crdb ${CRDB_PORT_FW} > /dev/null 2>&1 &
 	kubectl port-forward deployment/fleetdb ${FLEETDB_PORT_FW} > /dev/null 2>&1 &

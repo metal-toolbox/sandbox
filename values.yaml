@@ -49,9 +49,12 @@ fleetdb:
     publishStreamPrefix: com.hollow.sh.fleetdb.events
 
 conditionorc:
-  enable_server_enroll: true
-  <<: *env_anchor
   <<: *image_anchor
+  <<: *env_anchor
+  conditions_api:
+    enable_server_enroll: true
+    enable_inband_firmware_install: true
+  orchestrator_api:
   image: # Temporary until helm chart conversion is done
     repository:
       tag: latest
