@@ -2,13 +2,13 @@ kind: Service
 apiVersion: v1
 metadata:
   labels:
-    k8s-service: conditionorc-api
-  name: conditionorc-api
+    k8s-service: conditionorc
+  name: conditionorc
 spec:
   ports:
-    - name: conditionorc-api
-      port: 9001
+    - name: conditionorc
+      port: 9002
       targetPort: 9001
       protocol: TCP
   selector:
-    k8s-service: conditionorc-api
+    k8s-service: conditionorc

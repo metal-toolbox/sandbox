@@ -2,23 +2,23 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    k8s-service: conditionorc-api
+    k8s-service: conditions-api
     kind: controller
-  name: conditionorc-api
+  name: conditions-api
 spec:
   replicas: 1
   selector:
     matchLabels:
-      k8s-service: conditionorc-api
+      k8s-service: conditions-api
   template:
     metadata:
       labels:
-        k8s-service: conditionorc-api
+        k8s-service: conditions-api
     spec:
       containers:
         - image: {{ .Values.conditionorc.image.repository.url }}/conditionorc:{{ .Values.conditionorc.image.repository.tag }}
           imagePullPolicy: {{ $.Values.conditionorc.image.pullPolicy }}
-          name: conditionorc-api
+          name: conditions-api
           args:
             - server
             - "--oidc=false"
