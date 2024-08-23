@@ -36,7 +36,9 @@ spec:
             - name: CONDITIONORC_OIDC_ENABLED
               value: "{{ .Values.conditionorc.env.endpoints.conditionorc.authenticate }}"
             - name: CONDITIONORC_FLEETDB_ENABLE_SERVER_ENROLL
-              value: "{{ .Values.conditionorc.enable_server_enroll }}"
+              value: "{{ .Values.conditionorc.conditions_api.enable_server_enroll }}"
+            - name: CONDITION_API_FEATURE_INBAND_FIRMWARE
+              value: "{{ .Values.conditionorc.conditions_api.enable_inband_firmware_install }}"
             - name: CONDITIONORC_NATS_URL
               value: "{{ .Values.conditionorc.env.endpoints.nats.url }}"
             - name: CONDITIONORC_NATS_CONNECT_TIMEOUT
