@@ -9,6 +9,7 @@ CRDB_UI_PORT_FW=8081:8080
 CRDB_PORT_FW=26257:26257
 CHAOS_DASH_PORT_FW=2333:2333
 JAEGER_DASH_PORT_FW=16686:16686
+OTEL_PORT_FW=4317:4317
 MINIO_PORT_FW=9000:9000
 
 ifneq (,$(wildcard .local-values.yaml))
@@ -64,6 +65,10 @@ port-forward-chaos-dash: kubectl-ctx-kind
 ## port forward jaeger frontend
 port-forward-jaeger-dash:
 	kubectl port-forward service/jaeger ${JAEGER_DASH_PORT_FW}
+
+## port forward otel server
+port-forward-otel:
+	kubectl port-forward deployment/jaeger ${OTEL_PORT_FW}
 
 ## port forward to the minio S3 port
 port-forward-minio:
