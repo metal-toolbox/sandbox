@@ -1,16 +1,18 @@
 .DEFAULT_GOAL := help
 
 # local-port:service-port
-CONDITION_API_PORT_FW=9001:9001
-CONDITION_ORC_API_PORT_FW=9002:9001
-ALLOY_PORT_FW=9091:9091
-FLEETDB_PORT_FW=8000:8000
-CRDB_UI_PORT_FW=8081:8080
-CRDB_PORT_FW=26257:26257
-CHAOS_DASH_PORT_FW=2333:2333
-JAEGER_DASH_PORT_FW=16686:16686
-OTEL_PORT_FW=4317:4317
-MINIO_PORT_FW=9000:9000
+
+WITH_LAN=
+CONDITION_API_PORT_FW=9001
+CONDITION_ORC_API_PORT_FW=9001
+ALLOY_PORT_FW=9091
+FLEETDB_PORT_FW=8000
+CRDB_UI_PORT_FW=8080
+CRDB_PORT_FW=26257
+CHAOS_DASH_PORT_FW=2333
+JAEGER_DASH_PORT_FW=16686
+OTEL_PORT_FW=4317
+MINIO_PORT_FW=9000
 
 ifneq (,$(wildcard .local-values.yaml))
 	OVERRIDE_VALUES_YAML=-f .local-values.yaml
@@ -77,35 +79,31 @@ port-forward-minio:
 port-forward-crdb-ui:
 	kubectl port-forward deployment/fleetdb-crdb --address 0.0.0.0  ${CRDB_UI_PORT_FW}
 
-## port forward all endpoints (runs in the background)
-port-all-with-lan:
-	kubectl port-forward deployment/conditions-api --address 0.0.0.0 ${CONDITION_API_PORT_FW} > /dev/null 2>&1 &
-	kubectl port-forward deployment/alloy --address 0.0.0.0 ${ALLOY_PORT_FW} > /dev/null 2>&1 &
-	kubectl port-forward deployment/crdb --address 0.0.0.0 ${CRDB_PORT_FW} > /dev/null 2>&1 &
-	kubectl port-forward deployment/fleetdb --address 0.0.0.0 ${FLEETDB_PORT_FW} > /dev/null 2>&1 &
-	kubectl port-forward deployment/fleetdb-crdb --address 0.0.0.0 ${CRDB_PORT_FW} > /dev/null 2>&1 &
-	kubectl port-forward service/chaos-dashboard --address 0.0.0.0 ${CHAOS_DASH_PORT_FW} > /dev/null 2>&1 &
-	kubectl port-forward service/jaeger --address 0.0.0.0 ${JAEGER_DASH_PORT_FW} > /dev/null 2>&1 &
-	kubectl port-forward deployment/minio --address 0.0.0.0 ${MINIO_PORT_FW} > /dev/null 2>&1
+## port forward all endpoints  to LAN (runs in the background)
+port-all-to-lan: with-lan port-all
 
+## port forward all endpoints (runs in the background)
 port-all:
-	kubectl port-forward deployment/conditions-api ${CONDITION_API_PORT_FW} > /dev/null 2>&1 &
-	kubectl port-forward deployment/alloy ${ALLOY_PORT_FW} > /dev/null 2>&1 &
-	kubectl port-forward deployment/crdb ${CRDB_PORT_FW} > /dev/null 2>&1 &
-	kubectl port-forward deployment/fleetdb ${FLEETDB_PORT_FW} > /dev/null 2>&1 &
-	kubectl port-forward service/chaos-dashboard ${CHAOS_DASH_PORT_FW} > /dev/null 2>&1 &
-	kubectl port-forward service/jaeger ${JAEGER_DASH_PORT_FW} > /dev/null 2>&1 &
-	kubectl port-forward deployment/minio ${MINIO_PORT_FW} > /dev/null 2>&1
+	kubectl port-forward deployment/conditions-api ${WITH_LAN} ${CONDITION_API_PORT_FW} > /dev/null 2>&1 &
+	kubectl port-forward deployment/alloy ${WITH_LAN} ${ALLOY_PORT_FW} > /dev/null 2>&1 &
+	kubectl port-forward deployment/crdb ${WITH_LAN} ${CRDB_PORT_FW} > /dev/null 2>&1 &
+	kubectl port-forward deployment/fleetdb ${WITH_LAN} ${FLEETDB_PORT_FW} > /dev/null 2>&1 &
+	kubectl port-forward service/chaos-dashboard ${WITH_LAN} ${CHAOS_DASH_PORT_FW} > /dev/null 2>&1 &
+	kubectl port-forward service/jaeger ${WITH_LAN} ${JAEGER_DASH_PORT_FW} > /dev/null 2>&1 &
+	kubectl port-forward deployment/minio ${WITH_LAN} ${MINIO_PORT_FW} > /dev/null 2>&1
+
+with-lan:
+	$(eval WITH_LAN=--address 0.0.0.0)
 
 ## kill all port fowarding processes that are running in the background
 kill-all-ports:
-	lsof -i:${CONDITION_API_PORT_FW} -t | xargs kill
-	lsof -i:${ALLOY_PORT_FW} -t | xargs kill
-	lsof -i:${FLEETDB_PORT_FW} -t | xargs kill
-	lsof -i:${CRDB_PORT_FW} -t | xargs kill
-	lsof -i:${CHAOS_DASH_PORT_FW} -t | xargs kill
-	lsof -i:${JAEGER_DASH_PORT_FW} -t | xargs kill
-	lsof -i:${MINIO_PORT_FW} -t | xargs kill
+	lsof -i:${CONDITION_API_PORT_FW} -t | xargs --no-run-if-empty kill
+	lsof -i:${ALLOY_PORT_FW} -t | xargs --no-run-if-empty kill
+	lsof -i:${FLEETDB_PORT_FW} -t | xargs --no-run-if-empty kill
+	lsof -i:${CRDB_PORT_FW} -t | xargs --no-run-if-empty kill
+	lsof -i:${CHAOS_DASH_PORT_FW} -t | xargs --no-run-if-empty kill
+	lsof -i:${JAEGER_DASH_PORT_FW} -t | xargs --no-run-if-empty kill
+	lsof -i:${MINIO_PORT_FW} -t | xargs --no-run-if-empty kill
 
 ## install extra services used to test firmware-syncer
 firmware-syncer-env:
@@ -171,3 +169,5 @@ kubectl-ctx-kind:
 ## Show help
 help:
 	@./scripts/makefile/help.awk ${MAKEFILE_LIST}
+
+.NOTPARALLEL: port-all-with-lan
