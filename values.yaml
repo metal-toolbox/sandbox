@@ -42,6 +42,7 @@ fleetdb:
   <<: *env_anchor
   <<: *image_anchor
   image: # Temporary until helm chart conversion is done
+    pullPolicy: Always
     repository:
       tag: latest
       url: localhost:5001
@@ -56,6 +57,7 @@ conditionorc:
     enable_inband_firmware_install: true
   orchestrator_api:
   image: # Temporary until helm chart conversion is done
+    pullPolicy: Always
     repository:
       tag: latest
       url: localhost:5001
@@ -70,6 +72,7 @@ flasher:
   <<: *env_anchor
   <<: *image_anchor
   image: # Temporary until helm chart conversion is done
+    pullPolicy: Always
     repository:
       tag: latest
       url: localhost:5001
@@ -84,6 +87,7 @@ alloy:
   <<: *env_anchor
   <<: *image_anchor
   image:
+    pullPolicy: Always
     repository:
       tag: latest
       url: localhost:5001
@@ -96,6 +100,7 @@ syncer:
   <<: *env_anchor
   <<: *image_anchor
   image: # Temporary until helm chart conversion is done
+    pullPolicy: Always
     repository:
       tag: latest
       url: localhost:5001
@@ -135,6 +140,17 @@ flipflop:
   <<: *env_anchor
   <<: *image_anchor
   image:
+    pullPolicy: Always
+    repository:
+      tag: latest
+      url: localhost:5001
+
+bioscfg:
+  enable: true
+  <<: *env_anchor
+  <<: *image_anchor
+  image:
+    pullPolicy: Always
     repository:
       tag: latest
       url: localhost:5001
@@ -196,6 +212,7 @@ broker:
   <<: *env_anchor
   <<: *image_anchor
   image:
+    pullPolicy: Always
     repository: "localhost:5001/metal-broker"
     tag: latest
     pullPolicy: Always

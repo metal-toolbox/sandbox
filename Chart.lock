@@ -16,6 +16,9 @@ dependencies:
   version: v1.0.0
 - name: flipflop
   repository: https://metal-toolbox.github.io/flipflop
-  version: v0.0.3
-digest: sha256:c52ac0f2e440bc856a87d4e2e67894a2fe3e7893e0eea2ea064733120f5e68d1
-generated: "2024-08-14T15:22:35.317529573-04:00"
+  version: v0.1.3
+- name: bioscfg
+  repository: https://metal-toolbox.github.io/bioscfg
+  version: v0.0.2
+digest: sha256:d2ea3b23b5854ce23dad429905eb3903a47cd345c769d3a076af830ba7d89bc1
+generated: "2024-09-30T14:45:17.810741996-04:00"
